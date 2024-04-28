@@ -28,6 +28,20 @@ keymap.set("n", "<leader>s", "<C-w>v") -- split window vertically
 keymap.set("n", "<leader>ss", "<C-w>s") -- split window horizontally
 keymap.set("n", "<leader>sx", ":close<CR>") -- close split window
 -- keymap.set("n", "<leader>se", "<C-w>=") -- make split windows equal width
+keymap.set("n", "<leader>sw", function()
+  target_windows = require('leap.util').get_enterable_windows()
+  local targets = {}
+  for _, win in ipairs(target_windows) do
+    local wininfo = vim.fn.getwininfo(win)[1]
+    local pos = { wininfo.topline, 1 }  -- customize the position of the label here
+    table.insert(targets, { pos = pos, wininfo = wininfo })
+  end
+
+  require('leap').leap {
+    target_windows = target_windows, targets = targets,
+    action = function (t) vim.api.nvim_set_current_win(t.wininfo.winid) end
+  }
+end) -- Choose between windows
 keymap.set("n", "<leader>sj", "<C-w>-") -- make split window height shorter
 keymap.set("n", "<leader>sk", "<C-w>+") -- make split windows height taller
 keymap.set("n", "<leader>sl", "<C-w>>5") -- make split windows width bigger 
@@ -112,7 +126,8 @@ vim.keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true })
 
 -- Undo/Reundo
 vim.keymap.set('i', '<C-z>', '<Esc>"+u`[v`]vi', { noremap = true, silent = true })
-vim.keymap.set('i', '<leader><C-z>', '<Esc>"+<C-r>`[v`]vi', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-z>', '<Esc>', { noremap = true, silent = true })
+vim.keymap.set('i', '<leader>z', '<Esc>"+<C-r>`[v`]vi', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-f>', '/', { noremap = true, silent = true })
 
 -- Telescope
@@ -121,3 +136,12 @@ keymap.set("n", "<leader>ff", ':lua require"telescope.builtin".find_files({ hidd
 
 -- Visual mode
 keymap.set('v', 'd', '_d')
+
+-- Back to the previous page
+keymap.set('n', '<leader>gb', ':e#<CR>', { silent = true })
+
+-- Delete current file
+keymap.set('n', '<C-d>', ":call delete(expand('%'))<CR>", { silent = true })
+
+-- Create new file
+keymap.set('n', '<C-n>', ":new %:h/")
