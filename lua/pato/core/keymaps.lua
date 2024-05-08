@@ -127,7 +127,7 @@ vim.keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true })
 -- Undo/Reundo
 vim.keymap.set('i', '<C-z>', '<Esc>"+u`[v`]vi', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-z>', '<Esc>', { noremap = true, silent = true })
-vim.keymap.set('i', '<leader>z', '<Esc>"+<C-r>`[v`]vi', { noremap = true, silent = true })
+vim.keymap.set('i', '<C-\\>', '<Esc>"+<C-r>`[v`]vi', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-f>', '/', { noremap = true, silent = true })
 
 -- Telescope
