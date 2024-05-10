@@ -145,3 +145,8 @@ keymap.set('n', '<C-d>', ":call delete(expand('%'))<CR>", { silent = true })
 
 -- Create new file
 keymap.set('n', '<C-n>', ":new %:h/")
+
+-- Switch Case
+keymap.set('i', '<A-d>', "<Esc>:lua require('textcase').lsp_rename('to_pascal_case')<CR>i", { silent = true })
+keymap.set('i', '<A-s>', "<Esc>:lua require('textcase').lsp_rename('to_snake_case')<CR>i", { silent = true })
+
