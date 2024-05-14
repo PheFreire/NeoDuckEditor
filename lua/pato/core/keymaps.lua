@@ -127,7 +127,7 @@ keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true })
 
 -- Undo/Reundo
 keymap.set('i', '<C-z>', '<Esc>"+u`[v`]vi', { noremap = true, silent = true })
-keymap.set('i', '<C-\\>', '<Esc>"+<C-r>`[v`]vi', { noremap = true, silent = true })
+keymap.set('i', '<A-z>', '<Esc>"+<C-r>`[v`]vi', { noremap = true, silent = true })
 keymap.set('n', '<C-f>', '/', { noremap = true, silent = true })
 
 -- Telescope
@@ -154,4 +154,9 @@ keymap.set('i', '<A-s>', "<Esc>:lua require('textcase').lsp_rename('to_snake_cas
 -- Move cell
 keymap.set('i', '<A-Up>', "<Esc>1000000<Right>1000000<Left>v1000000<Right>:m '<-2<CR>gv=gv<CR><Esc>i", { silent = true })
 keymap.set('i', '<A-Down>', "<Esc>1000000<Right>1000000<Left>v1000000<Right>:m '>+1<CR>gv=gv<CR><Esc>i", { silent = true })
+
+-- Terminal
+keymap.set('n', '<C-t>', ":terminal<CR>", { silent = true })
+keymap.set('t', '<C-t>', [[<C-\><C-n>]],{noremap=true})
+
 
