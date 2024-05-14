@@ -29,6 +29,8 @@ return {
     require('mason-lspconfig').setup({
       -- Install these LSPs automatically
       ensure_installed = {
+        'tsserver',
+        'eslint',
         'bashls',
         'cssls',
         'html',

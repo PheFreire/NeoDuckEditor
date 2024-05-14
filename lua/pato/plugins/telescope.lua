@@ -4,7 +4,6 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-      "nvim-tree/nvim-web-devicons",
       "folke/todo-comments.nvim",
     },
     config = function()
@@ -22,17 +21,7 @@ return {
       })
 
       telescope.setup({
-        defaults = {
-          path_display = { "smart" },
-          mappings = {
-            i = {
-              ["<C-k>"] = actions.move_selection_previous, -- move to prev result
-              ["<C-j>"] = actions.move_selection_next, -- move to next result
-              ["<C-q>"] = actions.send_selected_to_qflist + custom_actions.open_trouble_qflist,
-              ["<C-t>"] = trouble_telescope.smart_open_with_trouble
-          },
-          },
-        },
+        defaults = { path_display = { "smart" } } 
       })
       telescope.load_extension("fzf")
       -- keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Fuzzy find recent files" })
@@ -42,7 +31,7 @@ return {
       -- keymap.set('n', '<leader>ff', ':lua require"telescope.builtin".current_buffer_fuzzy_find({ hidden = true })<CR>', {})
       -- keymap.set('n', '<leader>fo', ":lua require('telescope.builtin').lsp_document_symbols", {})
       -- keymap.set('n', '<leader>fi', ":lua require('telescope.builtin').lsp_incoming_calls", {})
-      -- keymap.set('n', '<leader>fm', ":lua function() require('telescope.builtin').treesitter({default_text=":method:"}) end)
+     -- keymap.set('n', '<leader>fm', ":lua function() require('telescope.builtin').treesitter({default_text=":method:"}) end)
     -- local telescope = require("telescope")
 
     local telescopeConfig = require("telescope.config")

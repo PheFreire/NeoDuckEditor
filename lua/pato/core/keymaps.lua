@@ -29,7 +29,7 @@ keymap.set("n", "<leader>ss", "<C-w>s") -- split window horizontally
 keymap.set("n", "<leader>sx", ":close<CR>") -- close split window
 -- keymap.set("n", "<leader>se", "<C-w>=") -- make split windows equal width
 keymap.set("n", "<leader>sw", function()
-  target_windows = require('leap.util').get_enterable_windows()
+  local target_windows = require('leap.util').get_enterable_windows()
   local targets = {}
   for _, win in ipairs(target_windows) do
     local wininfo = vim.fn.getwininfo(win)[1]
@@ -74,7 +74,8 @@ keymap.set("n", "<leader>h", ":tabp<CR>") -- previous tab
 -- Nvim-tree
 keymap.set("n", "<leader>ee", ":NvimTreeToggle<CR>") -- toggle file explorer
 keymap.set("n", "<leader>f", ":NvimTreeFindFile<CR>") -- find file in file explorer
--- keymap.set("n", "<leader>er", ":NvimTreeFocus<CR>") -- toggle focus to file explorer
+keymap.set("n", "<leader>ec", "<cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" }) -- collapse file explorer
+keymap.set("n", "<leader>er", "<cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" }) -- refresh file explorer
 
 -- Git-blame
 -- keymap.set("n", "<leader>gb", ":GitBlameToggle<CR>") -- toggle git blame
