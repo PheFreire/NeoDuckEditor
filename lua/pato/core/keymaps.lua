@@ -121,14 +121,14 @@ end)
 
 
 -- Clipboard
-vim.keymap.set('v', '<C-c>', '"+y', { noremap = true }) -- copy to system clipboard
-vim.keymap.set('i', '<C-v>', '<Esc>"+p`[v`]vi', { noremap = true }) -- paste system clipboard data
-vim.keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true }) 
+keymap.set('v', '<C-c>', '"+y', { noremap = true }) -- copy to system clipboard
+keymap.set('i', '<C-v>', '<Esc>"+p`[v`]vi', { noremap = true }) -- paste system clipboard data
+keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true }) 
 
 -- Undo/Reundo
-vim.keymap.set('i', '<C-z>', '<Esc>"+u`[v`]vi', { noremap = true, silent = true })
-vim.keymap.set('i', '<C-Z>', '<Esc>"+<C-r>`[v`]vi', { noremap = true, silent = true })
-vim.keymap.set('n', '<C-f>', '/', { noremap = true, silent = true })
+keymap.set('i', '<C-z>', '<Esc>"+u`[v`]vi', { noremap = true, silent = true })
+keymap.set('i', '<C-\\>', '<Esc>"+<C-r>`[v`]vi', { noremap = true, silent = true })
+keymap.set('n', '<C-f>', '/', { noremap = true, silent = true })
 
 -- Telescope
 keymap.set('n', '<leader>fs', ':lua require"telescope.builtin".grep_string({ hidden = true })<CR>', { noremap = true, silent = true })
