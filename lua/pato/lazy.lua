@@ -20,4 +20,3 @@ require("lazy").setup({ { import = "pato.plugins" }, }, {
     notify = false,
   },
 })
-

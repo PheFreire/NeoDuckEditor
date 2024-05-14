@@ -127,8 +127,7 @@ vim.keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true })
 
 -- Undo/Reundo
 vim.keymap.set('i', '<C-z>', '<Esc>"+u`[v`]vi', { noremap = true, silent = true })
-vim.keymap.set('n', '<C-z>', '<Esc>', { noremap = true, silent = true })
-vim.keymap.set('i', '<C-\\>', '<Esc>"+<C-r>`[v`]vi', { noremap = true, silent = true })
+vim.keymap.set('i', '<C-Z>', '<Esc>"+<C-r>`[v`]vi', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-f>', '/', { noremap = true, silent = true })
 
 -- Telescope
@@ -150,4 +149,9 @@ keymap.set('n', '<C-n>', ":new %:h/")
 -- Switch Case
 keymap.set('i', '<A-d>', "<Esc>:lua require('textcase').lsp_rename('to_pascal_case')<CR>i", { silent = true })
 keymap.set('i', '<A-s>', "<Esc>:lua require('textcase').lsp_rename('to_snake_case')<CR>i", { silent = true })
+
+
+-- Move cell
+keymap.set('i', '<A-Up>', "<Esc>1000000<Right>1000000<Left>v1000000<Right>:m '<-2<CR>gv=gv<CR><Esc>i", { silent = true })
+keymap.set('i', '<A-Down>', "<Esc>1000000<Right>1000000<Left>v1000000<Right>:m '>+1<CR>gv=gv<CR><Esc>i", { silent = true })
 
