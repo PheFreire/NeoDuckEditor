@@ -1,5 +1,5 @@
 return {
-  'mg978/vim-visual-multi',
-  event = "VeryLazy"
+  'mg979/vim-visual-multi',
+  lazy = false
 }
 

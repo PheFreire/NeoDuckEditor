@@ -13,10 +13,10 @@ keymap.set("n", "<C-j>", "1000000<Up>", { noremap = true, silent = true })
 
 keymap.set("v", "k", "<Down>", { noremap = true, silent = true })
 keymap.set("v", "j", "<Up>", { noremap = true, silent = true })
-keymap.set("v", "<C-l>", "1000000<Right>", { noremap = true, silent = true })
-keymap.set("v", "<C-h>", "1000000<Left>", { noremap = true, silent = true })
-keymap.set("v", "<C-k>", "1000000<Down>", { noremap = true, silent = true })
-keymap.set("v", "<C-j>", "1000000<Up>", { noremap = true, silent = true })
+keymap.set("v", "<C-l>", "100000000<Right>", { noremap = true, silent = true })
+keymap.set("v", "<C-h>", "100000000<Left>", { noremap = true, silent = true })
+keymap.set("v", "<C-k>", "100000000<Down>", { noremap = true, silent = true })
+keymap.set("v", "<C-j>", "100000000<Up>", { noremap = true, silent = true })
 
 keymap.set("i", "jk", "<ESC>") -- exit insert mode with jk 
 keymap.set("n", "<C-sq>", ":wq<CR>") -- save and quit
@@ -91,7 +91,6 @@ keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true })
 -- Undo/Reundo
 keymap.set('i', '<C-z>', '<Esc>"+u`[v`]vi', { noremap = true, silent = true })
 keymap.set('i', '<A-z>', '<Esc>"+<C-r>`[v`]vi', { noremap = true, silent = true })
-keymap.set('n', '<C-f>', '/', { noremap = true, silent = true })
 
 -- Telescope
 keymap.set('n', '<leader>fs', ':lua require"telescope.builtin".grep_string({ hidden = true })<CR>', { noremap = true, silent = true })
@@ -107,18 +106,15 @@ keymap.set('n', '<leader>gb', ':e#<CR>', { silent = true })
 keymap.set('n', '<C-d>', ":call delete(expand('%'))<CR>", { silent = true })
 
 -- Create new file
-keymap.set('n', '<C-n>', ":new %:h/")
-
--- Switch Case
-keymap.set('i', '<A-d>', "<Esc>:lua require('textcase').lsp_rename('to_pascal_case')<CR>i", { silent = true })
-keymap.set('i', '<A-s>', "<Esc>:lua require('textcase').lsp_rename('to_snake_case')<CR>i", { silent = true })
+keymap.set('n', '<A-n>', ":new %:h/")
 
 -- Move cell
-keymap.set('i', '<A-Up>', "<Esc>1000000<Right>1000000<Left>v1000000<Right>:m '<-2<CR>gv=gv<CR><Esc>i<Up>", { silent = true })
-keymap.set('i', '<A-Down>', "<Esc>1000000<Right>1000000<Left>v1000000<Right>:m '>+1<CR>gv=gv<CR><Esc>i<Down>", { silent = true })
+keymap.set('i', '<A-Up>', "<Esc>100000000<Right>100000000<Left>v1000000<Right>:m '<-2<CR>gv=gv<CR><Esc>i<Up>", { silent = true })
+keymap.set('i', '<A-Down>', "<Esc>100000000<Right>100000000<Left>v1000000<Right>:m '>+1<CR>gv=gv<CR><Esc>i<Down>", { silent = true })
 
 -- Terminal
 keymap.set('n', '<C-t>', ":terminal<CR>", { silent = true })
 keymap.set('t', '<C-t>', [[<C-\><C-n>]],{noremap=true})
 
-
+-- Delete word
+keymap.set('i', '<C-H>', '<C-w>', { noremap = true, silent = true })

@@ -41,6 +41,9 @@ return {
         'quick_lint_js',
         'yamlls',
         'pyright',
+        'dockerls',
+        'docker_compose_language_service',
+        'taplo',
       }
     })
 
@@ -49,10 +52,10 @@ return {
       ensure_installed = {
         'black',
         'debugpy',
-        'flake8',
+        -- 'flake8',
         'isort',
-        'mypy',
-        'pylint',
+        -- 'mypy',
+        -- 'pylint',
         'rust-analyzer',
       },
     })
