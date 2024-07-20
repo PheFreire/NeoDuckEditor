@@ -3,6 +3,25 @@ vim.g.mapleader = " "
 local keymap = vim.keymap
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+keymap.set('n', 'l', function ()
+    local col = vim.fn.col('.')
+    local line = vim.fn.getline('.')
+    if col >= #line then
+        vim.cmd('normal! j0')
+    else
+        vim.cmd('normal! l')
+    end
+end, { noremap = true, silent = true })
+
+keymap.set('n', 'h', function ()
+    local col = vim.fn.col('.')
+    if col == 1 then
+        vim.cmd('normal! k$')
+    else
+        vim.cmd('normal! h')
+    end
+end,  { noremap = true, silent = true })
+
 
 keymap.set("n", "k", "<Down>", { noremap = true, silent = true })
 keymap.set("n", "j", "<Up>", { noremap = true, silent = true })
@@ -87,6 +106,12 @@ keymap.set('n', '<leader>gd', '<cmd>lua vim.lsp.buf.definition()<CR>') -- Open t
 keymap.set('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>')
 keymap.set('n', '<leader>gs', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
 keymap.set('v', '<leader>gf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>')
+keymap.set('i', '<A-a>', function()
+    if vim.fn.pumvisible() == 1 then
+        return vim.api.nvim_replace_termcodes('<C-e>', true, true, true)
+    end
+    return ''
+end, { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Clipboard)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -107,8 +132,8 @@ keymap.set("n", '<leader>fg', '<cmd>Telescope live_grep<CR>', { noremap = true, 
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(File CRUD)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set('n', '<C-d>', ":call delete(expand('%'))<CR>", { silent = true }) -- Delete file
-keymap.set('n', '<A-n>', ":new %:h/") -- Create new file
+-- keymap.set('n', '<C-d>', ":call delete(expand('%'))<CR>", { silent = true }) -- Delete file
+-- keymap.set('n', '<A-n>', ":new %:h/") -- Create new file
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Cell)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -125,5 +150,7 @@ keymap.set('t', '<C-t>', [[<C-\><C-n>]], { noremap = true })
 keymap.set('n', '<C-_>', ':Comment<CR>', { noremap = true, silent = true })
 keymap.set('v', '<C-_>', ':Comment<CR>', { noremap = true, silent = true })
 
- 
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Oil)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+-- keymap.set('n', "o", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 

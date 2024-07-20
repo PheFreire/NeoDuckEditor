@@ -3,6 +3,7 @@ return {
   requires = {
     'nvim-tree/nvim-web-devicons', -- Recomendado para ícones de desenvolvedor
   },
+  priority = 1000,
   config = function()
     require 'nvim-web-devicons'.setup()
     local nvimtree = require("nvim-tree")
