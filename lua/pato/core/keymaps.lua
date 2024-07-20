@@ -25,8 +25,8 @@ end,  { noremap = true, silent = true })
 
 keymap.set("n", "k", "<Down>", { noremap = true, silent = true })
 keymap.set("n", "j", "<Up>", { noremap = true, silent = true })
-keymap.set("n", "<C-l>", "1000000<Right>", { noremap = true, silent = true })
-keymap.set("n", "<C-h>", "1000000<Left>", { noremap = true, silent = true })
+keymap.set("n", "<C-l>", "e", { noremap = true, silent = true })
+keymap.set("n", "<C-h>", "b", { noremap = true, silent = true })
 keymap.set("n", "<C-k>", "1000000<Down>", { noremap = true, silent = true })
 keymap.set("n", "<C-j>", "1000000<Up>", { noremap = true, silent = true })
 keymap.set("n", "<C-q>", ":q!<CR>") -- quit without saving
@@ -35,20 +35,41 @@ keymap.set('n', '<leader>gb', ':e#<CR>', { silent = true }) -- Open last buffer
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps visual-mode)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+keymap.set('v', 'l', function ()
+    local col = vim.fn.col('.')
+    local line = vim.fn.getline('.')
+    if col >= #line then
+        vim.cmd('normal! j0')
+    else
+        vim.cmd('normal! l')
+    end
+end, { noremap = true, silent = true })
+
+keymap.set('v', 'h', function ()
+    local col = vim.fn.col('.')
+    if col == 1 then
+        vim.cmd('normal! k$')
+    else
+        vim.cmd('normal! h')
+    end
+end,  { noremap = true, silent = true })
+
+
+
 keymap.set("v", "k", "<Down>", { noremap = true, silent = true })
 keymap.set("v", "j", "<Up>", { noremap = true, silent = true })
-keymap.set("v", "<C-l>", "100000000<Right>", { noremap = true, silent = true })
-keymap.set("v", "<C-h>", "100000000<Left>", { noremap = true, silent = true })
+keymap.set("v", "<C-l>", "e", { noremap = true, silent = true })
+keymap.set("v", "<C-h>", "b", { noremap = true, silent = true })
 keymap.set("v", "<C-k>", "100000000<Down>", { noremap = true, silent = true })
 keymap.set("v", "<C-j>", "100000000<Up>", { noremap = true, silent = true })
-keymap.set('v', '<BS>', '"_d', { noremap = true, silent = true })
+keymap.set('v', 'x', '"_d', { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps editor-model)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set("i", "jk", "<ESC>") -- exit insert mode with jk 
 keymap.set('i', '<C-H>', '<C-w>', { noremap = true, silent = true }) -- Delete word with Crtl
-vim.api.nvim_set_keymap('i', '<C-Left>', '<Esc>bi', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('i', '<C-Right>', '<Esc>ea', { noremap = true, silent = true })
+keymap.set('i', '<C-Left>', '<Esc>bi', { noremap = true, silent = true })
+keymap.set('i', '<C-Right>', '<Esc>ea', { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Split window management)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
