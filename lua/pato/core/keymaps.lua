@@ -22,6 +22,7 @@ keymap.set("v", "<C-l>", "100000000<Right>", { noremap = true, silent = true })
 keymap.set("v", "<C-h>", "100000000<Left>", { noremap = true, silent = true })
 keymap.set("v", "<C-k>", "100000000<Down>", { noremap = true, silent = true })
 keymap.set("v", "<C-j>", "100000000<Up>", { noremap = true, silent = true })
+keymap.set('v', '<BS>', '"_d', { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps editor-model)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -119,4 +120,10 @@ keymap.set('i', '<A-Down>', "<Esc>100000000<Right>100000000<Left>v1000000<Right>
 keymap.set('n', '<C-t>', ":terminal<CR>", { silent = true })
 keymap.set('t', '<C-t>', [[<C-\><C-n>]], { noremap = true })
 
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Comment)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+keymap.set('n', '<C-_>', ':Comment<CR>', { noremap = true, silent = true })
+keymap.set('v', '<C-_>', ':Comment<CR>', { noremap = true, silent = true })
+
+ 
 
