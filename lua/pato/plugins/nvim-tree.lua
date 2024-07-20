@@ -1,7 +1,10 @@
 return {
   "nvim-tree/nvim-tree.lua",
-
+  requires = {
+    'nvim-tree/nvim-web-devicons', -- Recomendado para ícones de desenvolvedor
+  },
   config = function()
+    require 'nvim-web-devicons'.setup()
     local nvimtree = require("nvim-tree")
 
     -- recommended settings from nvim-tree documentation
@@ -13,12 +16,10 @@ return {
         width = 35,
         relativenumber = true,
       },
-
       git = {
-        enable = true,
         ignore = false,
+        enable = true,
       },
-      
       -- Icons
       renderer = {
         indent_markers = {
@@ -52,9 +53,7 @@ return {
         },
       },
 
-      -- disable window_picker for
-      -- explorer to work well with
-      -- window splits
+      -- disable window_picker to enable window splits
       actions = {
         open_file = {
           window_picker = {
