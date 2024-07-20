@@ -175,3 +175,11 @@ keymap.set('v', '<C-_>', ':Comment<CR>', { noremap = true, silent = true })
 
 -- keymap.set('n', "o", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
+
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Oil)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+-- Mapeia Shift + k para rolar a tela para cima sem mover o cursor
+vim.api.nvim_set_keymap('n', 'J', '<C-y>', { noremap = true, silent = true })
+
+-- Mapeia Shift + j para rolar a tela para baixo sem mover o cursor
+vim.api.nvim_set_keymap('n', 'K', '<C-e>', { noremap = true, silent = true })
