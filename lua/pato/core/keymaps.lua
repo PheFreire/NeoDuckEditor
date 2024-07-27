@@ -25,10 +25,15 @@ end,  { noremap = true, silent = true })
 
 keymap.set("n", "k", "<Down>", { noremap = true, silent = true })
 keymap.set("n", "j", "<Up>", { noremap = true, silent = true })
+
 keymap.set("n", "<C-l>", "e", { noremap = true, silent = true })
+keymap.set("n", "<A-l>", "1000000<Right>", { noremap = true, silent = true })
+
 keymap.set("n", "<C-h>", "b", { noremap = true, silent = true })
-keymap.set("n", "<C-k>", "1000000<Down>", { noremap = true, silent = true })
-keymap.set("n", "<C-j>", "1000000<Up>", { noremap = true, silent = true })
+keymap.set("n", "<A-h>", "1000000<Left>", { noremap = true, silent = true })
+
+keymap.set("n", "<A-k>", "1000000<Down>", { noremap = true, silent = true })
+keymap.set("n", "<A-j>", "1000000<Up>", { noremap = true, silent = true })
 keymap.set("n", "<C-q>", ":q!<CR>") -- quit without saving
 keymap.set("n", "<C-s>", ":w<CR>") -- save
 keymap.set('n', '<leader>gb', ':e#<CR>', { silent = true }) -- Open last buffer
@@ -58,10 +63,15 @@ end,  { noremap = true, silent = true })
 
 keymap.set("v", "k", "<Down>", { noremap = true, silent = true })
 keymap.set("v", "j", "<Up>", { noremap = true, silent = true })
+
 keymap.set("v", "<C-l>", "e", { noremap = true, silent = true })
+keymap.set("v", "<A-l>", "1000000<Right>", { noremap = true, silent = true })
+
 keymap.set("v", "<C-h>", "b", { noremap = true, silent = true })
-keymap.set("v", "<C-k>", "100000000<Down>", { noremap = true, silent = true })
-keymap.set("v", "<C-j>", "100000000<Up>", { noremap = true, silent = true })
+keymap.set("v", "<A-h>", "1000000<Left>", { noremap = true, silent = true })
+
+keymap.set("v", "<A-k>", "100000000<Down>", { noremap = true, silent = true })
+keymap.set("v", "<A-j>", "100000000<Up>", { noremap = true, silent = true })
 keymap.set('v', 'x', '"_d', { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps editor-model)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -175,11 +185,53 @@ keymap.set('v', '<C-_>', ':Comment<CR>', { noremap = true, silent = true })
 
 -- keymap.set('n', "o", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
-
--- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Oil)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Move Window)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 -- Mapeia Shift + k para rolar a tela para cima sem mover o cursor
-vim.api.nvim_set_keymap('n', 'J', '<C-y>', { noremap = true, silent = true })
+keymap.set('n', 'J', '<C-y>', { noremap = true, silent = true })
 
 -- Mapeia Shift + j para rolar a tela para baixo sem mover o cursor
-vim.api.nvim_set_keymap('n', 'K', '<C-e>', { noremap = true, silent = true })
+keymap.set('n', 'K', '<C-e>', { noremap = true, silent = true })
+
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Move Window)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+keymap.set('n', 'n', ':set wrap!<CR>', { noremap = true, silent = true })
+
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Replace text)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+keymap.set('n', 'F', function()
+  local search_text = vim.fn.input("Search: ")
+  local replace_text = vim.fn.input("Replace: ")
+  local project_path = vim.fn.getcwd()
+
+  -- Busca pelo texto e preenche a quickfix list
+  vim.cmd("vimgrep /" .. search_text .. "/gj " .. project_path .. "/**/*")
+  vim.cmd("copen")
+
+  -- Substitui o texto em todos os arquivos da quickfix list com confirmação
+  local qf_list = vim.fn.getqflist()
+  for _, item in ipairs(qf_list) do
+    if item.valid == 1 and item.bufnr and item.lnum and item.filename then
+      -- Abre o arquivo na quickfix list
+      vim.cmd("edit " .. item.filename)
+      -- Pula para a linha especificada
+      vim.cmd(":" .. item.lnum)
+      
+      -- Substitui o texto com confirmação usando API Lua
+      local bufnr = vim.fn.bufnr(item.filename)
+      local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+      for lnum, line in ipairs(lines) do
+        lines[lnum] = line:gsub(search_text, function(match)
+          print("Replace in file: " .. item.filename .. " line: " .. lnum)
+          return replace_text
+        end)
+      end
+      vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+      vim.cmd("write")
+    end
+  end
+
+  -- Fecha a quickfix list
+  vim.cmd("cclose")
+end, { noremap = true, silent = true })
+
