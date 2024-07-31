@@ -195,7 +195,7 @@ keymap.set('n', 'K', '<C-e>', { noremap = true, silent = true })
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Move Window)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set('n', 'n', ':set wrap!<CR>', { noremap = true, silent = true })
+keymap.set('n', 'm', ':set wrap!<CR>', { noremap = true, silent = true })
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Replace text)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -235,3 +235,6 @@ keymap.set('n', 'F', function()
   vim.cmd("cclose")
 end, { noremap = true, silent = true })
 
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-()-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+keymap.set('n', '//', ':noh<CR>', { noremap = true, silent = true })
