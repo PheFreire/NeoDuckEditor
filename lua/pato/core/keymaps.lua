@@ -238,3 +238,7 @@ end, { noremap = true, silent = true })
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-()-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('n', '//', ':noh<CR>', { noremap = true, silent = true })
+keymap.set('i', '))', '<ESC>bi(<ESC>ei<Right>)')
+keymap.set('i', '', '<ESC>:w<CR>i')
+
+
