@@ -45,10 +45,10 @@ return {
           ['<C-b>'] = cmp.mapping.scroll_docs(-4), -- scroll backward
           ['<C-f>'] = cmp.mapping.scroll_docs(4), -- scroll forward
           ['<C-Space>'] = cmp.mapping.complete {}, -- show completion suggestions
-          ['<CR>'] = cmp.mapping.confirm {
-            behavior = cmp.ConfirmBehavior.Replace,
+          ['<CR>'] = cmp.mapping.confirm ({
+            behavior = cmp.ConfirmBehavior.Insert,
             select = true,
-          },
+          }),
       -- Tab through suggestions or when a snippet is active, tab to the next argument
           ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then

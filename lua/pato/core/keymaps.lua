@@ -147,7 +147,7 @@ end, { noremap = true, silent = true })
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Clipboard)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('v', '<C-c>', '"+y', { noremap = true }) -- copy to system clipboard
-keymap.set('i', '<C-v>', '<Esc>"+p`[v`]vi', { noremap = true }) -- paste system clipboard data
+keymap.set('i', '<C-v>', '<Esc>"+p`[v`]vi<Right>', { noremap = true }) -- paste system clipboard data
 keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Undo/Reundo)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -169,7 +169,7 @@ keymap.set("n", '<leader>fg', '<cmd>Telescope live_grep<CR>', { noremap = true, 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Cell)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('i', '<A-Up>', "<Esc>100000000<Right>100000000<Left>v1000000<Right>:m '<-2<CR>gv=gv<CR><Esc>i<Up>", { silent = true })
-keymap.set('i', '<A-Down>', "<Esc>100000000<Right>100000000<Left>v1000000<Right>:m '>+1<CR>gv=gv<CR><Esc>i<Down>", { silent = true })
+keymap.set('i', '<A-Down>', "<Esc>100000000<Right>100000000<Left>v1000000<Right>:m '>+1<CR>gv=gv<CR><Esc>i<Up>", { silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Terminal)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -238,7 +238,8 @@ end, { noremap = true, silent = true })
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-()-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('n', '//', ':noh<CR>', { noremap = true, silent = true })
-keymap.set('i', '))', '<ESC>bi(<ESC>ei<Right>)')
 keymap.set('i', '', '<ESC>:w<CR>i')
 
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Unammed Tabs)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+keymap.set('n', '<leader>n', ':enew<CR>')
 
