@@ -23,6 +23,18 @@ return {
     -- Configura o Telescope
     telescope.setup({
       defaults = {
+      vimgrep_arguments = {
+          'rg',
+          '--color=never',
+          '--no-heading',
+          '--with-filename',
+          '--line-number',
+          '--column',
+          '--smart-case',
+          '--hidden',  -- Adiciona a flag --hidden para incluir arquivos ocultos
+          '--glob',
+          '!.git/*', -- Exclui o diretório .git
+        },
         -- Personalizações visuais e de comportamento
         prompt_prefix = "> ",
         selection_caret = "> ",

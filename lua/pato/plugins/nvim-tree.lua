@@ -36,10 +36,14 @@ return {
           glyphs = {
             modified = "●",
             folder = {
+              empty = "📁",
+              empty_open = "📂",
               default = "📁",
               open = "📂",
-              arrow_open = "↓",
-              arrow_closed = "→",
+              arrow_open = "▾",
+              -- arrow_open = "↓",
+              arrow_closed = "▸",
+              -- arrow_closed = "→",
             },
             git = {
               unstaged = "✗",
