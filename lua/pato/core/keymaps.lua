@@ -241,5 +241,14 @@ keymap.set('n', '//', ':noh<CR>', { noremap = true, silent = true })
 keymap.set('i', '', '<ESC>:w<CR>i')
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Unammed Tabs)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 keymap.set('n', '<leader>n', ':enew<CR>')
 
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Git Tools)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+keymap.set('n', '<leader>ms', ':G<CR>', { noremap = true, silent = true })  -- Git status
+keymap.set('n', '<leader>md', ':Gvdiffsplit<CR>', { noremap = true, silent = true })  -- Diferença de versões
+
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Git Tools)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+keymap.set('n', '<leader>p', ':MarkdownPreview<CR>', { noremap = true, silent = true })  --MarkDownPreview 
