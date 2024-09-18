@@ -29,7 +29,11 @@ return {
     require('mason-lspconfig').setup({
       -- Install these LSPs automatically
       ensure_installed = {
-        'tsserver',
+        'matlab_ls',
+        'prismals',
+        'terraformls',
+        'ts_ls',
+        'kotlin_language_server',
         'eslint',
         'bashls',
         'cssls',
@@ -44,6 +48,7 @@ return {
         'dockerls',
         'docker_compose_language_service',
         'taplo',
+        'arduino_language_server'
       }
     })
 
