@@ -45,10 +45,12 @@ return {
         'quick_lint_js',
         'yamlls',
         'pyright',
+        -- 'pylsp',
+        'remark_ls',
         'dockerls',
         'docker_compose_language_service',
         'taplo',
-        'arduino_language_server'
+        'arduino_language_server',
       }
     })
 
@@ -57,10 +59,10 @@ return {
       ensure_installed = {
         'black',
         'debugpy',
-        -- 'flake8',
-        'isort',
+        'flake8',
+        -- 'isort',
         -- 'mypy',
-        -- 'pylint',
+        'pylint',
         'rust-analyzer',
       },
     })
@@ -71,15 +73,15 @@ return {
 
     local lspconfig = require('lspconfig')
     local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-    local lsp_attach = function(client, bufnr)
-      -- Create your keybindings here...
-    end
+    -- local lsp_attach = function(client, bufnr)
+    --   -- Create your keybindings here...
+    -- end
 
     -- Call setup on each LSP server
     require('mason-lspconfig').setup_handlers({
       function(server_name)
         lspconfig[server_name].setup({
-          on_attach = lsp_attach,
+          -- on_attach = lsp_attach,
           capabilities = lsp_capabilities,
         })
       end

@@ -23,7 +23,7 @@ return {
     -- Configura o Telescope
     telescope.setup({
       defaults = {
-      vimgrep_arguments = {
+        vimgrep_arguments = {
           'rg',
           '--color=never',
           '--no-heading',
@@ -65,8 +65,17 @@ return {
         buffer_previewer_maker = require('telescope.previewers').buffer_previewer_maker,
       },
       pickers = {
+        live_grep = {
+          grep_open_file = false,
+        },
         find_files = {
-          find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+          find_command = {
+            "rg",
+            "--files",
+            "--hidden",
+            "--glob",
+            "!**/.git/*",
+          },
         },
       },
     })

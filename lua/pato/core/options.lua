@@ -3,7 +3,21 @@ vim.cmd("let g:netrw_liststyle = 3")
 local opt = vim.opt
 local g = vim.g
 
+-- Wrap Configs
+opt.wrap = false
+opt.linebreak = true
+opt.breakindent = true
+
+-- Clipboard
+
 opt.clipboard = 'unnamedplus'
+
+--
+vim.diagnostic.config({
+    signs = true,          -- Ativa sinais à esquerda do código para erros
+    underline = true,      -- Ativa sublinhado para erros
+    update_in_insert = false,
+})
 
 opt.relativenumber = true
 opt.number = true
@@ -14,12 +28,10 @@ opt.shiftwidth = 2 -- 2 spaces for indent width
 opt.expandtab = true -- expand tab to spaces
 opt.autoindent = true -- copy indent from current line when starting new one
 
-opt.wrap = false
 
 -- search settings
 opt.ignorecase = true -- ignore case when searching
 opt.smartcase = true -- if you include mixed case in your search, assumes you want case-sensitive
-
 opt.cursorline = true
 
 -- turn on termguicolors for tokyonight colorscheme to work

@@ -132,28 +132,32 @@ keymap.set("n", "<leader>er", "<cmd>NvimTreeRefresh<CR>", { desc = "Refresh file
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(LSP)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set('n', '<leader>gg', '<cmd>lua vim.lsp.buf.hover()<CR>') -- Get code definition
-keymap.set('n', '<leader>gd', '<cmd>lua vim.lsp.buf.definition()<CR>') -- Open the code root path script
+keymap.set('n', '<leader>gg', '<cmd>lua vim.lsp.buf.hover()<CR>')
+keymap.set('n', '<leader>gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
 keymap.set('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>')
 keymap.set('n', '<leader>gs', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
 keymap.set('v', '<leader>gf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>')
-keymap.set('i', '<A-a>', function()
-    if vim.fn.pumvisible() == 1 then
-        return vim.api.nvim_replace_termcodes('<C-e>', true, true, true)
+
+keymap.set('n', '<leader>g', function ()
+    for _, win in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+        local config = vim.api.nvim_win_get_config(win)
+        if config.relative ~= '' then  -- Se a janela for relativa (flutuante)
+            vim.api.nvim_win_close(win, true)  -- Fecha a janela
+        end
     end
-    return ''
 end, { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Clipboard)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('v', '<C-c>', '"+y', { noremap = true }) -- copy to system clipboard
-keymap.set('i', '<C-v>', '<Esc>"+p`[v`]vi<Right>', { noremap = true }) -- paste system clipboard data
+keymap.set('i', '<C-v>', '<Left><c-o>p', { noremap = true }) -- paste system clipboard data
 keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Undo/Reundo)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set('i', '<C-z>', '<Esc>"+u`[v`]vi', { noremap = true, silent = true })
-keymap.set('i', '<A-z>', '<Esc>"+<C-r>`[v`]vi', { noremap = true, silent = true })
+-- Mapeamento de teclas para <C-z> no modo de inserção
+keymap.set('i', '<C-z>', '<C-o>u', {noremap = true, silent = true,})
+keymap.set('i', '<A-z>', '<C-o><C-r>', { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Telescope)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -197,44 +201,6 @@ keymap.set('n', 'K', '<C-e>', { noremap = true, silent = true })
 
 keymap.set('n', 'm', ':set wrap!<CR>', { noremap = true, silent = true })
 
--- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Replace text)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-keymap.set('n', 'F', function()
-  local search_text = vim.fn.input("Search: ")
-  local replace_text = vim.fn.input("Replace: ")
-  local project_path = vim.fn.getcwd()
-
-  -- Busca pelo texto e preenche a quickfix list
-  vim.cmd("vimgrep /" .. search_text .. "/gj " .. project_path .. "/**/*")
-  vim.cmd("copen")
-
-  -- Substitui o texto em todos os arquivos da quickfix list com confirmação
-  local qf_list = vim.fn.getqflist()
-  for _, item in ipairs(qf_list) do
-    if item.valid == 1 and item.bufnr and item.lnum and item.filename then
-      -- Abre o arquivo na quickfix list
-      vim.cmd("edit " .. item.filename)
-      -- Pula para a linha especificada
-      vim.cmd(":" .. item.lnum)
-      
-      -- Substitui o texto com confirmação usando API Lua
-      local bufnr = vim.fn.bufnr(item.filename)
-      local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-      for lnum, line in ipairs(lines) do
-        lines[lnum] = line:gsub(search_text, function(match)
-          print("Replace in file: " .. item.filename .. " line: " .. lnum)
-          return replace_text
-        end)
-      end
-      vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
-      vim.cmd("write")
-    end
-  end
-
-  -- Fecha a quickfix list
-  vim.cmd("cclose")
-end, { noremap = true, silent = true })
-
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-()-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('n', '//', ':noh<CR>', { noremap = true, silent = true })
@@ -251,4 +217,6 @@ keymap.set('n', '<leader>md', ':Gvdiffsplit<CR>', { noremap = true, silent = tru
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Git Tools)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set('n', '<leader>p', ':MarkdownPreview<CR>', { noremap = true, silent = true })  --MarkDownPreview 
+keymap.set('n', '<leader>p', ':MarkdownPreview<CR>', { noremap = true, silent = true })  --MarkDownPreview
+
+
