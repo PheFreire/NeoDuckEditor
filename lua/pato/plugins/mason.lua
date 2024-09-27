@@ -87,6 +87,22 @@ return {
       end
     })
 
+  require('lspconfig').pyright.setup({
+    on_attach = function(client)
+      -- Ativar detecção de arquivos monitorados
+      client.server_capabilities.didChangeWatchedFiles = true
+    end,
+    settings = {
+      python = {
+        analysis = {
+          autoSearchPaths = true,
+          useLibraryCodeForTypes = true,
+          diagnosticMode = "workspace",
+        },
+      },
+    },
+  })
+
     -- Lua LSP settings
     lspconfig.lua_ls.setup {
       settings = {

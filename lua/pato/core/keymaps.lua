@@ -3,7 +3,54 @@ vim.g.mapleader = " "
 local keymap = vim.keymap
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+--
+keymap.set("n", "k", "<Down>", { noremap = true, silent = true })
+keymap.set("n", "j", "<Up>", { noremap = true, silent = true })
+
+keymap.set("n", "<C-l>", "e", { noremap = true, silent = true })
+keymap.set("n", "<A-l>", "1000000<Right>", { noremap = true, silent = true })
+
+keymap.set("n", "<C-h>", "b", { noremap = true, silent = true })
+keymap.set("n", "<A-h>", "1000000<Left>", { noremap = true, silent = true })
+
+keymap.set("n", "<A-k>", "1000000<Down>", { noremap = true, silent = true })
+keymap.set("n", "<A-j>", "1000000<Up>", { noremap = true, silent = true })
+keymap.set("n", "<C-q>", ":q!<CR>") -- quit without saving
+keymap.set("n", "<C-s>", ":w<CR>") -- save
+keymap.set('n', '<leader>gb', ':e#<CR>', { silent = true }) -- Open last buffer
+
+--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps visual-mode)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+keymap.set("v", "k", "<Down>", { noremap = true, silent = true })
+keymap.set("v", "j", "<Up>", { noremap = true, silent = true })
+
+keymap.set("v", "<C-l>", "e", { noremap = true, silent = true })
+keymap.set("v", "<A-l>", "1000000<Right>", { noremap = true, silent = true })
+
+keymap.set("v", "<C-h>", "b", { noremap = true, silent = true })
+keymap.set("v", "<A-h>", "1000000<Left>", { noremap = true, silent = true })
+
+keymap.set("v", "<A-k>", "100000000<Down>", { noremap = true, silent = true })
+keymap.set("v", "<A-j>", "100000000<Up>", { noremap = true, silent = true })
+
+keymap.set("v", "<A-k>", "100000000<Down>", { noremap = true, silent = true })
+keymap.set("v", "<A-j>", "100000000<Up>", { noremap = true, silent = true })
+
+keymap.set('v', 'x', '"_d', { noremap = true, silent = true })
+
+
+
 keymap.set('n', 'l', function ()
+    local col = vim.fn.col('.')
+    local line = vim.fn.getline('.')
+    if col >= #line then
+        vim.cmd('normal! j0')
+    else
+        vim.cmd('normal! l')
+    end
+end, { noremap = true, silent = true })
+
+keymap.set('n', '<Right>', function ()
     local col = vim.fn.col('.')
     local line = vim.fn.getline('.')
     if col >= #line then
@@ -22,23 +69,14 @@ keymap.set('n', 'h', function ()
     end
 end,  { noremap = true, silent = true })
 
-
-keymap.set("n", "k", "<Down>", { noremap = true, silent = true })
-keymap.set("n", "j", "<Up>", { noremap = true, silent = true })
-
-keymap.set("n", "<C-l>", "e", { noremap = true, silent = true })
-keymap.set("n", "<A-l>", "1000000<Right>", { noremap = true, silent = true })
-
-keymap.set("n", "<C-h>", "b", { noremap = true, silent = true })
-keymap.set("n", "<A-h>", "1000000<Left>", { noremap = true, silent = true })
-
-keymap.set("n", "<A-k>", "1000000<Down>", { noremap = true, silent = true })
-keymap.set("n", "<A-j>", "1000000<Up>", { noremap = true, silent = true })
-keymap.set("n", "<C-q>", ":q!<CR>") -- quit without saving
-keymap.set("n", "<C-s>", ":w<CR>") -- save
-keymap.set('n', '<leader>gb', ':e#<CR>', { silent = true }) -- Open last buffer
-
---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps visual-mode)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+keymap.set('n', '<Left>', function ()
+    local col = vim.fn.col('.')
+    if col == 1 then
+        vim.cmd('normal! k$')
+    else
+        vim.cmd('normal! h')
+    end
+end,  { noremap = true, silent = true })
 
 keymap.set('v', 'l', function ()
     local col = vim.fn.col('.')
@@ -59,27 +97,32 @@ keymap.set('v', 'h', function ()
     end
 end,  { noremap = true, silent = true })
 
+keymap.set('v', '<Right>', function ()
+    local col = vim.fn.col('.')
+    local line = vim.fn.getline('.')
+    if col >= #line then
+        vim.cmd('normal! j0')
+    else
+        vim.cmd('normal! l')
+    end
+end, { noremap = true, silent = true })
 
+keymap.set('v', '<Left>', function ()
+    local col = vim.fn.col('.')
+    if col == 1 then
+        vim.cmd('normal! k$')
+    else
+        vim.cmd('normal! h')
+    end
+end,  { noremap = true, silent = true })
 
-keymap.set("v", "k", "<Down>", { noremap = true, silent = true })
-keymap.set("v", "j", "<Up>", { noremap = true, silent = true })
-
-keymap.set("v", "<C-l>", "e", { noremap = true, silent = true })
-keymap.set("v", "<A-l>", "1000000<Right>", { noremap = true, silent = true })
-
-keymap.set("v", "<C-h>", "b", { noremap = true, silent = true })
-keymap.set("v", "<A-h>", "1000000<Left>", { noremap = true, silent = true })
-
-keymap.set("v", "<A-k>", "100000000<Down>", { noremap = true, silent = true })
-keymap.set("v", "<A-j>", "100000000<Up>", { noremap = true, silent = true })
-keymap.set('v', 'x', '"_d', { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps editor-model)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set("i", "jk", "<ESC>") -- exit insert mode with jk 
-keymap.set('i', '<C-H>', '<C-w>', { noremap = true, silent = true }) -- Delete word with Crtl
-keymap.set('i', '<C-Left>', '<Esc>bi', { noremap = true, silent = true })
-keymap.set('i', '<C-Right>', '<Esc>ea', { noremap = true, silent = true })
+-- keymap.set('i', '<C-H>', '<C-w>', { noremap = true, silent = true }) -- Delete word with Crtl
+keymap.set('i', '<C-Left>', '<C-o>b', { noremap = true, silent = true })
+keymap.set('i', '<C-Right>', '<C-o>e<Right>', { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Split window management)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -128,7 +171,7 @@ keymap.set("n", "<leader>qc", ":cclose<CR>") -- close quickfix list
 keymap.set("n", "<leader>ee", ":NvimTreeToggle<CR>") -- toggle file explorer
 keymap.set("n", "<leader>f", ":NvimTreeFindFile<CR>") -- find file in file explorer
 keymap.set("n", "<leader>ec", "<cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" }) -- collapse file explorer
-keymap.set("n", "<leader>er", "<cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" }) -- refresh file explorer
+keymap.set("n", "<leader>er", "<cmd>:LspRestart<CR><cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" }) -- refresh file explorer
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(LSP)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -196,6 +239,13 @@ keymap.set('n', 'J', '<C-y>', { noremap = true, silent = true })
 
 -- Mapeia Shift + j para rolar a tela para baixo sem mover o cursor
 keymap.set('n', 'K', '<C-e>', { noremap = true, silent = true })
+
+-- Mapeia Shift + k para rolar a tela para cima sem mover o cursor no modo Visual 
+keymap.set('v', 'J', '<C-y>', { noremap = true, silent = true })
+
+-- Mapeia Shift + j para rolar a tela para baixo sem mover o cursor no modo Visual
+keymap.set('v', 'K', '<C-e>', { noremap = true, silent = true })
+
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Move Window)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
