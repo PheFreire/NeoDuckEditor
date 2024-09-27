@@ -9,16 +9,19 @@ opt.linebreak = true
 opt.breakindent = true
 
 -- Clipboard
-
 opt.clipboard = 'unnamedplus'
 
---
+-- Errors
 vim.diagnostic.config({
     signs = true,          -- Ativa sinais à esquerda do código para erros
     underline = true,      -- Ativa sublinhado para erros
     update_in_insert = false,
 })
 
+-- Updating Default Iskeyword
+
+
+--
 opt.relativenumber = true
 opt.number = true
 
