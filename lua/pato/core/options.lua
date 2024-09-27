@@ -19,10 +19,10 @@ vim.diagnostic.config({
 })
 
 -- Updating Default Iskeyword
+-- vim.opt.iskeyword:append(')')
 
-
---
-opt.relativenumber = true
+-- Lateral numbers
+-- opt.relativenumber = true
 opt.number = true
 
 -- tabs & indentation

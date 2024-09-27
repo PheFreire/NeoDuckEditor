@@ -59,25 +59,6 @@ keymap.set('n', 'h', function ()
     end
 end,  { noremap = true, silent = true })
 
-keymap.set('i', '<Right>', function ()
-    local col = vim.fn.col('.')
-    local line = vim.fn.getline('.')
-    if col >= #line then
-        vim.cmd('normal! j0')
-    else
-        vim.cmd('normal! l')
-    end
-end, { noremap = true, silent = true })
-
-keymap.set('i', '<Left>', function ()
-    local col = vim.fn.col('.')
-    if col == 1 then
-        vim.cmd('normal! k$')
-    else
-        vim.cmd('normal! h')
-    end
-end,  { noremap = true, silent = true })
-
 keymap.set('v', 'l', function ()
     local col = vim.fn.col('.')
     local line = vim.fn.getline('.')
