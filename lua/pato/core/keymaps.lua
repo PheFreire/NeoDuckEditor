@@ -120,7 +120,7 @@ end,  { noremap = true, silent = true })
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps editor-model)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set("i", "jk", "<ESC>") -- exit insert mode with jk 
--- keymap.set('i', '<C-H>', '<C-w>', { noremap = true, silent = true }) -- Delete word with Crtl
+keymap.set('i', '<C-H>', '<C-w>', { noremap = true, silent = true }) -- Delete word with Crtl
 keymap.set('i', '<C-Left>', '<C-o>b', { noremap = true, silent = true })
 keymap.set('i', '<C-Right>', '<C-o>e<Right>', { noremap = true, silent = true })
 
