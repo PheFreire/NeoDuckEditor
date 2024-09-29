@@ -4,7 +4,7 @@ local keymap = vim.keymap
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set("n", "i", "<cmd>startinsert<CR><C-o><Right>")
+keymap.set("n", "i", "<cmd>startinsert<CR><Right>")
 
 keymap.set("n", "k", "<Down>", { noremap = true, silent = true })
 keymap.set("n", "j", "<Up>", { noremap = true, silent = true })
