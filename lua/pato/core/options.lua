@@ -20,6 +20,7 @@ vim.diagnostic.config({
 
 -- Updating Default Iskeyword
 -- vim.opt.iskeyword:append(')')
+vim.opt.iskeyword:remove({ '"', '.', '{', '}', '(', ')', '[', ']', '/', '\\', ':', ';', ',' })
 
 -- Lateral numbers
 -- opt.relativenumber = true

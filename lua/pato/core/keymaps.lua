@@ -3,7 +3,9 @@ vim.g.mapleader = " "
 local keymap = vim.keymap
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
---
+
+keymap.set("n", "i", "<cmd>startinsert<CR><C-o><Right>")
+
 keymap.set("n", "k", "<Down>", { noremap = true, silent = true })
 keymap.set("n", "j", "<Up>", { noremap = true, silent = true })
 keymap.set("n", "<C-l>", "e", { noremap = true, silent = true })
@@ -134,22 +136,6 @@ keymap.set("n", "<leader>sj", "<C-w>-") -- make split window height shorter
 keymap.set("n", "<leader>sk", "<C-w>+") -- make split windows height taller
 keymap.set("n", "<leader>sl", "<C-w>>5") -- make split windows width bigger 
 keymap.set("n", "<leader>sh", "<C-w><5") -- make split windows width smaller
-keymap.set(
-  "n", "<leader>sw", function()
-    local target_windows = require('leap.util').get_enterable_windows()
-    local targets = {}
-    for _, win in ipairs(target_windows) do
-      local wininfo = vim.fn.getwininfo(win)[1]
-      local pos = { wininfo.topline, 1 }  -- customize the position of the label here
-      table.insert(targets, { pos = pos, wininfo = wininfo })
-    end
-
-    require('leap').leap {
-      target_windows = target_windows, targets = targets,
-      action = function (t) vim.api.nvim_set_current_win(t.wininfo.winid) end
-    }
-  end
-)
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Tab Management)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -181,8 +167,8 @@ keymap.set('n', '<leader>gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
 keymap.set('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>')
 keymap.set('n', '<leader>gs', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
 keymap.set('v', '<leader>gf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>')
-
-keymap.set('n', '<leader>g', function ()
+-- keymap.set('i', '<C-A-a>', '<C-e>') -- Close LSP sugetion
+keymap.set('n', 'g', function ()
     for _, win in pairs(vim.api.nvim_tabpage_list_wins(0)) do
         local config = vim.api.nvim_win_get_config(win)
         if config.relative ~= '' then  -- Se a janela for relativa (flutuante)
@@ -228,6 +214,7 @@ keymap.set('t', '<C-t>', [[<C-\><C-n>]], { noremap = true })
 
 keymap.set('n', '<C-_>', ':Comment<CR>', { noremap = true, silent = true })
 keymap.set('v', '<C-_>', ':Comment<CR>', { noremap = true, silent = true })
+keymap.set('i', '<C-_>', '<C-o>:Comment<CR>', { noremap = true, silent = true })
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Oil)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -252,7 +239,7 @@ keymap.set('v', 'K', '<C-e>', { noremap = true, silent = true })
 
 keymap.set('n', 'm', ':set wrap!<CR>', { noremap = true, silent = true })
 
--- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-()-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Utils)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('n', '//', ':noh<CR>', { noremap = true, silent = true })
 keymap.set('i', '', '<ESC>:w<CR>i')
@@ -266,8 +253,27 @@ keymap.set('n', '<leader>n', ':enew<CR>')
 keymap.set('n', '<leader>ms', ':G<CR>', { noremap = true, silent = true })  -- Git status
 keymap.set('n', '<leader>md', ':Gvdiffsplit<CR>', { noremap = true, silent = true })  -- Diferença de versões
 
--- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Git Tools)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Markdown Tools)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('n', '<leader>p', ':MarkdownPreview<CR>', { noremap = true, silent = true })  --MarkDownPreview
+
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Leap)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+keymap.set("n", "<leader>sw", function()
+    local target_windows = require('leap.util').get_enterable_windows()
+    local targets = {}
+    for _, win in ipairs(target_windows) do
+      local wininfo = vim.fn.getwininfo(win)[1]
+      local pos = { wininfo.topline, 1 }  -- customize the position of the label here
+      table.insert(targets, { pos = pos, wininfo = wininfo })
+    end
+
+    require('leap').leap {
+      target_windows = target_windows, targets = targets,
+      action = function (t) vim.api.nvim_set_current_win(t.wininfo.winid) end
+    }
+  end
+)
+
+-- keymap.set('i', '<A-s>', '<C-o><cmd>lua require("flash").jump()<CR>', { noremap = true, silent = true })  --MarkDownPreview
 
 
