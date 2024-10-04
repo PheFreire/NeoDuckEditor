@@ -181,21 +181,23 @@ end, { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Clipboard)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set('v', '<C-c>', '"+y', { noremap = true }) -- copy to system clipboard
-keymap.set('i', '<C-v>', '<Left><c-o>p', { noremap = true }) -- paste system clipboard data
-keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true })
+keymap.set('v', '<C-c>', '"+y', { noremap = true, }) -- copy to system clipboard
+keymap.set('i', '<C-v>', '<Left><c-o>p', { noremap = true, }) -- paste system clipboard data
+keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true, })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Undo/Reundo)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 -- Mapeamento de teclas para <C-z> no modo de inserção
-keymap.set('i', '<C-z>', '<C-o>u', {noremap = true, silent = true,})
-keymap.set('i', '<A-z>', '<C-o><C-r>', { noremap = true, silent = true })
+keymap.set('i', '<C-z>', '<C-o>u', { noremap = true, silent = true, })
+keymap.set('i', '<A-z>', '<C-o><C-r>', { noremap = true, silent = true, })
+keymap.set('n', '<C-z>', 'u', { noremap = true, silent = true, })
+keymap.set('n', '<A-z>', '<C-r>', {noremap = true, silent = true, })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Telescope)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set('n', '<leader>fs', ':lua require"telescope.builtin".grep_string({ hidden = true })<CR>', { noremap = true, silent = true })
-keymap.set("n", "<leader>ff", ':lua require"telescope.builtin".find_files({ hidden = true })<CR>', { noremap = true, silent = true, desc = "Fuzzy find files in cwd" })
-keymap.set("n", '<leader>fg', '<cmd>Telescope live_grep<CR>', { noremap = true, silent = true })
+keymap.set('n', '<leader>fs', ':lua require"telescope.builtin".grep_string({ hidden = true })<CR>', { noremap = true, silent = true, })
+keymap.set("n", "<leader>ff", ':lua require"telescope.builtin".find_files({ hidden = true })<CR>', { noremap = true, silent = true,  })
+keymap.set("n", '<leader>fg', '<cmd>Telescope live_grep<CR>', { noremap = true, silent = true, })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(File CRUD)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -281,5 +283,5 @@ keymap.set("n", "<leader>sw", function()
 keymap.set('n', '<C-c>', '"+<Plug>(VM-Yank)<Plug>(VM-Exit)', { noremap = false, silent = true }) -- Copy multiple lines
 keymap.set('i', '<A-s>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Menu)s<Plug>(VM-Exit)i')
 keymap.set('i', '<A-d>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Menu)P<Plug>(VM-Exit)i')
-keymap.set('i', 'jk', '<Esc><Plug>(VM-Exit)')
+
 
