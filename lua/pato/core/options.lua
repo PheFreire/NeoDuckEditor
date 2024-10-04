@@ -3,6 +3,9 @@ vim.cmd("let g:netrw_liststyle = 3")
 local opt = vim.opt
 local g = vim.g
 
+-- Define Cursor Color 
+vim.api.nvim_set_hl(0, 'Cursor', { fg = 'black', bg = 'white' })
+
 -- Wrap Configs
 opt.wrap = false
 opt.linebreak = true
@@ -20,7 +23,7 @@ vim.diagnostic.config({
 
 -- Updating Default Iskeyword
 -- vim.opt.iskeyword:append(')')
-vim.opt.iskeyword:remove({ '"', '.', '{', '}', '(', ')', '[', ']', '/', '\\', ':', ';', ',' })
+opt.iskeyword:remove({ '"', '.', '{', '}', '(', ')', '[', ']', '/', '\\', ':', ';', ',', ' ', ' '})
 
 -- Lateral numbers
 -- opt.relativenumber = true
@@ -32,15 +35,14 @@ opt.shiftwidth = 2 -- 2 spaces for indent width
 opt.expandtab = true -- expand tab to spaces
 opt.autoindent = true -- copy indent from current line when starting new one
 
-
 -- search settings
 opt.ignorecase = true -- ignore case when searching
 opt.smartcase = true -- if you include mixed case in your search, assumes you want case-sensitive
-opt.cursorline = true
+opt.list = false
 
 -- turn on termguicolors for tokyonight colorscheme to work
 -- (have to use iterm2 or any other true color terminal)
-opt.termguicolors = true
+-- opt.termguicolors = true
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark
 opt.signcolumn = "yes" -- show sign column so that text doesn't shift
 

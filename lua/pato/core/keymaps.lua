@@ -125,8 +125,10 @@ keymap.set("i", "jk", "<ESC>") -- exit insert mode with jk dsada
 keymap.set('i', '<C-H>', '<C-w>', { noremap = true, silent = true }) -- Delete word with Crtl
 keymap.set('i', '<C-Right>', '<C-o>:lua _G.ctrl_right()<CR>', { noremap = true, silent = true })
 keymap.set('i', '<C-Left>', '<C-o>:lua _G.ctrl_left()<CR>', { noremap = true, silent = true })
+keymap.set('n', '<C-Right>', 'e', { noremap = true, silent = true })
+keymap.set('n', '<C-Left>', 'b', { noremap = true, silent = true })
 keymap.set('v', '<C-Left>', 'b', { noremap = true, silent = true })
-
+keymap.set('v', '<C-Right>', 'e', { noremap = true, silent = true })
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Split window management)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set("n", "<leader>s", "<C-w>v") -- split window vertically
@@ -242,7 +244,7 @@ keymap.set('n', 'm', ':set wrap!<CR>', { noremap = true, silent = true })
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Utils)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('n', '//', ':noh<CR>', { noremap = true, silent = true })
-keymap.set('i', '', '<ESC>:w<CR>i')
+keymap.set('i', '', '<C-o><cmd>w<CR>')
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Unammed Tabs)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -274,6 +276,10 @@ keymap.set("n", "<leader>sw", function()
   end
 )
 
--- keymap.set('i', '<A-s>', '<C-o><cmd>lua require("flash").jump()<CR>', { noremap = true, silent = true })  --MarkDownPreview
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Visual Multi)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+keymap.set('n', '<C-c>', '"+<Plug>(VM-Yank)<Plug>(VM-Exit)', { noremap = false, silent = true }) -- Copy multiple lines
+keymap.set('i', '<A-s>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Menu)s<Plug>(VM-Exit)i')
+keymap.set('i', '<A-d>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Menu)P<Plug>(VM-Exit)i')
+keymap.set('i', 'jk', '<Esc><Plug>(VM-Exit)')
 

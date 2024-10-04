@@ -62,6 +62,25 @@ return {
           '--hidden',  -- Adiciona a flag --hidden para incluir arquivos ocultos
           '--glob',
           '!.git/*', -- Exclui o diretório .git
+          '--no-ignore', -- Não respeita o .gitignore
+          '--fixed-strings',  -- Força a pesquisa literal (ignora expressões regulares)
+        },
+        file_ignore_patterns = {
+          "%.exe",  -- Arquivos executáveis
+          "%.bin",  -- Arquivos binários
+          "%.dll",  -- Arquivos DLL no Windows
+          "%.so",   -- Arquivos SO no Linux
+          "%.o",    -- Arquivos objeto
+          "%.a",     -- Ignora bibliotecas estáticas
+          "%.class", -- Arquivos Java compilados
+          "%.pyc",
+          "%.pdf",   -- Ignora arquivos PDF
+          "%.zip",   -- Ignora arquivos zipados
+          "%.tar",   -- Ignora arquivos tar
+          "%.gz",    -- Ignora arquivos gzip
+          "node_modules/", -- Ignora a pasta node_modules
+          "__pycache__/",  -- Ignora cache do Python,
+          ".mypy_cache/"
         },
         -- Personalizações visuais e de comportamento
         prompt_prefix = "> ",
@@ -80,7 +99,6 @@ return {
           },
         },
         file_sorter = require('telescope.sorters').get_fuzzy_file,
-        file_ignore_patterns = {},
         generic_sorter = require('telescope.sorters').get_generic_fuzzy_sorter,
         path_display = { "truncate" },
         winblend = 0,
@@ -102,7 +120,10 @@ return {
             "--files",
             "--hidden",
             "--glob",
-            "!**/.git/*",
+            -- "!**/.git/*",
+            '!.git/*',
+            '--no-ignore', -- Não respeita o .gitignore
+            '--smart-case',
           },
         },
       },
