@@ -16,17 +16,15 @@ opt.clipboard = 'unnamedplus'
 
 -- Errors
 vim.diagnostic.config({
-    signs = true,          -- Ativa sinais à esquerda do código para erros
-    underline = true,      -- Ativa sublinhado para erros
-    update_in_insert = false,
+  underline = true,
+  virtual_text = true,
+  signs = true,
+  update_in_insert = false,
+  severity_sort = true,
+  float = { source = "always", },
 })
 
--- Updating Default Iskeyword
--- vim.opt.iskeyword:append(')')
 opt.iskeyword:remove({ '"', '.', '{', '}', '(', ')', '[', ']', '/', '\\', ':', ';', ',', ' ', ' '})
-
--- Lateral numbers
--- opt.relativenumber = true
 opt.number = true
 
 -- tabs & indentation
@@ -57,15 +55,15 @@ opt.splitbelow = true -- split horizontal window to the bottom
 opt.swapfile = false
 
 -- disable some default providers
-g["loaded_node_provider"] = 0
-g["loaded_python3_provider"] = 0
-g["loaded_perl_provider"] = 0
-g["loaded_ruby_provider"] = 0
+g.loaded_node_provider = 0
+g.loaded_python3_provider = 0
+g.loaded_perl_provider = 0
+g.loaded_ruby_provider = 0
 
 -- Ativa o folding baseado em sintaxe
 vim.o.foldmethod = 'indent'
-vim.o.foldlevelstart = 99  -- Abre todos os folds por padrão
-vim.o.foldenable = false  -- Desativa o folding por padrão
+vim.o.foldlevelstart = 99
+vim.o.foldenable = false
 
 -- add binaries installed by mason.nvim to path
 local is_windows = vim.fn.has("win32") ~= 0

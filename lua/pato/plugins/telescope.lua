@@ -5,15 +5,14 @@ return {
     "nvim-lua/plenary.nvim",
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     "folke/todo-comments.nvim",
+    'nvim-telescope/telescope-live-grep-args.nvim',
   },
   config = function()
     local telescope = require("telescope")
-    local actions = require("telescope.actions")
+    local actions = require('telescope.actions')
     local transform_mod = require("telescope.actions.mt").transform_mod
     local trouble = require("trouble")
-    -- local trouble_telescope = require("trouble.providers.telescope")
-    local action_state = require('telescope.actions.state')
-
+    
     -- Cria ações personalizadas
     local custom_actions = transform_mod({
       open_trouble_qflist = function(prompt_bufnr)
@@ -24,10 +23,20 @@ return {
     -- Configura o Telescope
     telescope.setup({
       defaults = {
+        mappings = {
+          n = {
+            ["k"] = actions.move_selection_next,
+            ["j"] = actions.move_selection_previous,
+            ["h"] = actions.close,
+            ["l"] = actions.select_default,
+            ["<A-j>"] = actions.move_to_top,
+            ["<A-k>"] = actions.move_to_bottom,
+          },
+        },
         preview = {
           mime_hook = function(filepath, bufnr, opts)
             local is_image = function(filepath)
-              local image_extensions = {'png','jpg'}   -- Supported image formats
+              local image_extensions = {'png','jpg'}   -- Formatos de imagem suportados
               local split_path = vim.split(filepath:lower(), '.', {plain=true})
               local extension = split_path[#split_path]
               return vim.tbl_contains(image_extensions, extension)
@@ -47,9 +56,6 @@ return {
               require("telescope.previewers.utils").set_preview_message(bufnr, opts.winid, "Binary cannot be previewed")
             end
           end
-        },
-        mappings = {
-          i = {},
         },
         vimgrep_arguments = {
           'rg',
@@ -128,6 +134,7 @@ return {
         },
       },
     })
+    require('telescope').load_extension('fzf')
+    require('telescope').load_extension('live_grep_args')
   end,
 }
-

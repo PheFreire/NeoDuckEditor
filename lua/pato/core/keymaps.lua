@@ -4,24 +4,36 @@ local keymap = vim.keymap
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set("n", "i", "<cmd>startinsert<CR><Right>")
+keymap.set("n", "i", "<cmd>startinsert<CR><Right>", { noremap = false, silent = true })
 
 keymap.set("n", "k", "<Down>", { noremap = true, silent = true })
 keymap.set("n", "j", "<Up>", { noremap = true, silent = true })
 keymap.set("n", "<C-l>", "e", { noremap = true, silent = true })
-keymap.set("n", "<A-l>", "1000000<Right>", { noremap = true, silent = true })
+keymap.set("n", "<A-l>", "$", { noremap = true, silent = true })
 
 keymap.set("n", "<C-h>", "b", { noremap = true, silent = true })
-keymap.set("n", "<A-h>", "1000000<Left>", { noremap = true, silent = true })
+keymap.set("n", "<A-h>", "0", { noremap = true, silent = true })
 
 keymap.set("i", "<A-Left>", "<C-o>0", { noremap = true, silent = true })
 keymap.set("i", "<A-Right>", "<C-o>$", { noremap = true, silent = true })
 
-keymap.set("n", "<A-k>", "1000000<Down>", { noremap = true, silent = true })
-keymap.set("n", "<A-j>", "1000000<Up>", { noremap = true, silent = true })
-keymap.set("n", "<C-q>", ":q!<CR>") -- quit without saving
-keymap.set("n", "<C-s>", ":w<CR>") -- save
+keymap.set("n", "<A-k>", "G", { noremap = true, silent = true })
+keymap.set("n", "<A-j>", "gg", { noremap = true, silent = true })
+keymap.set("n", "<C-q>", ":q!<CR>", { noremap = false, silent = true }) -- quit without saving
+keymap.set("n", "<C-s>", ":w<CR>", { noremap = false, silent = true }) -- save
 keymap.set('n', '<leader>gb', ':e#<CR>', { silent = true }) -- Open last buffer
+
+--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps visual mode)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+keymap.set("i", "<A-k>", "<Down>", { noremap = true, silent = true })
+keymap.set("i", "<A-j>", "<Up>", { noremap = true, silent = true })
+keymap.set("i", "<A-h>", "<Left>", { noremap = true, silent = true })
+keymap.set("i", "<A-l>", "<Right>", { noremap = true, silent = true })
+
+keymap.set("i", "<A-K>", "<C-o>G", { noremap = true, silent = true })
+keymap.set("i", "<A-J>", "<C-o>gg", { noremap = true, silent = true })
+keymap.set("i", "<A-H>", "<C-o>:lua _G.ctrl_left()<CR>", { noremap = true, silent = true })
+keymap.set("i", "<A-L>", "<C-o>:lua _G.ctrl_right()<CR>", { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps visual-mode)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -29,16 +41,16 @@ keymap.set("v", "k", "<Down>", { noremap = true, silent = true })
 keymap.set("v", "j", "<Up>", { noremap = true, silent = true })
 
 keymap.set("v", "<C-l>", "e", { noremap = true, silent = true })
-keymap.set("v", "<A-l>", "1000000<Right>", { noremap = true, silent = true })
+keymap.set("v", "<A-l>", "$", { noremap = true, silent = true })
 
 keymap.set("v", "<C-h>", "b", { noremap = true, silent = true })
-keymap.set("v", "<A-h>", "1000000<Left>", { noremap = true, silent = true })
+keymap.set("v", "<A-h>", "0", { noremap = true, silent = true })
 
-keymap.set("v", "<A-k>", "100000000<Down>", { noremap = true, silent = true })
-keymap.set("v", "<A-j>", "100000000<Up>", { noremap = true, silent = true })
+keymap.set("v", "<A-k>", "G", { noremap = true, silent = true })
+keymap.set("v", "<A-j>", "gg", { noremap = true, silent = true })
 
-keymap.set("v", "<A-k>", "100000000<Down>", { noremap = true, silent = true })
-keymap.set("v", "<A-j>", "100000000<Up>", { noremap = true, silent = true })
+keymap.set("v", "<A-k>", "G", { noremap = true, silent = true })
+keymap.set("v", "<A-j>", "gg", { noremap = true, silent = true })
 
 keymap.set('v', 'x', '"_d', { noremap = true, silent = true })
 
@@ -121,7 +133,7 @@ function _G.ctrl_left()
   end
 end
 
-keymap.set("i", "jk", "<ESC>") -- exit insert mode with jk dsada
+keymap.set("i", "jk", "<ESC>", { noremap = false, silent = true }) -- exit insert mode with jk dsada
 keymap.set('i', '<C-H>', '<C-w>', { noremap = true, silent = true }) -- Delete word with Crtl
 keymap.set('i', '<C-Right>', '<C-o>:lua _G.ctrl_right()<CR>', { noremap = true, silent = true })
 keymap.set('i', '<C-Left>', '<C-o>:lua _G.ctrl_left()<CR>', { noremap = true, silent = true })
@@ -146,15 +158,6 @@ keymap.set("n", "<leader>tx", ":tabclose<CR>") -- close a tab
 keymap.set("n", "<leader>l", ":tabn<CR>") -- next tab
 keymap.set("n", "<leader>h", ":tabp<CR>") -- previous tab
 
---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Quickfix)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-keymap.set("n", "<leader>qf", ":cfirst<CR>") -- jump to first quickfix list item
-keymap.set("n", "<leader>ql", ":clast<CR>") -- jump to last quickfix list item
-keymap.set("n", "<leader>qc", ":cclose<CR>") -- close quickfix list
--- keymap.set("n", "<leader>qo", ":copen<CR>") -- open quickfix list
--- keymap.set("n", "<leader>qp", ":cprev<CR>") -- jump to prev quickfix list item
--- keymap.set("n", "<leader>qn", ":cnext<CR>") -- jump to next quickfix list item
-
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Nvim-tree)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set("n", "<leader>ee", ":NvimTreeToggle<CR>") -- toggle file explorer
@@ -164,11 +167,11 @@ keymap.set("n", "<leader>er", "<cmd>:LspRestart<CR><cmd>NvimTreeRefresh<CR>", { 
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(LSP)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set('n', '<leader>gg', '<cmd>lua vim.lsp.buf.hover()<CR>')
-keymap.set('n', '<leader>gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
-keymap.set('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>')
-keymap.set('n', '<leader>gs', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
-keymap.set('v', '<leader>gf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>')
+keymap.set('n', '<leader>gg', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = false, silent = true })
+keymap.set('n', '<leader>gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap = false, silent = true })
+keymap.set('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', { noremap = false, silent = true })
+keymap.set('n', '<leader>gs', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', { noremap = false, silent = true })
+keymap.set('v', '<leader>gf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', { noremap = false, silent = true })
 -- keymap.set('i', '<C-A-a>', '<C-e>') -- Close LSP sugetion
 keymap.set('n', 'g', function ()
     for _, win in pairs(vim.api.nvim_tabpage_list_wins(0)) do
@@ -182,7 +185,7 @@ end, { noremap = true, silent = true })
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Clipboard)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('v', '<C-c>', '"+y', { noremap = true, }) -- copy to system clipboard
-keymap.set('i', '<C-v>', '<Left><c-o>p', { noremap = true, }) -- paste system clipboard data
+keymap.set('i', '<C-v>', '<Left><C-o>p', { noremap = true, }) -- paste system clipboard data
 keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true, })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Undo/Reundo)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -198,6 +201,7 @@ keymap.set('n', '<A-z>', '<C-r>', {noremap = true, silent = true, })
 keymap.set('n', '<leader>fs', ':lua require"telescope.builtin".grep_string({ hidden = true })<CR>', { noremap = true, silent = true, })
 keymap.set("n", "<leader>ff", ':lua require"telescope.builtin".find_files({ hidden = true })<CR>', { noremap = true, silent = true,  })
 keymap.set("n", '<leader>fg', '<cmd>Telescope live_grep<CR>', { noremap = true, silent = true, })
+keymap.set('n', '<leader>t', ':Telescope buffers<CR>', { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(File CRUD)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -206,23 +210,31 @@ keymap.set("n", '<leader>fg', '<cmd>Telescope live_grep<CR>', { noremap = true, 
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Cell)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set('i', '<A-Up>', "<Esc>100000000<Right>100000000<Left>v1000000<Right>:m '<-2<CR>gv=gv<CR><Esc>i<Up>", { silent = true })
-keymap.set('i', '<A-Down>', "<Esc>100000000<Right>100000000<Left>v1000000<Right>:m '>+1<CR>gv=gv<CR><Esc>i<Up>", { silent = true })
+keymap.set('i', '<A-Up>', "<Esc>0v$:m '<-2<CR>gv=gv<CR><Esc>i<Up>", { silent = true })
+keymap.set('i', '<A-Down>', "<Esc>$v$:m '>+1<CR>gv=gv<CR><Esc>i<Up>", { silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Terminal)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set('n', '<C-t>', ":terminal<CR>", { silent = true })
-keymap.set('t', '<C-t>', [[<C-\><C-n>]], { noremap = true })
+function CreateTmuxSession()
+  vim.ui.input({ prompt = 'Terminal Session Name:', default = '' }, function(input)
+    if input ~= nil then
+      if input == "" then
+        input = "terminal-session"
+      end
+      vim.cmd('terminal')
+      vim.cmd('file ' .. input)
+    end
+  end)
+end
+
+keymap.set('n', '<C-t>', ':lua CreateTmuxSession()<CR>', { noremap = true, silent = true })
+keymap.set('t', 'jk', [[<C-\><C-n>]], { noremap = true, silent = true })
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Comment)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('n', '<C-_>', ':Comment<CR>', { noremap = true, silent = true })
 keymap.set('v', '<C-_>', ':Comment<CR>', { noremap = true, silent = true })
 keymap.set('i', '<C-_>', '<C-o>:Comment<CR>', { noremap = true, silent = true })
-
--- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Oil)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
--- keymap.set('n', "o", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Move Window)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -243,14 +255,16 @@ keymap.set('v', 'K', '<C-e>', { noremap = true, silent = true })
 
 keymap.set('n', 'm', ':set wrap!<CR>', { noremap = true, silent = true })
 
--- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Utils)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Utils)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 keymap.set('n', '//', ':noh<CR>', { noremap = true, silent = true })
-keymap.set('i', '', '<C-o><cmd>w<CR>')
+keymap.set('i', '', '<C-o><cmd>w<CR>', { noremap = false, silent = true })
+keymap.set('n', 's', ":HopWord<CR>", { noremap = true, silent = true })
+keymap.set('v', 's', ":HopWord<CR>", { noremap = true, silent = true })
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Unammed Tabs)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set('n', '<leader>n', ':enew<CR>')
+keymap.set('n', '<leader>n', ':enew<CR>', { noremap = false, silent = true })
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Git Tools)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -262,6 +276,7 @@ keymap.set('n', '<leader>md', ':Gvdiffsplit<CR>', { noremap = true, silent = tru
 keymap.set('n', '<leader>p', ':MarkdownPreview<CR>', { noremap = true, silent = true })  --MarkDownPreview
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Leap)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 keymap.set("n", "<leader>sw", function()
     local target_windows = require('leap.util').get_enterable_windows()
     local targets = {}
@@ -275,13 +290,13 @@ keymap.set("n", "<leader>sw", function()
       target_windows = target_windows, targets = targets,
       action = function (t) vim.api.nvim_set_current_win(t.wininfo.winid) end
     }
-  end
+  end, { noremap = false, silent = true }
 )
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Visual Multi)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-keymap.set('n', '<C-c>', '"+<Plug>(VM-Yank)<Plug>(VM-Exit)', { noremap = false, silent = true }) -- Copy multiple lines
-keymap.set('i', '<A-s>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Menu)s<Plug>(VM-Exit)i')
-keymap.set('i', '<A-d>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Menu)P<Plug>(VM-Exit)i')
+keymap.set('n', '<C-c>', '"+<Plug>(VM-Yank)<Plug>(VM-Exit)', { noremap = false, silent = true })
+keymap.set('i', '<A-s>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Menu)s<Plug>(VM-Exit)', { noremap = false, silent = true })
+keymap.set('i', '<A-d>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Menu)P<Plug>(VM-Exit)', { noremap = false, silent = true })
 
 
