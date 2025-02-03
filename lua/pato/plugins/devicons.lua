@@ -1,15 +1,10 @@
 return {
   'nvim-tree/nvim-web-devicons',
+  lazy = false,
+  priority = 100000,
   config = function()
-    local devicons = require('nvim-web-devicons')
-    devicons.setup {
-      extension = {
-        [".envrc"] = {
-          icon = "",
-          color = "#808080",
-          name = "EnvRc"
-        },
-      },
+    require('nvim-web-devicons').setup {
+      default = true,
       override = {
         -- Python (.py)
         py = {
@@ -80,7 +75,7 @@ return {
         -- Shell Script (.sh)
         sh = {
           icon = "",           -- Ícone do Shell Script
-          color = "#808080",     -- Cor preta do Shell
+          color = "#808080",     -- Cor cinza do Shell
           name = "Shell"
         },
         -- Markdown (.md)
@@ -107,46 +102,43 @@ return {
           color = "#2496ED",     -- Cor do Docker
           name = "Dockerfile"
         },
-
-            -- Swift (.swift)
-      swift = {
-        icon = "",           -- Ícone para Swift
-        color = "#F05138",     -- Cor laranja do Swift
-        name = "Swift"
-      },
-      -- Rust (.rs)
-      rs = {
-        icon = "",           -- Ícone para Rust
-        color = "#dea584",     -- Cor marrom do Rust
-        name = "Rust"
-      },
-      -- Kotlin (.kt)
-      kt = {
-        icon = "",           -- Ícone para Kotlin
-        color = "#F88A02",     -- Cor laranja do Kotlin
-        name = "Kotlin"
-      },
-      -- Haskell (.hs)
-      hs = {
-        icon = "",           -- Ícone para Haskell
-        color = "#5e5086",     -- Cor roxa do Haskell
-        name = "Haskell"
-      },
-
-      [".envrc"] = {
+        -- Swift (.swift)
+        swift = {
+          icon = "",           -- Ícone para Swift
+          color = "#F05138",     -- Cor laranja do Swift
+          name = "Swift"
+        },
+        -- Rust (.rs)
+        rs = {
+          icon = "",           -- Ícone para Rust
+          color = "#dea584",     -- Cor marrom do Rust
+          name = "Rust"
+        },
+        -- Kotlin (.kt)
+        kt = {
+          icon = "",           -- Ícone para Kotlin
+          color = "#F88A02",     -- Cor laranja do Kotlin
+          name = "Kotlin"
+        },
+        -- Haskell (.hs)
+        hs = {
+          icon = "",           -- Ícone para Haskell
+          color = "#5e5086",     -- Cor roxa do Haskell
+          name = "Haskell"
+        },
+        -- Arquivo .envrc
+        [".envrc"] = {
           icon = "",
           color = "#808080",
           name = "EnvRc"
-      },
-
-      Makefile = {
-        icon = "",               -- Engrenagem
-        color = "#E37933",         -- Laranja
-        name = "Makefile"
-      },
-    };
-    default = true;
-  }
+        },
+        -- Makefile
+        Makefile = {
+          icon = "",               -- Engrenagem
+          color = "#E37933",         -- Laranja
+          name = "Makefile"
+        },
+      }
+    }
   end
 }
-  

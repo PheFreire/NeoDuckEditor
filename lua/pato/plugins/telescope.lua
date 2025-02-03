@@ -1,7 +1,7 @@
 return {
   "nvim-telescope/telescope.nvim",
-  branch = "0.1.x",
   dependencies = {
+    'nvim-tree/nvim-web-devicons',
     "nvim-lua/plenary.nvim",
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     "folke/todo-comments.nvim",
@@ -10,15 +10,7 @@ return {
   config = function()
     local telescope = require("telescope")
     local actions = require('telescope.actions')
-    local transform_mod = require("telescope.actions.mt").transform_mod
-    local trouble = require("trouble")
-    
-    -- Cria ações personalizadas
-    local custom_actions = transform_mod({
-      open_trouble_qflist = function(prompt_bufnr)
-        trouble.toggle("quickfix")
-      end,
-    })
+
  
     -- Configura o Telescope
     telescope.setup({
@@ -84,6 +76,11 @@ return {
           "%.zip",   -- Ignora arquivos zipados
           "%.tar",   -- Ignora arquivos tar
           "%.gz",    -- Ignora arquivos gzip
+          "%.d", -- ignora arquivos build do rust
+          "%.rmeta",
+          "%.rlib",
+          "%.timestamp",
+          "%.lock",
           "node_modules/", -- Ignora a pasta node_modules
           "__pycache__/",  -- Ignora cache do Python,
           ".mypy_cache/"
@@ -108,7 +105,7 @@ return {
         generic_sorter = require('telescope.sorters').get_generic_fuzzy_sorter,
         path_display = { "truncate" },
         winblend = 0,
-        color_devicons = true,
+        -- color_devicons = true,
         use_less = true,
         set_env = { ['COLORTERM'] = 'truecolor' },
         file_previewer = require('telescope.previewers').vim_buffer_cat.new,

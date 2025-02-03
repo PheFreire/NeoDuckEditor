@@ -17,12 +17,14 @@ opt.clipboard = 'unnamedplus'
 -- Errors
 vim.diagnostic.config({
   underline = true,
-  virtual_text = true,
+  virtual_text = false,
   signs = true,
   update_in_insert = false,
   severity_sort = true,
-  float = { source = "always", },
+  float = { source = "always", border = "rounded" },
 })
+
+vim.o.updatetime = 350
 
 opt.iskeyword:remove({ '"', '.', '{', '}', '(', ')', '[', ']', '/', '\\', ':', ';', ',', ' ', ' '})
 opt.number = true
@@ -64,6 +66,9 @@ g.loaded_ruby_provider = 0
 vim.o.foldmethod = 'indent'
 vim.o.foldlevelstart = 99
 vim.o.foldenable = false
+
+-- Obsidian
+vim.opt.conceallevel = 2
 
 -- add binaries installed by mason.nvim to path
 local is_windows = vim.fn.has("win32") ~= 0

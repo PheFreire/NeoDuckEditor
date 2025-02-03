@@ -200,7 +200,7 @@ keymap.set('n', '<A-z>', '<C-r>', {noremap = true, silent = true, })
 
 keymap.set('n', '<leader>fs', ':lua require"telescope.builtin".grep_string({ hidden = true })<CR>', { noremap = true, silent = true, })
 keymap.set("n", "<leader>ff", ':lua require"telescope.builtin".find_files({ hidden = true })<CR>', { noremap = true, silent = true,  })
-keymap.set("n", '<leader>fg', '<cmd>Telescope live_grep<CR>', { noremap = true, silent = true, })
+keymap.set("n", '<leader>fg', ':Telescope live_grep<CR>', { noremap = true, silent = true, })
 keymap.set('n', '<leader>t', ':Telescope buffers<CR>', { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(File CRUD)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -215,19 +215,32 @@ keymap.set('i', '<A-Down>', "<Esc>$v$:m '>+1<CR>gv=gv<CR><Esc>i<Up>", { silent =
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Terminal)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-function CreateTmuxSession()
+function CreateTerminalSession()
   vim.ui.input({ prompt = 'Terminal Session Name:', default = '' }, function(input)
     if input ~= nil then
       if input == "" then
         input = "terminal-session"
       end
-      vim.cmd('terminal')
-      vim.cmd('file ' .. input)
+
+      local buffer_exists = false
+      for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.fn.bufname(buf) == input then
+          buffer_exists = true
+          vim.api.nvim_set_current_buf(buf) -- Foca no buffer existente
+          break
+        end
+      end
+
+      if not buffer_exists then
+        vim.cmd('enew')
+        vim.cmd('terminal')
+        vim.cmd('file ' .. input)
+      end
     end
   end)
 end
 
-keymap.set('n', '<C-t>', ':lua CreateTmuxSession()<CR>', { noremap = true, silent = true })
+keymap.set('n', '<C-t>', ':lua CreateTerminalSession()<CR>', { noremap = true, silent = true })
 keymap.set('t', 'jk', [[<C-\><C-n>]], { noremap = true, silent = true })
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Comment)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -259,8 +272,8 @@ keymap.set('n', 'm', ':set wrap!<CR>', { noremap = true, silent = true })
 
 keymap.set('n', '//', ':noh<CR>', { noremap = true, silent = true })
 keymap.set('i', '', '<C-o><cmd>w<CR>', { noremap = false, silent = true })
-keymap.set('n', 's', ":HopWord<CR>", { noremap = true, silent = true })
-keymap.set('v', 's', ":HopWord<CR>", { noremap = true, silent = true })
+-- keymap.set('n', 's', ":HopWord<CR>", { noremap = true, silent = true })
+-- keymap.set('v', 's', ":HopWord<CR>", { noremap = true, silent = true })
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Unammed Tabs)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -298,5 +311,14 @@ keymap.set("n", "<leader>sw", function()
 keymap.set('n', '<C-c>', '"+<Plug>(VM-Yank)<Plug>(VM-Exit)', { noremap = false, silent = true })
 keymap.set('i', '<A-s>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Menu)s<Plug>(VM-Exit)', { noremap = false, silent = true })
 keymap.set('i', '<A-d>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Menu)P<Plug>(VM-Exit)', { noremap = false, silent = true })
+
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Trouble)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+-- Mapeia a função para uma tecla (por exemplo, Alt + e)
+keymap.set('n', 'e', ':lua vim.diagnostic.open_float(nil, { focusable = false })<CR>', { noremap = true, silent = true })
+
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Obsidian)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+keymap.set('n', '<leader>o', ':ObsidianOpen<CR>', { noremap = true, silent = true })
 
 

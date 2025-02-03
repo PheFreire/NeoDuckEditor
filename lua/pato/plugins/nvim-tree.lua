@@ -1,12 +1,12 @@
 return {
   "nvim-tree/nvim-tree.lua",
-  requires = {
-    'nvim-tree/nvim-web-devicons', -- Recomendado para ícones de desenvolvedor
-  },
-  priority = 1000,
+  dependencies = { 'nvim-tree/nvim-web-devicons' },
   config = function()
-    require 'nvim-web-devicons'.setup()
     local nvimtree = require("nvim-tree")
+    
+    local api = require('nvim-tree.api')
+    vim.keymap.set('n', '<CR>', api.node.open.tab)
+    vim.keymap.set('n', '<C-t>', ':lua CreateTerminalSession()<CR>')
 
     -- recommended settings from nvim-tree documentation
     vim.g.loaded_netrw = 1

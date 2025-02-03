@@ -5,13 +5,13 @@ return {
     { 'williamboman/mason.nvim' },
     { 'williamboman/mason-lspconfig.nvim' },
     { 'WhoIsSethDaniel/mason-tool-installer.nvim' },
-    { 'j-hui/fidget.nvim', opts = {} },
+    'j-hui/fidget.nvim',
     {'folke/neodev.nvim' },
   },
   config = function ()
     require('mason').setup()
-    require('mason-lspconfig').setup({
 
+    require('mason-lspconfig').setup({
       ensure_installed = {
         'matlab_ls',
         'prismals',
@@ -34,7 +34,9 @@ return {
         'docker_compose_language_service',
         'taplo',
         'arduino_language_server',
-      }
+        'rust_analyzer',
+      },
+      automatic_installation = true,
     })
 
     require('mason-tool-installer').setup({
@@ -53,9 +55,6 @@ return {
 
     local lspconfig = require('lspconfig')
     local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-    -- local lsp_attach = function(client, bufnr)
-    --   -- Create your keybindings here...
-    -- end
 
     require('mason-lspconfig').setup_handlers({
       function(server_name)
@@ -64,20 +63,41 @@ return {
         })
       end
     })
+    
+    lspconfig.rust_analyzer.setup {
+      on_attach = function(_, bufnr)
+        local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+        local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+        buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+      end,
+      settings = {
+        ["rust-analyzer"] = {
+          cargo = {
+            allFeatures = true,
+          },
+          checkOnSave = {
+            command = "clippy",
+          },
+          lens = {
+            enable = true,
+          },
+        },
+      }
+    }
 
     lspconfig.pyright.setup({
       on_attach = function(client)
-      client.server_capabilities.didChangeWatchedFiles = true
+        if client.server_capabilities.documentFormattingProvider then
+          -- código para formatação
+        end
       end,
-      settings = {
         python = {
           analysis = {
-            autoSearchPaths = true,
             useLibraryCodeForTypes = true,
+            autoSearchPaths = true,
             diagnosticMode = "workspace",
           },
         },
-      },
     })
 
     lspconfig.lua_ls.setup {
