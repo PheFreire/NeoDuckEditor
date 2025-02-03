@@ -274,6 +274,8 @@ keymap.set('n', '//', ':noh<CR>', { noremap = true, silent = true })
 keymap.set('i', '', '<C-o><cmd>w<CR>', { noremap = false, silent = true })
 -- keymap.set('n', 's', ":HopWord<CR>", { noremap = true, silent = true })
 -- keymap.set('v', 's', ":HopWord<CR>", { noremap = true, silent = true })
+-- -- Remove um nível de indentação (shift + tab) no modo visual
+keymap.set('v', '<S-Tab>', '<gv', { noremap = true, silent = true })
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Unammed Tabs)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -320,5 +322,9 @@ keymap.set('n', 'e', ':lua vim.diagnostic.open_float(nil, { focusable = false })
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Obsidian)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('n', '<leader>o', ':ObsidianOpen<CR>', { noremap = true, silent = true })
+
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Fold)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+keymap.set('n', '<leader><leader>', 'za', { noremap = true, silent = true })
 
 
