@@ -12,7 +12,7 @@ opt.linebreak = true
 opt.breakindent = true
 
 -- Clipboard
-opt.clipboard = 'unnamedplus'
+vim.o.clipboard = "unnamedplus"
 
 -- Errors
 vim.diagnostic.config({

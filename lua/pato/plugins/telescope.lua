@@ -16,13 +16,17 @@ return {
     telescope.setup({
       defaults = {
         mappings = {
+          i = {
+            ["<C-v>"] = function()
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-r>+", true, false, true), "n", true)
+            end,
+          },
           n = {
             ["k"] = actions.move_selection_next,
             ["j"] = actions.move_selection_previous,
-            ["h"] = actions.close,
-            ["l"] = actions.select_default,
             ["<A-j>"] = actions.move_to_top,
             ["<A-k>"] = actions.move_to_bottom,
+
           },
         },
         preview = {

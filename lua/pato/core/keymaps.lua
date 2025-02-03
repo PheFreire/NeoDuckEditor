@@ -185,8 +185,8 @@ end, { noremap = true, silent = true })
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Clipboard)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('v', '<C-c>', '"+y', { noremap = true, }) -- copy to system clipboard
-keymap.set('i', '<C-v>', '<Left><C-o>p', { noremap = true, }) -- paste system clipboard data
 keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true, })
+keymap.set('i', '<C-v>', '<C-r>+', { noremap = true, }) -- paste system clipboard data
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Undo/Reundo)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
