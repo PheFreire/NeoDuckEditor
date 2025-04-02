@@ -186,7 +186,8 @@ end, { noremap = true, silent = true })
 
 keymap.set('v', '<C-c>', '"+y', { noremap = true, }) -- copy to system clipboard
 keymap.set('v', '<C-x>', 'c', { noremap = true, silent = true, })
-keymap.set('i', '<C-v>', '<C-r>+', { noremap = true, }) -- paste system clipboard data
+-- keymap.set('i', '<C-v>', '<C-r>+', { noremap = true, }) -- paste system clipboard data
+vim.keymap.set("i", "<C-v>", "<C-o>:set paste<CR><C-r>+<C-o>:set nopaste<CR>", { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Undo/Reundo)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -311,6 +312,7 @@ keymap.set("n", "<leader>sw", function()
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Visual Multi)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('n', '<C-c>', '"+<Plug>(VM-Yank)<Plug>(VM-Exit)', { noremap = false, silent = true })
+
 keymap.set('i', '<A-s>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Menu)s<Plug>(VM-Exit)', { noremap = false, silent = true })
 keymap.set('i', '<A-d>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Menu)P<Plug>(VM-Exit)', { noremap = false, silent = true })
 
