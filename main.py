@@ -1,6 +1,0 @@
-
-def pato():
-    print()
-    print()
-
-
