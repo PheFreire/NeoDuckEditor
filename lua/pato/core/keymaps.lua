@@ -2,7 +2,7 @@
 vim.g.mapleader = " "
 local keymap = vim.keymap
 
---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General Move keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set("n", "i", "<cmd>startinsert<CR><Right>", { noremap = false, silent = true })
 
@@ -19,6 +19,9 @@ keymap.set("i", "<A-Right>", "<C-o>$", { noremap = true, silent = true })
 
 keymap.set("n", "<A-k>", "G", { noremap = true, silent = true })
 keymap.set("n", "<A-j>", "gg", { noremap = true, silent = true })
+
+--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General Buffer Keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 keymap.set("n", "<C-q>", ":q!<CR>", { noremap = false, silent = true }) -- quit without saving
 keymap.set("n", "<C-s>", ":w<CR>", { noremap = false, silent = true }) -- save
 keymap.set('n', '<leader>gb', ':e#<CR>', { silent = true }) -- Open last buffer
