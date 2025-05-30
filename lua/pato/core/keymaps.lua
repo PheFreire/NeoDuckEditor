@@ -318,8 +318,18 @@ keymap.set('i', '<A-d>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Me
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Trouble)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
--- Mapeia a função para uma tecla (por exemplo, Alt + e)
-keymap.set('n', 'e', ':lua vim.diagnostic.open_float(nil, { focusable = false })<CR>', { noremap = true, silent = true })
+keymap.set('n', 'e', function()
+  vim.diagnostic.open_float(nil, {
+    focusable = true,
+    border = "rounded",
+    scope = "line",
+  })
+
+  if vim.v.count == 2 then
+    vim.cmd("wincmd w")
+  end
+end, { noremap = true, silent = true })
+
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Obsidian)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 

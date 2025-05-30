@@ -6,9 +6,9 @@ return {
     { 'williamboman/mason-lspconfig.nvim' },
     { 'WhoIsSethDaniel/mason-tool-installer.nvim' },
     'j-hui/fidget.nvim',
-    {'folke/neodev.nvim' },
+    { 'folke/neodev.nvim' },
   },
-  config = function ()
+  config = function()
     require('mason').setup()
 
     require('mason-lspconfig').setup({
@@ -54,66 +54,88 @@ return {
     vim.api.nvim_command('MasonToolsInstall')
 
     local lspconfig = require('lspconfig')
-    local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+    local capabilities = require('cmp_nvim_lsp').default_capabilities()
+    local uv = vim.loop
+
+    -- Função para verificar se a pasta src/ existe no root_dir
+    local function has_src_dir(root_dir)
+      local stat = uv.fs_stat(root_dir .. "/src")
+      return stat and stat.type == "directory"
+    end
 
     require('mason-lspconfig').setup_handlers({
       function(server_name)
         lspconfig[server_name].setup({
-          capabilities = lsp_capabilities,
+          capabilities = capabilities,
         })
-      end
-    })
-    
-    lspconfig.rust_analyzer.setup {
-      on_attach = function(_, bufnr)
-        local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-        local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-        buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
       end,
-      settings = {
-        ["rust-analyzer"] = {
-          cargo = {
-            allFeatures = true,
-          },
-          checkOnSave = {
-            command = "clippy",
-          },
-          lens = {
-            enable = true,
-          },
-        },
-      }
-    }
 
-    lspconfig.pyright.setup({
-      on_attach = function(client)
-        if client.server_capabilities.documentFormattingProvider then
-          -- código para formatação
-        end
-      end,
-        python = {
-          analysis = {
-            useLibraryCodeForTypes = true,
-            autoSearchPaths = true,
-            diagnosticMode = "workspace",
+      ["rust_analyzer"] = function()
+        lspconfig.rust_analyzer.setup({
+          capabilities = capabilities,
+          on_attach = function(_, bufnr)
+            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+          end,
+          settings = {
+            ["rust-analyzer"] = {
+              cargo = { allFeatures = true },
+              checkOnSave = { command = "clippy" },
+              lens = { enable = true },
+            },
           },
-        },
+        })
+      end,
+
+      ["pyright"] = function()
+        lspconfig.pyright.setup({
+          capabilities = capabilities,
+          on_attach = function(client)
+            if client.server_capabilities.documentFormattingProvider then
+              -- formatação opcional
+            end
+          end,
+          before_init = function(_, config)
+            local root_dir = config.root_dir or vim.fn.getcwd()
+            local paths = {}
+            if has_src_dir(root_dir) then
+              table.insert(paths, root_dir .. "/src")
+            end
+            config.settings = vim.tbl_deep_extend("force", config.settings or {}, {
+              python = {
+                analysis = {
+                  useLibraryCodeForTypes = true,
+                  autoSearchPaths = true,
+                  diagnosticMode = "workspace",
+                  typeCheckingMode = "basic",
+                  extraPaths = paths,
+                },
+              },
+            })
+          end,
+        })
+      end,
+
+      ["lua_ls"] = function()
+        lspconfig.lua_ls.setup({
+          capabilities = capabilities,
+          settings = {
+            Lua = {
+              diagnostics = {
+                globals = { "vim" },
+              },
+            },
+          },
+        })
+      end,
     })
 
-    lspconfig.lua_ls.setup {
-      settings = {
-        Lua = {
-          diagnostics = { globals = {'vim'}, },
-        },
-      },
-    }
-
+    -- Floating window arredondada
     local open_floating_preview = vim.lsp.util.open_floating_preview
     function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
       opts = opts or {}
       opts.border = opts.border or "rounded"
       return open_floating_preview(contents, syntax, opts, ...)
     end
-
-  end
+  end,
 }
+
