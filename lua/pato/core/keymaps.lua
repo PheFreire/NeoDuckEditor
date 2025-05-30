@@ -282,11 +282,6 @@ keymap.set('v', '<S-Tab>', '<gv', { noremap = true, silent = true })
 
 keymap.set('n', '<leader>n', ':enew<CR>', { noremap = false, silent = true })
 
--- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Git Tools)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-keymap.set('n', '<leader>ms', ':G<CR>', { noremap = true, silent = true })  -- Git status
-keymap.set('n', '<leader>md', ':Gvdiffsplit<CR>', { noremap = true, silent = true })  -- Diferença de versões
-
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Markdown Tools)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 keymap.set('n', '<leader>p', ':MarkdownPreview<CR>', { noremap = true, silent = true })  --MarkDownPreview

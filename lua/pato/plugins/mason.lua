@@ -6,7 +6,7 @@ return {
     { 'williamboman/mason-lspconfig.nvim' },
     { 'WhoIsSethDaniel/mason-tool-installer.nvim' },
     'j-hui/fidget.nvim',
-    { 'folke/neodev.nvim' },
+    {'folke/neodev.nvim' },
   },
   config = function()
     require('mason').setup()
@@ -57,7 +57,6 @@ return {
     local capabilities = require('cmp_nvim_lsp').default_capabilities()
     local uv = vim.loop
 
-    -- Função para verificar se a pasta src/ existe no root_dir
     local function has_src_dir(root_dir)
       local stat = uv.fs_stat(root_dir .. "/src")
       return stat and stat.type == "directory"
@@ -129,7 +128,6 @@ return {
       end,
     })
 
-    -- Floating window arredondada
     local open_floating_preview = vim.lsp.util.open_floating_preview
     function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
       opts = opts or {}
