@@ -166,7 +166,6 @@ keymap.set("n", "<leader>h", ":tabp<CR>") -- previous tab
 keymap.set("n", "<leader>ee", ":NvimTreeToggle<CR>") -- toggle file explorer
 keymap.set("n", "<leader>f", ":NvimTreeFindFile<CR>") -- find file in file explorer
 keymap.set("n", "<leader>ec", "<cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" }) -- collapse file explorer
-keymap.set("n", "<leader>er", "<cmd>:LspRestart<CR><cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" }) -- refresh file explorer
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(LSP)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -176,14 +175,6 @@ keymap.set('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', { noremap
 keymap.set('n', '<leader>gs', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', { noremap = false, silent = true })
 keymap.set('v', '<leader>gf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', { noremap = false, silent = true })
 -- keymap.set('i', '<C-A-a>', '<C-e>') -- Close LSP sugetion
-keymap.set('n', 'g', function ()
-    for _, win in pairs(vim.api.nvim_tabpage_list_wins(0)) do
-        local config = vim.api.nvim_win_get_config(win)
-        if config.relative ~= '' then  -- Se a janela for relativa (flutuante)
-            vim.api.nvim_win_close(win, true)  -- Fecha a janela
-        end
-    end
-end, { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Clipboard)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -206,11 +197,6 @@ keymap.set('n', '<leader>fs', ':lua require"telescope.builtin".grep_string({ hid
 keymap.set("n", "<leader>ff", ':lua require"telescope.builtin".find_files({ hidden = true })<CR>', { noremap = true, silent = true,  })
 keymap.set("n", '<leader>fg', ':Telescope live_grep<CR>', { noremap = true, silent = true, })
 keymap.set('n', '<leader>t', ':Telescope buffers<CR>', { noremap = true, silent = true })
-
---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(File CRUD)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
--- keymap.set('n', '<C-d>', ":call delete(expand('%'))<CR>", { silent = true }) -- Delete file
--- keymap.set('n', '<A-n>', ":new %:h/") -- Create new file
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Cell)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -319,8 +305,6 @@ keymap.set('i', '<A-d>', '<Esc><Plug>(VM-Find-Under)<Plug>(VM-Case-Conversion-Me
 keymap.set('n', 'e', function()
   vim.diagnostic.open_float(nil, {
     focusable = true,
-    border = "rounded",
-    scope = "line",
   })
 
   if vim.v.count == 2 then
