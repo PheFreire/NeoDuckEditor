@@ -2,6 +2,7 @@ return {
   "williamboman/mason-lspconfig.nvim",
   dependencies = { "williamboman/mason.nvim", "j-hui/fidget.nvim", { "WhoIsSethDaniel/mason-tool-installer.nvim" } },
   config = function()
+    require("fidget")
     local ensure_installed = {
       'prisma-language-server', 'terraformls', 'ts_ls', 'kotlin_language_server','eslint', 'bashls',
       'cssls', 'html', 'lua_ls', 'jsonls', 'lemminx', 'marksman', 'quick_lint_js',
@@ -20,7 +21,6 @@ return {
       run_on_start = true,
       auto_update = true,
       start_delay = 3000,
-      debounce_hours = 12,
     })
 
     vim.api.nvim_create_user_command("MasonSyncLSPs", function()
@@ -74,34 +74,11 @@ return {
       end
     end, { desc = "Sync LSPs installed via Mason with desired list" })
     
-    require("fidget")
     local open_floating_preview = vim.lsp.util.open_floating_preview
     function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
       opts = opts or {}
       opts.border = opts.border or "rounded"
       return open_floating_preview(contents, syntax, opts, ...)
     end
-
-    local keymap = vim.keymap
-    local fidget = require("fidget")
-
-    keymap.set("n", "<leader>er", function()
-      local clients = vim.lsp.get_clients({ bufnr = 0 })
-  
-      if #clients == 0 then
-        fidget.notify("Nenhum cliente LSP ativo", vim.log.levels.WARN)
-        return
-      end
-  
-      for _, client in ipairs(clients) do
-        fidget.notify("Restarting LSP: " .. client.name, vim.log.levels.INFO)
-        vim.lsp.stop_client(client.id)
-      end
-  
-      vim.defer_fn(function()
-        vim.cmd("edit")
-        vim.cmd("NvimTreeRefresh")
-      end, 100)
-    end, { desc = "Restart LSP e atualizar árvore" })
   end,
 }

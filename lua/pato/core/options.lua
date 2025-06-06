@@ -62,32 +62,14 @@ g.loaded_python3_provider = 0
 g.loaded_perl_provider = 0
 g.loaded_ruby_provider = 0
 
--- Ativa o folding baseado em sintaxe
-vim.opt.fillchars = {
-    fold = " ",         -- Remove a linha tracejada
-    foldopen = "▾",     -- Seta para baixo quando o fold está aberto
-    foldclose = "▸",    -- Seta para a direita quando o fold está fechado
-    foldsep = " ",      -- Remove separadores entre folds
-}
-
-function _G.custom_fold_text()
-  local line = vim.fn.getline(vim.v.foldstart)
-  local num_lines = vim.v.foldend - vim.v.foldstart + 1
-  return " ▸ " .. line .. " ▸ " .. num_lines .. " lines "
-end
-
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldlevel = 99
-vim.opt.foldenable = true
-vim.opt.foldtext = "v:lua.custom_fold_text()"
-
--- vim.cmd([[
---     autocmd CursorMoved * if foldclosed('.') != -1 | execute 'normal! zo' | endif
--- ]])
-
 -- Obsidian
 vim.opt.conceallevel = 2
+
+vim.filetype.add({
+    pattern = {
+      [".*%.envrc"] = "sh",
+    },
+})
 
 -- add binaries installed by mason.nvim to path
 local is_windows = vim.fn.has("win32") ~= 0

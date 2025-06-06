@@ -1,0 +1,17 @@
+require("pato.core.keymaps.core")
+
+require("pato.core.keymaps.comment")
+require("pato.core.keymaps.fold")
+require("pato.core.keymaps.leap")
+require("pato.core.keymaps.markdown")
+require("pato.core.keymaps.nvim-lsp")
+require("pato.core.keymaps.nvim-tree")
+require("pato.core.keymaps.obsidian")
+require("pato.core.keymaps.spectre")
+require("pato.core.keymaps.split-window")
+require("pato.core.keymaps.tab")
+require("pato.core.keymaps.telescope")
+require("pato.core.keymaps.terminal")
+require("pato.core.keymaps.trouble")
+require("pato.core.keymaps.visual-multi")
+

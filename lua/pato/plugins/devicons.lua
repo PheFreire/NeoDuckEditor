@@ -1,6 +1,5 @@
 return {
   'nvim-tree/nvim-web-devicons',
-  lazy = false,
   priority = 100000,
   config = function()
     require('nvim-web-devicons').setup {
@@ -69,7 +68,6 @@ return {
         -- Lua (.lua)
         lua = {
           icon = "",           -- Ícone do Lua
-          color = "#000080",     -- Cor azul escuro do Lua
           name = "Lua"
         },
         -- Shell Script (.sh)
@@ -135,7 +133,6 @@ return {
         -- Makefile
         Makefile = {
           icon = "",               -- Engrenagem
-          color = "#E37933",         -- Laranja
           name = "Makefile"
         },
       }

@@ -9,14 +9,14 @@ if not vim.loop.fs_stat(lazypath) then
     lazypath,
   })
 end
-vim.opt.rtp:prepend(lazypath)
 
+vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({ { import = "pato.plugins" }, }, {
   checker = {
     enabled = true,
-    notify = false,
+    notify = true,
   },
   change_detection = {
-    notify = false,
+    notify = true,
   },
 })
