@@ -10,7 +10,7 @@ return {
         },
         border = 'rounded',
         relative = "editor",
-        prefer_width = 40,
+        prefer_width = 70,
         max_width = { 80, 0.9 },
         min_width = { 20, 0.2 },
         col = 0.5,

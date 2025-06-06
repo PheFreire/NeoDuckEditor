@@ -31,25 +31,27 @@ return {
         },
         preview = {
           mime_hook = function(filepath, bufnr, opts)
-            local is_image = function(filepath)
-              local image_extensions = {'png','jpg'}   -- Formatos de imagem suportados
-              local split_path = vim.split(filepath:lower(), '.', {plain=true})
-              local extension = split_path[#split_path]
-              return vim.tbl_contains(image_extensions, extension)
+            local is_image = function(path)
+              local supported_extensions = { "png", "jpg", "jpeg", "gif" }
+              local ext = vim.fn.fnamemodify(path, ":e"):lower()
+              return vim.tbl_contains(supported_extensions, ext)
             end
+
             if is_image(filepath) then
               local term = vim.api.nvim_open_term(bufnr, {})
-              local function send_output(_, data, _ )
-                for _, d in ipairs(data) do
-                  vim.api.nvim_chan_send(term, d..'\r\n')
+              local function send_output(_, data, _)
+                for _, line in ipairs(data) do
+                  vim.api.nvim_chan_send(term, line .. "\r\n")
                 end
-            end
-              vim.fn.jobstart(
-                { 'catimg', filepath },
-                { on_stdout=send_output, stdout_buffered=true, pty=true }
-              )
+              end
+
+              vim.fn.jobstart({ "catimg", "-w", "80", filepath }, {
+                on_stdout = send_output,
+                stdout_buffered = true,
+                pty = true,
+              })
             else
-              require("telescope.previewers.utils").set_preview_message(bufnr, opts.winid, "Binary cannot be previewed")
+              require("telescope.previewers.utils").set_preview_message(bufnr, opts.winid, "Not an image.")
             end
           end
         },
