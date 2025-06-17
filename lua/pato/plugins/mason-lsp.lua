@@ -1,26 +1,78 @@
 return {
-  "williamboman/mason-lspconfig.nvim",
-  dependencies = { "williamboman/mason.nvim", "j-hui/fidget.nvim", { "WhoIsSethDaniel/mason-tool-installer.nvim" } },
+  "neovim/nvim-lspconfig",
+  dependencies = {
+    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
+    "j-hui/fidget.nvim",
+    { "WhoIsSethDaniel/mason-tool-installer.nvim" }
+  },
   config = function()
     require("fidget")
+    
+    require("mason").setup()
     local ensure_installed = {
-      'prisma-language-server', 'terraformls', 'ts_ls', 'kotlin_language_server','eslint', 'bashls',
+      'terraformls', 'ts_ls', 'eslint', 'bashls',
       'cssls', 'html', 'lua_ls', 'jsonls', 'lemminx', 'marksman', 'quick_lint_js',
-      'yamlls', 'remark_ls', 'dockerls', 'docker_compose_language_service',
-      'taplo',
+      'yamlls', 'remark_ls', 'dockerls', 'prismals',
+      'taplo', "pyright", "rust_analyzer",
     }
-    require("mason-lspconfig").setup({
+
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities.workspace = capabilities.workspace or {}
+    capabilities.workspace.didChangeWatchedFiles = capabilities.workspace.didChangeWatchedFiles or {}
+    capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
+
+    local lspconfig = require("lspconfig")
+    local mason_lspconfig = require("mason-lspconfig")
+
+    mason_lspconfig.setup({
       ensure_installed = ensure_installed,
       automatic_installation = false,
+      auto_update = true,
+      run_on_start = true,
     })
 
     require("mason-tool-installer").setup({
-      ensure_installed = {
-        'black', 'flake8', 'isort', 'mypy', 'pylint',
-      },
-      run_on_start = true,
+      ensure_installed = ensure_installed,
       auto_update = true,
-      start_delay = 3000,
+      run_on_start = true,
+    })
+
+    -- Setup manual do pyright
+    lspconfig.pyright.setup({
+      capabilities = capabilities,
+      on_attach = function(client, bufnr)
+        for _, c in pairs(vim.lsp.get_clients()) do
+          if c.name == "pyright" and c.id ~= client.id then
+            client.stop()
+            return
+          end
+        end
+      end,
+      settings = {
+        python = {
+          analysis = {
+            autoSearchPaths = true,
+            diagnosticMode = "workspace",
+            typeCheckingMode = "basic",
+            useLibraryCodeForTypes = true,
+            extraPaths = { "src" },
+            ignore = { "build", "dist", "**/__pycache__/**" },
+          },
+        },
+      },
+    })
+
+    -- Setup do Rust (opcional)
+    lspconfig.rust_analyzer.setup({
+      capabilities = capabilities,
+      settings = {
+        ["rust-analyzer"] = {
+          cargo = { allFeatures = true },
+          checkOnSave = { command = "clippy" },
+          lens = { enable = true },
+        },
+      },
     })
 
     vim.api.nvim_create_user_command("MasonSyncLSPs", function()

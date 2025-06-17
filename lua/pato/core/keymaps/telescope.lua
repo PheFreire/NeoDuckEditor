@@ -1,7 +1,7 @@
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Telescope)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-Km.set('n', '<leader>fs', ':lua require"telescope.builtin".grep_string({ hidden = true })<CR>', { noremap = true, silent = true, })
-Km.set("n", "<leader>ff", ':lua require"telescope.builtin".find_files({ hidden = true })<CR>', { noremap = true, silent = true,  })
+Km.set('n', '<leader>fs', ':Telescope grep_string<CR>', { noremap = true, silent = true, })
+Km.set("n", "<leader>ff", ':Telescope find_files<CR>', { noremap = true, silent = true,  })
 Km.set("n", '<leader>fg', ':Telescope live_grep<CR>', { noremap = true, silent = true, })
 Km.set('n', '<leader>t', ':Telescope buffers<CR>', { noremap = true, silent = true })
 

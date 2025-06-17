@@ -8,10 +8,20 @@ return {
     'nvim-telescope/telescope-live-grep-args.nvim',
   },
   config = function()
-    local telescope = require("telescope")
-    local actions = require('telescope.actions')
+    local telescope = require('telescope')
+    local actions = require("telescope.actions")
+    local action_state = require("telescope.actions.state")
+    
+    local open_after_tree = function(prompt_bufnr)
+      local entry = action_state.get_selected_entry()
+      actions.close(prompt_bufnr)
+    
+      vim.defer_fn(function()
+        vim.cmd("edit " .. vim.fn.fnameescape(entry.path or entry.value))
+      end, 20)
+    end
 
- 
+
     -- Configura o Telescope
     telescope.setup({
       defaults = {
@@ -20,12 +30,14 @@ return {
             ["<C-v>"] = function()
               vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-r>+", true, false, true), "n", true)
             end,
+            ["<CR>"] = open_after_tree,
           },
           n = {
             ["k"] = actions.move_selection_next,
             ["j"] = actions.move_selection_previous,
             ["<A-j>"] = actions.move_to_top,
             ["<A-k>"] = actions.move_to_bottom,
+            ["<CR>"] = open_after_tree
 
           },
         },
@@ -50,8 +62,6 @@ return {
                 stdout_buffered = true,
                 pty = true,
               })
-            else
-              require("telescope.previewers.utils").set_preview_message(bufnr, opts.winid, "Not an image.")
             end
           end
         },
@@ -89,7 +99,10 @@ return {
           "%.lock",
           "node_modules/", -- Ignora a pasta node_modules
           "__pycache__/",  -- Ignora cache do Python,
-          ".mypy_cache/"
+          ".mypy_cache/",
+          "dist/",        -- ignora o diretório dist
+          ".*/dist/.*",
+          ".pytest_cache/"
         },
         -- Personalizações visuais e de comportamento
         prompt_prefix = "> ",
@@ -111,10 +124,10 @@ return {
         generic_sorter = require('telescope.sorters').get_generic_fuzzy_sorter,
         path_display = { "truncate" },
         winblend = 0,
-        -- color_devicons = true,
+        color_devicons = true,
         use_less = true,
         set_env = { ['COLORTERM'] = 'truecolor' },
-        file_previewer = require('telescope.previewers').vim_buffer_cat.new,
+        file_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
         grep_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
         qflist_previewer = require('telescope.previewers').vim_buffer_qflist.new,
         buffer_previewer_maker = require('telescope.previewers').buffer_previewer_maker,
@@ -125,19 +138,24 @@ return {
         },
         find_files = {
           find_command = {
-            "rg",
-            "--files",
-            "--hidden",
-            "--glob",
-            -- "!**/.git/*",
-            '!.git/*',
-            '--no-ignore', -- Não respeita o .gitignore
+            'rg',
+            '--color=never',
+            '--no-heading',
+            '--with-filename',
+            '--line-number',
+            '--column',
             '--smart-case',
+            '--hidden',  -- Adiciona a flag --hidden para incluir arquivos ocultos
+            '--glob',
+            '!.git/*', -- Exclui o diretório .git
+            '--no-ignore', -- Não respeita o .gitignore
+            '--fixed-strings',  -- Força a pesquisa literal (ignora expressões regulares)
+            "--files",
           },
         },
       },
     })
-    require('telescope').load_extension('fzf')
-    require('telescope').load_extension('live_grep_args')
+    -- telescope.load_extension('fzf')
+    telescope.load_extension('live_grep_args')
   end,
 }

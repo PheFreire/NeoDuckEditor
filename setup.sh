@@ -8,14 +8,10 @@ error() {
   echo -e "\033[1;31m$1\033[0m"
 }
 
-log ""
+log "======================================================="
 log "🔧 Iniciando setup do ambiente Neovim personalizado..."
-log "=============================================="
+log "======================================================="
 
-# Atualiza PATH para garantir acesso ao cargo/rustup
-export PATH="$HOME/.cargo/bin:$PATH"
-
-# Instala catimg se necessário
 log "📦 Verificando instalação do 'catimg'..."
 if ! command -v catimg &> /dev/null; then
   log "📥 Instalando 'catimg'..."
@@ -26,5 +22,23 @@ else
 fi
 log "----------------------------------------------"
 
+log "📦 Verificando instalação do 'FiraCode Nerd Font' ''..."
+FONT_DIR="$HOME/.local/share/fonts"
+FONT_NAME="FiraCode"
+FONT_FILE="$FONT_DIR/${FONT_NAME} Regular Nerd Font Complete.ttf"
+
+if [ ! -f "$FONT_FILE" ]; then
+  log "📥 Baixando e instalando FiraCode Nerd Font..."
+  mkdir -p "$FONT_DIR"
+  wget -q -O "$FONT_DIR/FiraCode.zip" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip
+  unzip -o "$FONT_DIR/FiraCode.zip" -d "$FONT_DIR" > /dev/null
+  rm "$FONT_DIR/FiraCode.zip"
+  fc-cache -fv > /dev/null
+  log "✅ FiraCode Nerd Font instalada com sucesso."
+else
+  log "✅ FiraCode Nerd Font já está instalada."
+fi 
+
+log "======================================================="
 log "🎉 Setup finalizado com sucesso!"
-log ""
+log "======================================================="

@@ -15,7 +15,4 @@ return {
       vim.cmd('colorscheme github_dark')
 
   end,
-  -- vim.cmd('highlight Normal guibg=#292c2e')
-  -- vim.cmd('highlight Normal guibg=#2a2d30')
-  -- vim.cmd('highlight Normal guibg=#26292d')
 }
