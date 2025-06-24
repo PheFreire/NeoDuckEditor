@@ -10,15 +10,11 @@ return {
   config = function()
     local telescope = require('telescope')
     local actions = require("telescope.actions")
-    local action_state = require("telescope.actions.state")
     
     local open_after_tree = function(prompt_bufnr)
-      local entry = action_state.get_selected_entry()
-      actions.close(prompt_bufnr)
-    
       vim.defer_fn(function()
-        vim.cmd("edit " .. vim.fn.fnameescape(entry.path or entry.value))
-      end, 20)
+        actions.select_default(prompt_bufnr)
+      end, 100) -- Delay allows filetype and plugins to settle before opening
     end
 
 
