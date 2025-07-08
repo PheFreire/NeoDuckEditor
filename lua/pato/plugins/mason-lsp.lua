@@ -43,11 +43,11 @@ return {
       capabilities = capabilities,
       on_attach = function(client, bufnr)
         for _, c in pairs(vim.lsp.get_clients()) do
-          if c.name == "pyright" and c.id ~= client.id then
-            client.stop()
-            return
+          if c.name == "pyright" and c.id ~= client.id and c.config.root_dir == client.config.root_dir then
+            c.stop()
           end
         end
+        vim.notify("✅ Pyright attached.")
       end,
       settings = {
         python = {

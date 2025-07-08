@@ -11,8 +11,5 @@ return {
         },
       },
     })
-    -- github_dark_dimmed | github_dark |  dark_default
-      vim.cmd('colorscheme github_dark')
-
   end,
 }

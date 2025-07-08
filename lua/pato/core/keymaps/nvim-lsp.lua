@@ -8,9 +8,11 @@ Km.set('v', '<leader>gf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', { n
 
 
 Km.set('n', '<leader>er', function()
-  for _, client in pairs(vim.lsp.get_clients()) do
-    client.stop()
-  end
-  vim.notify("🔁 Todos os LSPs foram encerrados. Eles serão reiniciados ao reabrir arquivos.")
+  local current_buf = vim.api.nvim_get_current_buf()
+  local filename = vim.api.nvim_buf_get_name(current_buf)
+  vim.cmd("bdelete!") -- Fecha buffer e LSPs relacionados
+  vim.cmd("edit " .. vim.fn.fnameescape(filename)) -- Reabre arquivo, LSPs serão reiniciados
+  vim.notify("🔁 Reabrindo buffer e reiniciando LSPs.")
 end, { noremap = false, silent = true })
+
 

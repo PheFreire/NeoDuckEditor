@@ -9,5 +9,3 @@ Excluded = {
   "github_dark_high_contrast", "github_light_high_contrast",
   "github_dark_dimmed", "github_light"
 }
-
-
