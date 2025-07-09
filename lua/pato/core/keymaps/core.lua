@@ -1,6 +1,25 @@
 vim.g.mapleader = " "
 Km = vim.keymap
 
+local sysname = vim.loop.os_uname().sysname
+local is_mac = sysname == "Darwin"
+
+function Alt(key)
+  if is_mac then
+    return "<D-" .. key .. ">"
+  else
+    return "<A-" .. key .. ">"
+  end
+end
+
+function Ctrl(key)
+  if is_mac then
+    return "<D-" .. key .. ">"
+  else
+    return "<A-" .. key .. ">"
+  end
+end
+
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Normal-Mode Movement keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 Km.set("n", "i", "<cmd>startinsert<CR><Right>", { noremap = false, silent = true })
@@ -8,13 +27,13 @@ Km.set("n", "i", "<cmd>startinsert<CR><Right>", { noremap = false, silent = true
 Km.set("n", "k", "<Down>", { noremap = true, silent = true })
 Km.set("n", "j", "<Up>", { noremap = true, silent = true })
 Km.set("n", "<C-l>", "e", { noremap = true, silent = true })
-Km.set("n", "<A-l>", "$", { noremap = true, silent = true })
+Km.set("n", Alt("l"), "$", { noremap = true, silent = true })
 
 Km.set("n", "<C-h>", "b", { noremap = true, silent = true })
-Km.set("n", "<A-h>", "0", { noremap = true, silent = true })
+Km.set("n", Alt("h"), "0", { noremap = true, silent = true })
 
-Km.set("n", "<A-k>", "G", { noremap = true, silent = true })
-Km.set("n", "<A-j>", "gg", { noremap = true, silent = true })
+Km.set("n", Alt("k"), "G", { noremap = true, silent = true })
+Km.set("n", Alt("j"), "gg", { noremap = true, silent = true })
 
 Km.set('n', 'l', function ()
     local col = vim.fn.col('.')
@@ -37,18 +56,18 @@ end,  { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Insert-Mode Movement keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-Km.set("i", "<A-Left>", "<C-o>0", { noremap = true, silent = true })
-Km.set("i", "<A-Right>", "<C-o>$", { noremap = true, silent = true })
+Km.set("i", Alt("Left"), "<C-o>0", { noremap = true, silent = true })
+Km.set("i", Alt("Right"), "<C-o>$", { noremap = true, silent = true })
 
-Km.set("i", "<A-k>", "<Down>", { noremap = true, silent = true })
-Km.set("i", "<A-j>", "<Up>", { noremap = true, silent = true })
-Km.set("i", "<A-h>", "<Left>", { noremap = true, silent = true })
-Km.set("i", "<A-l>", "<Right>", { noremap = true, silent = true })
+Km.set("i", Alt("k"), "<Down>", { noremap = true, silent = true })
+Km.set("i", Alt("j"), "<Up>", { noremap = true, silent = true })
+Km.set("i", Alt("h"), "<Left>", { noremap = true, silent = true })
+Km.set("i", Alt("l"), "<Right>", { noremap = true, silent = true })
 
-Km.set("i", "<A-K>", "<C-o>G", { noremap = true, silent = true })
-Km.set("i", "<A-J>", "<C-o>gg", { noremap = true, silent = true })
-Km.set("i", "<A-H>", "<C-o>:lua _G.ctrl_left()<CR>", { noremap = true, silent = true })
-Km.set("i", "<A-L>", "<C-o>:lua _G.ctrl_right()<CR>", { noremap = true, silent = true })
+Km.set("i", Alt("K"), "<C-o>G", { noremap = true, silent = true })
+Km.set("i", Alt("J"), "<C-o>gg", { noremap = true, silent = true })
+Km.set("i", Alt("H"), "<C-o>:lua _G.ctrl_left()<CR>", { noremap = true, silent = true })
+Km.set("i", Alt("L"), "<C-o>:lua _G.ctrl_right()<CR>", { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Visual-Mode Movement keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -56,16 +75,16 @@ Km.set("v", "k", "<Down>", { noremap = true, silent = true })
 Km.set("v", "j", "<Up>", { noremap = true, silent = true })
 
 Km.set("v", "<C-l>", "e", { noremap = true, silent = true })
-Km.set("v", "<A-l>", "$", { noremap = true, silent = true })
+Km.set("v", Alt("l"), "$", { noremap = true, silent = true })
 
 Km.set("v", "<C-h>", "b", { noremap = true, silent = true })
-Km.set("v", "<A-h>", "0", { noremap = true, silent = true })
+Km.set("v", Alt("h"), "0", { noremap = true, silent = true })
 
-Km.set("v", "<A-k>", "G", { noremap = true, silent = true })
-Km.set("v", "<A-j>", "gg", { noremap = true, silent = true })
+Km.set("v", Alt("k"), "G", { noremap = true, silent = true })
+Km.set("v", Alt("j"), "gg", { noremap = true, silent = true })
 
-Km.set("v", "<A-k>", "G", { noremap = true, silent = true })
-Km.set("v", "<A-j>", "gg", { noremap = true, silent = true })
+Km.set("v", Alt("k"), "G", { noremap = true, silent = true })
+Km.set("v", Alt("j"), "gg", { noremap = true, silent = true })
 
 Km.set('v', 'x', '"_d', { noremap = true, silent = true })
 
