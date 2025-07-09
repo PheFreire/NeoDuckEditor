@@ -1,7 +1,7 @@
-vim.cmd("let g:netrw_liststyle = 3")
-
 local opt = vim.opt
 local g = vim.g
+
+g.netrw_liststyle = 3
 
 -- Define Cursor Color 
 vim.api.nvim_set_hl(0, 'Cursor', { fg = 'black', bg = 'white' })
@@ -12,7 +12,7 @@ opt.linebreak = true
 opt.breakindent = true
 
 -- Clipboard
-vim.o.clipboard = "unnamedplus"
+opt.clipboard = "unnamedplus"
 
 -- Errors
 vim.diagnostic.config({
@@ -24,7 +24,9 @@ vim.diagnostic.config({
   float = { source = "always", border = "rounded" },
 })
 
-vim.o.updatetime = 350
+opt.updatetime = 350
+opt.ttyfast = true
+opt.cursorline = true
 
 opt.iskeyword:remove({ '"', '.', '{', '}', '(', ')', '[', ']', '/', '\\', ':', ';', ',', ' ', ' '})
 opt.number = true
@@ -42,7 +44,7 @@ opt.list = false
 
 -- turn on termguicolors for tokyonight colorscheme to work
 -- (have to use iterm2 or any other true color terminal)
--- opt.termguicolors = true
+opt.termguicolors = true
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark
 opt.signcolumn = "yes" -- show sign column so that text doesn't shift
 

@@ -37,10 +37,10 @@ return {
           glyphs = {
             modified = "●",
             folder = {
-              empty = "📁",
-              empty_open = "📂",
-              default = "📁",
-              open = "📂",
+              empty = "♙",
+              empty_open = "♕",
+              default = "♟",
+              open = "♛",
               arrow_open = "▾",
               -- arrow_open = "↓",
               arrow_closed = "▸",
