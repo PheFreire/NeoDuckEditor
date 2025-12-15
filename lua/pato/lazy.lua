@@ -11,7 +11,16 @@ if not vim.loop.fs_stat(lazypath) then
 end
 
 vim.opt.rtp:prepend(lazypath)
-require("lazy").setup({ { import = "pato.plugins" }, }, {
+require("lazy").setup({ 
+  { import = "pato.plugins" },
+  { import = "pato.plugins.code-tool" },
+  { import = "pato.plugins.file-support" },
+  { import = "pato.plugins.home-page" },
+  { import = "pato.plugins.language" },
+  { import = "pato.plugins.optimization-tool" },
+  { import = "pato.plugins.ui" },
+  { import = "pato.plugins.utils" },
+}, {
   checker = {
     enabled = true,
     notify = false,
@@ -20,4 +29,5 @@ require("lazy").setup({ { import = "pato.plugins" }, }, {
     notify = false,
   },
 })
+vim.cmd("silent !kitty @ set-spacing margin=0")
 

@@ -1,3 +1,5 @@
+require("pato.core.highlights")
 require("pato.core.options")
 require("pato.core.aesthetics")
 require("pato.core.keymaps")
+require("pato.core.lsp_diagnostic")

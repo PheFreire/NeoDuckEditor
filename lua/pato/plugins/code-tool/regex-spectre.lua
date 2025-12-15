@@ -104,6 +104,7 @@ return {
             '--line-number',
             '--column',
             '--multiline',
+            '--pcre2'
           },
           options = {
             ['ignore-case'] = {
@@ -121,8 +122,8 @@ return {
       },
       replace_engine={
           ['sed']={
-              cmd = "sed",
-              args = nil,
+              cmd = 'gsed',
+              args = { "-E", "-i" },
               options = {
                 ['ignore-case'] = {
                   value= "--ignore-case",
@@ -131,6 +132,17 @@ return {
                 },
               }
           },
+          ['perl'] = {
+            cmd = "perl",
+            args = { "-0777", "-pi", "-e" },
+            options = {
+              ['ignore-case'] = {
+                value = "",
+                icon = "[I]",
+                desc = "ignore case (adicione (?i) na regex manualmente)"
+              }
+            }
+          }
       },
       default = {
           find = {

@@ -37,7 +37,16 @@ if [ ! -f "$FONT_FILE" ]; then
   log "✅ FiraCode Nerd Font instalada com sucesso."
 else
   log "✅ FiraCode Nerd Font já está instalada."
-fi 
+fi
+
+log "📦 Verificando instalação do 'codex'..."
+if ! command -v codex &> /dev/null; then
+  log "📥 Instalando 'codex'..."
+  npm i -g @openai/codex
+  log "✅ codex instalado com sucesso."
+else
+  log "✅ codex já está instalado."
+fi
 
 log "======================================================="
 log "🎉 Setup finalizado com sucesso!"

@@ -4,6 +4,12 @@ vim.opt.fillchars = {
     foldopen = "▾",     -- Seta para baixo quando o fold está aberto
     foldclose = "▸",    -- Seta para a direita quando o fold está fechado
     foldsep = " ",      -- Remove separadores entre folds
+
+    vert = "│",
+    vertleft = "│",
+    vertright = "│",
+    verthoriz = "│",
+    eob = " ",
 }
 
 function _G.custom_fold_text()

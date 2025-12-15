@@ -2,7 +2,7 @@ vim.g.mapleader = " "
 Km = vim.keymap
 
 local sysname = vim.loop.os_uname().sysname
--- local is_mac = sysname == "Darwin"
+local is_mac = sysname == "Darwin"
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Normal-Mode Movement keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 

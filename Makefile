@@ -1,4 +1,4 @@
-.DEFAULT_GOAL := help
+skk.DEFAULT_GOAL := help
 .SILENT:
 .PHONY: help
 

@@ -3,10 +3,8 @@ local g = vim.g
 
 g.netrw_liststyle = 3
 
--- Define Cursor Color 
-vim.api.nvim_set_hl(0, 'Cursor', { fg = 'black', bg = 'white' })
-
 -- Wrap Configs
+opt.fileencoding = "utf-8"
 opt.wrap = false
 opt.linebreak = true
 opt.breakindent = true
@@ -14,17 +12,6 @@ opt.breakindent = true
 -- Clipboard
 opt.clipboard = "unnamedplus"
 
--- Errors
-vim.diagnostic.config({
-  underline = true,
-  virtual_text = false,
-  signs = true,
-  update_in_insert = false,
-  severity_sort = true,
-  float = { source = "always", border = "rounded" },
-})
-
-opt.updatetime = 350
 opt.ttyfast = true
 opt.cursorline = true
 
@@ -36,26 +23,39 @@ opt.tabstop = 2 -- 2 spaces for tabs (prettier default)
 opt.shiftwidth = 2 -- 2 spaces for indent width
 opt.expandtab = true -- expand tab to spaces
 opt.autoindent = true -- copy indent from current line when starting new one
+vim.opt.foldcolumn = "0"
+vim.opt.statuscolumn = ""
 
 -- search settings
-opt.ignorecase = true -- ignore case when searching
-opt.smartcase = true -- if you include mixed case in your search, assumes you want case-sensitive
-opt.list = false
+opt.hlsearch = true
+opt.ignorecase = true
+opt.smartcase = true
 
 -- turn on termguicolors for tokyonight colorscheme to work
 -- (have to use iterm2 or any other true color terminal)
 opt.termguicolors = true
+opt.pumheight = 10
+opt.cmdheight = 0
+opt.conceallevel = 0
+opt.showtabline = 1
+opt.winborder = "none"
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark
-opt.signcolumn = "yes" -- show sign column so that text doesn't shift
+opt.signcolumn = "no" -- show sign column so that text doesn't shift
 
 -- backspace
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
--- split windows
-opt.splitright = true -- split vertical window to the right
-opt.splitbelow = true -- split horizontal window to the bottom
+-- Split Windows
+opt.splitbelow = true
+opt.splitright = true
+opt.inccommand = "split"
 
--- turn off swapfile
+-- Update and backups
+opt.showmode = false
+opt.backup = false
+opt.writebackup = true
+opt.updatetime = 300
+opt.timeoutlen = 500
 opt.swapfile = false
 
 -- disable some default providers
@@ -64,8 +64,8 @@ g.loaded_python3_provider = 0
 g.loaded_perl_provider = 0
 g.loaded_ruby_provider = 0
 
--- Obsidian
-vim.opt.conceallevel = 2
+-- Browser
+vim.g.mkdp_browser = 'chromium' -- 'firefox'
 
 vim.filetype.add({
     pattern = {

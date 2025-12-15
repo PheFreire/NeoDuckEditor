@@ -3,13 +3,13 @@ return {
   version = "*",
   lazy = true,
   ft = "markdown",
-  
+
   config = function()
     require("obsidian").setup({
       workspaces = {
         {
           name = "Brain",
-          path = "~/Documentos/dev/Brain",
+          path = "/Users/phepato/Documents/dev/Lemon",
         },
       },
       mappings = {

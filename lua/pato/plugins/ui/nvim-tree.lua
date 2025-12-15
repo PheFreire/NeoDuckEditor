@@ -13,10 +13,15 @@ return {
     vim.g.loaded_netrwPlugin = 1
 
     nvimtree.setup({
+      disable_netrw = true,
+      hijack_cursor = true,
+      sync_root_with_cwd = true,
       view = {
-        width = 35,
         -- relativenumber = true,
         side = "right",
+        adaptive_size = true,
+        -- width = 30,
+        preserve_window_proportions = true,
       },
       git = {
         ignore = false,
@@ -24,6 +29,7 @@ return {
       },
       -- Icons
       renderer = {
+        root_folder_label = false,
         indent_markers = {
           enable = true,
         },
@@ -31,8 +37,8 @@ return {
           show = {
             file = true,
             folder = true,
-            folder_arrow = true,
             git = true,
+            folder_arrow = false
           },
           glyphs = {
             modified = "●",
@@ -68,7 +74,7 @@ return {
         },
       },
       filters = {
-        custom = { ".DS_Store" },
+        custom = { ".DS_Store", "__pycache__"  },
         dotfiles = false,
       },
     })
