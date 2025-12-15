@@ -52,7 +52,7 @@ return {
 		options = {
 			theme = gruv_material,
 			component_separators = { left = "|", right = "|" },
-			section_separators = { left = "", right = "" },
+			section_separators = { left = "|", right = "|" },
 	  		disabled_filetypes = {
         statusline = {},
         winbar = {},
