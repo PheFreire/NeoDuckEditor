@@ -109,6 +109,7 @@ return {
         sorting_strategy = "descending",
         layout_strategy = "horizontal",
         layout_config = {
+          preview_cutoff = 40,
           horizontal = {
             mirror = false,
           },

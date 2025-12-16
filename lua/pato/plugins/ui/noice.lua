@@ -7,7 +7,7 @@ local function getviews()
 		"vsplit",
 		"popup",
 		"mini",
-		"cmdline",
+		-- "cmdline",
 		"cmdline_popup",
 		"cmdline_output",
 		"messages",
