@@ -9,3 +9,10 @@ Km.set('n', 'e', function()
     vim.cmd("wincmd w")
   end
 end, { noremap = true, silent = true })
+
+Km.set('n', 'ee', function()
+  require("telescope.builtin").diagnostics({
+    bufnr = nil,
+    severity = vim.diagnostic.severity.ERROR,
+  })
+end, { silent = true, desc = "Workspace errors only" })

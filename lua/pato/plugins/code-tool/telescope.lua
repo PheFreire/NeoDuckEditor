@@ -17,7 +17,6 @@ return {
       end, 100) -- Delay allows filetype and plugins to settle before opening
     end
 
-
     -- Configura o Telescope
     telescope.setup({
       defaults = {
@@ -33,8 +32,7 @@ return {
             ["j"] = actions.move_selection_previous,
             ["<A-j>"] = actions.move_to_top,
             ["<A-k>"] = actions.move_to_bottom,
-            ["<CR>"] = open_after_tree
-
+            ["<CR>"] = open_after_tree,
           },
         },
         preview = {
