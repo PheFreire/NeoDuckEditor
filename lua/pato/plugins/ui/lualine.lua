@@ -53,10 +53,6 @@ return {
 			theme = gruv_material,
 			component_separators = { left = "|", right = "|" },
 			section_separators = { left = "|", right = "|" },
-	  		disabled_filetypes = {
-        statusline = {},
-        winbar = {},
-      },
 		},
     globalstatus = false,
 		sections = {
@@ -65,28 +61,16 @@ return {
 			},
 			lualine_b = {
 				"branch",
-				-- {
-				-- 	"buffers",
-          -- path = 3,
-				-- 	buffers_color = {
-				-- 		active = { bg = colors.gruvYellow, fg = colors.gruvBlack, gui = "bold" },
-				-- 		inactive = { bg = colors.gruvGray, fg = colors.gruvWhite, gui = "italic" },
-				-- 	},
-				-- 	symbols = {
-				-- 		modified = " ●",
-				-- 		alternate_file = "",
-				-- 		directory = "",
-				-- 	},
-				-- },
-			},
-			-- lualine_y = {
-			-- 	"searchcount",
-			-- 	"selectioncount",
-			-- 	"lsp_status",
-			-- 	"filetype",
-			-- },
+      },
+      lualine_c = {
+			  {
+          'filename',
+          path = 1,
+          file_status = true
+        }
+      },
+      lualine_x = { 'fileformat', 'filetype'},
 			lualine_z = {
-				"encoding",
 				"location",
 			},
 		},
