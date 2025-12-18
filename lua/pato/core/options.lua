@@ -38,7 +38,7 @@ opt.pumheight = 10
 opt.cmdheight = 0
 opt.conceallevel = 0
 opt.showtabline = 1
-opt.winborder = "none"
+opt.winborder = "rounded"
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark
 opt.signcolumn = "no" -- show sign column so that text doesn't shift
 

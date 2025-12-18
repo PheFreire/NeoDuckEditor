@@ -14,4 +14,5 @@ require("pato.core.keymaps.telescope")
 require("pato.core.keymaps.terminal")
 require("pato.core.keymaps.trouble")
 require("pato.core.keymaps.visual-multi")
+require("pato.core.keymaps.dressing")
 
