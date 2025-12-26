@@ -3,12 +3,9 @@ return {
   config = function()
     _G.globalSpectreReplacer = function()
       local entries = require('spectre.actions').get_all_entries() or {}
-      
       local state = require('spectre.actions').get_state()
       local replace = state.query.replace_query or ""
       local search = state.query.search_query or ""
-    
-    
       local function table_length(tbl)
         local count = 0
         for _ in pairs(tbl) do
@@ -16,19 +13,18 @@ return {
         end
         return count
       end
-    
+
       if table_length(entries) == 0 or search == "" or replace == "" then
         vim.notify("❌ Spectre: empty search, replace or no matches found.", vim.log.levels.WARN)
         return
       end
-    
+
       local function escape(str)
         return str
           :gsub("%%", "%%%%")  -- escapa '%' para não quebrar string.format
           :gsub("/", "\\/")    -- escapa '/' para não quebrar :s///
       end
 
-    
       if replace:find("\\r") then
         local escaped_search = escape(search)
         local escaped_replace = escape(replace)
@@ -38,7 +34,7 @@ return {
           local cmd = string.format("cdo %%s/\\v%s/%s/g | update", escaped_search, escaped_replace)
           vim.cmd(cmd)
         end, 100)
-        
+
         vim.cmd("cclose")
         vim.notify("🔁 Replacement executed using :cdo on Spectre results (multiline).", vim.log.levels.INFO)
         return
@@ -49,10 +45,8 @@ return {
 
     require('spectre').setup({
       color_devicons = true,
-      open_cmd = function()
-        vim.cmd("70vnew")
-      end,
-      live_update = true,
+      open_cmd = "noswapfile vnew",
+      live_update = false,
       lnum_for_results = true,
       line_sep_start = "╭─────────────────────────────────────",
       result_padding = "│ ",

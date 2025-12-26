@@ -172,7 +172,14 @@ Km.set('n', 'm', ':set wrap!<CR>', { noremap = true, silent = true })
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Undo/Reundo)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-Km.set('i', '<C-z>', '<C-o>u', { noremap = true, silent = true, })
+-- Km.set('i', '<C-z>', '<C-o>u', { noremap = true, silent = true, })
+
+Km.set('i', '<C-z>', function ()
+  local ut = vim.fn.undotree()
+  if (ut.seq_last or 0) > 0 and (ut.seq_cur or 0) > 0 then
+    vim.cmd("normal! u")
+  end
+end, { desc = "Undo apenas se houver histórico", noremap = true, silent = true, })
 Km.set('i', '<A-z>', '<C-o><C-r>', { noremap = true, silent = true, })
 Km.set('n', '<C-z>', 'u', { noremap = true, silent = true, })
 Km.set('n', '<A-z>', '<C-r>', {noremap = true, silent = true, })
