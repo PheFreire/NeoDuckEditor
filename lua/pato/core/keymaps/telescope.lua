@@ -1,9 +1,9 @@
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Telescope)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-Km.set('n', '<leader>fs', ':Telescope grep_string<CR>', { noremap = true, silent = true, })
-Km.set("n", "<leader>ff", ':Telescope find_files<CR>', { noremap = true, silent = true,  })
-Km.set("n", '<leader>fg', ':Telescope live_grep<CR>', { noremap = true, silent = true, })
-Km.set('n', '<leader>t', ':Telescope buffers<CR>', { noremap = true, silent = true })
+Km.set('n', '<leader>fs', '<cmd>Telescope grep_string<CR>', { noremap = true, silent = true, })
+Km.set("n", "<leader>ff", '<cmd>Telescope find_files<CR>', { noremap = true, silent = true,  })
+Km.set("n", '<leader>fg', '<cmd>Telescope live_grep<CR>', { noremap = true, silent = true, })
+Km.set('n', '<leader>t', '<cmd>Telescope buffers<CR>', { noremap = true, silent = true })
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Theme Selection)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 

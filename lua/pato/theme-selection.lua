@@ -1,2 +1,2 @@
 -- sorbet | github_dark | habamax | unokai
-vim.cmd('colorscheme dark-duck')
+vim.cmd('silent colorscheme dark-duck')

@@ -35,7 +35,7 @@ return {
           vim.cmd(cmd)
         end, 100)
 
-        vim.cmd("cclose")
+        vim.cmd("silent cclose")
         vim.notify("🔁 Replacement executed using :cdo on Spectre results (multiline).", vim.log.levels.INFO)
         return
       end

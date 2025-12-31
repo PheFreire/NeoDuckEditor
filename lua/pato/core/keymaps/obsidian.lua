@@ -1,3 +1,3 @@
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Obsidian)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-Km.set('n', '<leader>o', ':ObsidianOpen<CR>', { noremap = true, silent = true })
+Km.set('n', '<leader>o', '<cmd>ObsidianOpen<CR>', { noremap = true, silent = true })

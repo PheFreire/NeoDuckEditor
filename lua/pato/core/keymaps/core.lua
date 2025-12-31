@@ -1,200 +1,213 @@
 vim.g.mapleader = " "
-Km = vim.keymap
+vim.keymap = vim.keymap
 
 local sysname = vim.loop.os_uname().sysname
 local is_mac = sysname == "Darwin"
+Km = vim.keymap
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Normal-Mode Movement keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-Km.set("n", "i", "<cmd>startinsert<CR><Right>", { noremap = false, silent = true })
+local M = {}
 
-Km.set("n", "k", "<Down>", { noremap = true, silent = true })
-Km.set("n", "j", "<Up>", { noremap = true, silent = true })
-Km.set("n", "<C-l>", "e", { noremap = true, silent = true })
-Km.set("n", "<A-l>", "$", { noremap = true, silent = true })
+function M.setDefaultNavigationKeymaps(bufnr)
+  local opts = {}
+  if bufnr then opts.buffer = bufnr end
 
-Km.set("n", "<C-h>", "b", { noremap = true, silent = true })
-Km.set("n", "<A-h>", "0", { noremap = true, silent = true })
+  local keymapOpts = vim.tbl_extend("force", opts, { noremap = true, silent = true })
 
-Km.set("n", "<A-k>", "G", { noremap = true, silent = true })
-Km.set("n", "<A-j>", "gg", { noremap = true, silent = true })
+  vim.keymap.set("n", "i", "<cmd>startinsert<CR><Right>", keymapOpts)
 
-Km.set('n', 'l', function ()
-    local col = vim.fn.col('.')
-    local line = vim.fn.getline('.')
-    if col >= #line then
-        vim.cmd('normal! j0')
-    else
-        vim.cmd('normal! l')
+  vim.keymap.set("n", "k", "<Down>", keymapOpts)
+  vim.keymap.set("n", "j", "<Up>", keymapOpts)
+  vim.keymap.set("n", "<C-l>", "e", keymapOpts)
+  vim.keymap.set("n", "<A-l>", "$", keymapOpts)
+
+  vim.keymap.set("n", "<C-h>", "b", keymapOpts)
+  vim.keymap.set("n", "<A-h>", "0", keymapOpts)
+
+  vim.keymap.set("n", "<A-k>", "G", keymapOpts)
+  vim.keymap.set("n", "<A-j>", "gg", keymapOpts)
+
+  vim.keymap.set('n', 'l', function ()
+      local col = vim.fn.col('.')
+      local line = vim.fn.getline('.')
+      if col >= #line then
+          vim.cmd('silent normal! j0')
+      else
+          vim.cmd('silent normal! l')
+      end
+  end, keymapOpts)
+
+  vim.keymap.set('n', 'h', function ()
+      local col = vim.fn.col('.')
+      if col == 1 then
+          vim.cmd('silent normal! k$')
+      else
+          vim.cmd('silent normal! h')
+      end
+  end,  keymapOpts)
+
+  --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Insert-Mode Movement keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  vim.keymap.set("i", "<A-Left>", "<C-o>0", keymapOpts)
+  vim.keymap.set("i", "<A-Right>", "<C-o>$", keymapOpts)
+
+  vim.keymap.set("i", "<A-k>", "<Down>", keymapOpts)
+  vim.keymap.set("i", "<A-j>", "<Up>", keymapOpts)
+  vim.keymap.set("i", "<A-h>", "<Left>", keymapOpts)
+  vim.keymap.set("i", "<A-l>", "<Right>", keymapOpts)
+
+  vim.keymap.set("i", "<A-K>", "<C-o>G", keymapOpts)
+  vim.keymap.set("i", "<A-J>", "<C-o>gg", keymapOpts)
+  vim.keymap.set("i", "<A-H>", "<C-o>:lua _G.ctrl_left()<CR>", keymapOpts)
+  vim.keymap.set("i", "<A-L>", "<C-o>:lua _G.ctrl_right()<CR>", keymapOpts)
+
+  --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Visual-Mode Movement keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  vim.keymap.set("v", "k", "<Down>", keymapOpts)
+  vim.keymap.set("v", "j", "<Up>", keymapOpts)
+
+  vim.keymap.set("v", "<C-l>", "e", keymapOpts)
+  vim.keymap.set("v", "<A-l>", "$", keymapOpts)
+
+  vim.keymap.set("v", "<C-h>", "b", keymapOpts)
+  vim.keymap.set("v", "<A-h>", "0", keymapOpts)
+
+  vim.keymap.set("v", "<A-k>", "G", keymapOpts)
+  vim.keymap.set("v", "<A-j>", "gg", keymapOpts)
+
+  vim.keymap.set("v", "<A-k>", "G", keymapOpts)
+  vim.keymap.set("v", "<A-j>", "gg", keymapOpts)
+
+  vim.keymap.set('v', 'x', '"_d', keymapOpts)
+
+  vim.keymap.set('v', 'l', function ()
+      local col = vim.fn.col('.')
+      local line = vim.fn.getline('.')
+      if col >= #line then
+          vim.cmd('silent normal! j0')
+      else
+          vim.cmd('silent normal! l')
+      end
+  end, keymapOpts)
+
+  vim.keymap.set('v', 'h', function ()
+      local col = vim.fn.col('.')
+      if col == 1 then
+          vim.cmd('silent normal! k$')
+      else
+          vim.cmd('silent normal! h')
+      end
+  end,  keymapOpts)
+
+  vim.keymap.set('v', '<Right>', function ()
+      local col = vim.fn.col('.')
+      local line = vim.fn.getline('.')
+      if col >= #line then
+          vim.cmd('silent normal! j0')
+      else
+          vim.cmd('silent normal! l')
+      end
+  end, keymapOpts)
+
+  vim.keymap.set('v', '<Left>', function ()
+      local col = vim.fn.col('.')
+      if col == 1 then
+          vim.cmd('silent normal! k$')
+      else
+          vim.cmd('silent normal! h')
+      end
+  end, keymapOpts)
+
+  --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Ctrl Movement Keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  function _G.ctrl_right()
+    local original_line = vim.fn.line('.')
+    vim.cmd('silent normal! e')
+
+    if vim.fn.line('.') ~= original_line then
+      vim.cmd('silent normal! k$')
     end
-end, { noremap = true, silent = true })
-
-Km.set('n', 'h', function ()
-    local col = vim.fn.col('.')
-    if col == 1 then
-        vim.cmd('normal! k$')
-    else
-        vim.cmd('normal! h')
-    end
-end,  { noremap = true, silent = true })
-
---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Insert-Mode Movement keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-Km.set("i", "<A-Left>", "<C-o>0", { noremap = true, silent = true })
-Km.set("i", "<A-Right>", "<C-o>$", { noremap = true, silent = true })
-
-Km.set("i", "<A-k>", "<Down>", { noremap = true, silent = true })
-Km.set("i", "<A-j>", "<Up>", { noremap = true, silent = true })
-Km.set("i", "<A-h>", "<Left>", { noremap = true, silent = true })
-Km.set("i", "<A-l>", "<Right>", { noremap = true, silent = true })
-
-Km.set("i", "<A-K>", "<C-o>G", { noremap = true, silent = true })
-Km.set("i", "<A-J>", "<C-o>gg", { noremap = true, silent = true })
-Km.set("i", "<A-H>", "<C-o>:lua _G.ctrl_left()<CR>", { noremap = true, silent = true })
-Km.set("i", "<A-L>", "<C-o>:lua _G.ctrl_right()<CR>", { noremap = true, silent = true })
-
---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Visual-Mode Movement keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-Km.set("v", "k", "<Down>", { noremap = true, silent = true })
-Km.set("v", "j", "<Up>", { noremap = true, silent = true })
-
-Km.set("v", "<C-l>", "e", { noremap = true, silent = true })
-Km.set("v", "<A-l>", "$", { noremap = true, silent = true })
-
-Km.set("v", "<C-h>", "b", { noremap = true, silent = true })
-Km.set("v", "<A-h>", "0", { noremap = true, silent = true })
-
-Km.set("v", "<A-k>", "G", { noremap = true, silent = true })
-Km.set("v", "<A-j>", "gg", { noremap = true, silent = true })
-
-Km.set("v", "<A-k>", "G", { noremap = true, silent = true })
-Km.set("v", "<A-j>", "gg", { noremap = true, silent = true })
-
-Km.set('v', 'x', '"_d', { noremap = true, silent = true })
-
-Km.set('v', 'l', function ()
-    local col = vim.fn.col('.')
-    local line = vim.fn.getline('.')
-    if col >= #line then
-        vim.cmd('normal! j0')
-    else
-        vim.cmd('normal! l')
-    end
-end, { noremap = true, silent = true })
-
-Km.set('v', 'h', function ()
-    local col = vim.fn.col('.')
-    if col == 1 then
-        vim.cmd('normal! k$')
-    else
-        vim.cmd('normal! h')
-    end
-end,  { noremap = true, silent = true })
-
-Km.set('v', '<Right>', function ()
-    local col = vim.fn.col('.')
-    local line = vim.fn.getline('.')
-    if col >= #line then
-        vim.cmd('normal! j0')
-    else
-        vim.cmd('normal! l')
-    end
-end, { noremap = true, silent = true })
-
-Km.set('v', '<Left>', function ()
-    local col = vim.fn.col('.')
-    if col == 1 then
-        vim.cmd('normal! k$')
-    else
-        vim.cmd('normal! h')
-    end
-end,  { noremap = true, silent = true })
-
---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Ctrl Movement Keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-function _G.ctrl_right()
-  local original_line = vim.fn.line('.')
-  vim.cmd('normal! e')
-
-  if vim.fn.line('.') ~= original_line then
-    vim.cmd('normal! k$')
+    vim.fn.cursor(0, vim.fn.col('.') + 1)
   end
-  vim.fn.cursor(0, vim.fn.col('.') + 1)
+
+  function _G.ctrl_left()
+    local original_line = vim.fn.line('.')
+    vim.cmd('silent normal! b')
+
+    if vim.fn.line('.') ~= original_line then
+      vim.cmd('silent normal! j0')
+    end
+  end
+
+  vim.keymap.set("i", "jk", "<ESC>", keymapOpts) -- exit insert mode with jk
+  vim.keymap.set('i', '<C-H>', '<C-w>', keymapOpts) -- Delete word with Crtl
+  vim.keymap.set('i', '<C-Right>', '<C-o>:lua _G.ctrl_right()<CR>', keymapOpts)
+  vim.keymap.set('i', '<C-Left>', '<C-o>:lua _G.ctrl_left()<CR>', keymapOpts)
+  vim.keymap.set('n', '<C-Right>', 'e', keymapOpts)
+  vim.keymap.set('n', '<C-Left>', 'b', keymapOpts)
+  vim.keymap.set('v', '<C-Left>', 'b', keymapOpts)
+  vim.keymap.set('v', '<C-Right>', 'e', keymapOpts)
+
+  --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General Buffer Keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  vim.keymap.set("n", "<C-q>", "<cmd>q!<CR>", keymapOpts) -- quit without saving
+  vim.keymap.set("n", "<C-s>", "<cmd>w<CR>", keymapOpts) -- save
+  vim.keymap.set('n', '<leader>gb', '<cmd>e#<CR>', keymapOpts) -- Open last buffer
+  vim.keymap.set('i', '', '<C-o><cmd>w<CR>', keymapOpts)
+
+  --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Move Cell)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  vim.keymap.set('i', '<A-Up>', "<Esc>0v$:m '<-2<CR>gv=gv<CR><Esc>i<Up>", keymapOpts)
+  vim.keymap.set('i', '<A-Down>', "<Esc>$v$:m '>+1<CR>gv=gv<CR><Esc>i<Up>", keymapOpts)
+
+  -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Move Window)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  -- Mapeia Shift + k para rolar a tela para cima sem mover o cursor
+  vim.keymap.set('n', 'J', '2<C-y>', keymapOpts)
+
+  -- Mapeia Shift + j para rolar a tela para baixo sem mover o cursor
+  vim.keymap.set('n', 'K', '2<C-e>', keymapOpts)
+
+  -- Mapeia Shift + k para rolar a tela para cima sem mover o cursor no modo Visual 
+  vim.keymap.set('v', 'J', '2<C-y>', keymapOpts)
+
+  -- Mapeia Shift + j para rolar a tela para baixo sem mover o cursor no modo Visual
+  vim.keymap.set('v', 'K', '2<C-e>', keymapOpts)
+
+  -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Break Text)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  vim.keymap.set('n', 'm', '<cmd>set wrap!<CR>', keymapOpts)
+
+  --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Undo/Reundo)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  -- vim.keymap.set('i', '<C-z>', '<C-o>u', { noremap = true, silent = true, })
+
+  vim.keymap.set('i', '<C-z>', function ()
+    local ut = vim.fn.undotree()
+    if (ut.seq_last or 0) > 0 and (ut.seq_cur or 0) > 0 then
+      vim.cmd('silent normal! u')
+    end
+  end, keymapOpts)
+  vim.keymap.set('i', '<A-z>', '<C-o><C-r>', keymapOpts)
+  vim.keymap.set('n', '<C-z>', 'u', keymapOpts)
+  vim.keymap.set('n', '<A-z>', '<C-r>', keymapOpts)
+
+  --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Clipboard)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  vim.keymap.set('v', '<C-c>', '"+y', keymapOpts) -- copy to system clipboard
+  vim.keymap.set('v', '<C-x>', 'c', keymapOpts) -- cut to system clipboard
+  vim.keymap.set("i", "<C-v>", "<C-o>:set paste<CR><C-r>+<C-o>:set nopaste<CR>", keymapOpts) -- cut from system clipboard
+
+  -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Unammed Tabs)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  vim.keymap.set('n', '<leader>n', '<cmd>enew<CR>', keymapOpts)
+
+  -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Filter)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  vim.keymap.set('n', '//', '<cmd>noh<CR>', keymapOpts)
 end
 
-function _G.ctrl_left()
-  local original_line = vim.fn.line('.')
-  vim.cmd('normal! b')
+M.setDefaultNavigationKeymaps()
 
-  if vim.fn.line('.') ~= original_line then
-    vim.cmd('normal! j0')
-  end
-end
-
-Km.set("i", "jk", "<ESC>", { noremap = false, silent = true }) -- exit insert mode with jk
-Km.set('i', '<C-H>', '<C-w>', { noremap = true, silent = true }) -- Delete word with Crtl
-Km.set('i', '<C-Right>', '<C-o>:lua _G.ctrl_right()<CR>', { noremap = true, silent = true })
-Km.set('i', '<C-Left>', '<C-o>:lua _G.ctrl_left()<CR>', { noremap = true, silent = true })
-Km.set('n', '<C-Right>', 'e', { noremap = true, silent = true })
-Km.set('n', '<C-Left>', 'b', { noremap = true, silent = true })
-Km.set('v', '<C-Left>', 'b', { noremap = true, silent = true })
-Km.set('v', '<C-Right>', 'e', { noremap = true, silent = true })
-
---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(General Buffer Keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-Km.set("n", "<C-q>", ":q!<CR>", { noremap = false, silent = true }) -- quit without saving
-Km.set("n", "<C-s>", ":w<CR>", { noremap = false, silent = true }) -- save
-Km.set('n', '<leader>gb', ':e#<CR>', { silent = true }) -- Open last buffer
-Km.set('i', '', '<C-o><cmd>w<CR>', { noremap = false, silent = true })
-
---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Move Cell)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-Km.set('i', '<A-Up>', "<Esc>0v$:m '<-2<CR>gv=gv<CR><Esc>i<Up>", { silent = true })
-Km.set('i', '<A-Down>', "<Esc>$v$:m '>+1<CR>gv=gv<CR><Esc>i<Up>", { silent = true })
-
--- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Move Window)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
--- Mapeia Shift + k para rolar a tela para cima sem mover o cursor
-Km.set('n', 'J', '2<C-y>', { noremap = true, silent = true })
-
--- Mapeia Shift + j para rolar a tela para baixo sem mover o cursor
-Km.set('n', 'K', '2<C-e>', { noremap = true, silent = true })
-
--- Mapeia Shift + k para rolar a tela para cima sem mover o cursor no modo Visual 
-Km.set('v', 'J', '2<C-y>', { noremap = true, silent = true })
-
--- Mapeia Shift + j para rolar a tela para baixo sem mover o cursor no modo Visual
-Km.set('v', 'K', '2<C-e>', { noremap = true, silent = true })
-
--- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Break Text)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-Km.set('n', 'm', ':set wrap!<CR>', { noremap = true, silent = true })
-
---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Undo/Reundo)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
--- Km.set('i', '<C-z>', '<C-o>u', { noremap = true, silent = true, })
-
-Km.set('i', '<C-z>', function ()
-  local ut = vim.fn.undotree()
-  if (ut.seq_last or 0) > 0 and (ut.seq_cur or 0) > 0 then
-    vim.cmd("normal! u")
-  end
-end, { desc = "Undo apenas se houver histórico", noremap = true, silent = true, })
-Km.set('i', '<A-z>', '<C-o><C-r>', { noremap = true, silent = true, })
-Km.set('n', '<C-z>', 'u', { noremap = true, silent = true, })
-Km.set('n', '<A-z>', '<C-r>', {noremap = true, silent = true, })
-
---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Clipboard)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-Km.set('v', '<C-c>', '"+y', { noremap = true, }) -- copy to system clipboard
-Km.set('v', '<C-x>', 'c', { noremap = true, silent = true, }) -- cut to system clipboard
-Km.set("i", "<C-v>", "<C-o>:set paste<CR><C-r>+<C-o>:set nopaste<CR>", { noremap = true, silent = true }) -- cut from system clipboard
-
--- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Unammed Tabs)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-Km.set('n', '<leader>n', ':enew<CR>', { noremap = false, silent = true })
-
--- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Filter)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-Km.set('n', '//', ':noh<CR>', { noremap = true, silent = true })
-
+return M

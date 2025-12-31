@@ -25,5 +25,5 @@ function CreateTerminalSession()
   end)
 end
 
-Km.set('n', '<C-t>', ':lua CreateTerminalSession()<CR>', { noremap = true, silent = true })
+Km.set('n', '<C-t>', '<cmd>lua CreateTerminalSession()<CR>', { noremap = true, silent = true })
 Km.set('t', 'jk', [[<C-\><C-n>]], { noremap = true, silent = true })

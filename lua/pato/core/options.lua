@@ -35,7 +35,7 @@ opt.smartcase = true
 -- (have to use iterm2 or any other true color terminal)
 opt.termguicolors = true
 opt.pumheight = 10
-opt.cmdheight = 0
+opt.cmdheight = 1
 opt.conceallevel = 0
 opt.showtabline = 1
 opt.winborder = "rounded"

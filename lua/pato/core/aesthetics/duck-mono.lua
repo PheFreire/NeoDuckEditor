@@ -7,7 +7,7 @@ local fg  = "#e6e0c2"
 local dim = "#2a2927"
 
 -- limpa qualquer tema anterior e registra o nome do colorscheme
-vim.cmd("hi clear")
+vim.cmd("silent hi clear")
 vim.o.background = "dark"
 vim.g.colors_name = "duck-mono"
 
