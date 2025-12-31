@@ -1,8 +1,13 @@
 return {
+  -- Bealtiful docs:
+  -- https://github.com/stevearc/oil.nvim
+  -- https://github.com/stevearc/oil.nvim/blob/master/doc/oil.txt
+  -- https://github.com/stevearc/oil.nvim/blob/master/doc/api.md
   "stevearc/oil.nvim",
   lazy = false,
   opts = {
     default_file_explorer = true,
+    skip_confirm_for_simple_edits = false,
     columns = {
       "icon",
     },
