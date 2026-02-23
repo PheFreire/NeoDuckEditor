@@ -197,7 +197,7 @@ function M.setDefaultNavigationKeymaps(bufnr)
 
   vim.keymap.set('v', '<C-c>', '"+y', keymapOpts) -- copy to system clipboard
   vim.keymap.set('v', '<C-x>', 'c', keymapOpts) -- cut to system clipboard
-  vim.keymap.set("i", "<C-v>", "<C-o>:set paste<CR><C-r>+<C-o>:set nopaste<CR>", keymapOpts) -- cut from system clipboard
+  vim.keymap.set("i", "<C-v>", "<C-o>:set paste<CR><C-r>+<C-o>:set nopaste<CR>", keymapOpts)
 
   -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Unammed Tabs)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 

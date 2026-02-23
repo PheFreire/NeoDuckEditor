@@ -44,14 +44,14 @@ return {
         local defaultCoreKeymaps = require("pato.core.keymaps.core")
         defaultCoreKeymaps.setDefaultNavigationKeymaps(ev.buf)
 
-        local defaultVisualKeymaps = require("pato.core.keymaps.visual-multi")
-        defaultVisualKeymaps.setDefaultVisualMultiKeymaps(ev.buf)
-
         local defaultRevealInFinderKeymaps = require("pato.core.keymaps.revel-in-finder")
         defaultRevealInFinderKeymaps.setRevealInFinderKeymaps(ev.buf)
 
-        vim.keymap.set("n", "v", "V", keymapsOpts)
-        vim.keymap.set("n", "<A-v>", "V", keymapsOpts)
+        local defaultVisualKeymaps = require("pato.core.keymaps.visual-multi")
+        defaultVisualKeymaps.setDefaultVisualMultiKeymaps(ev.buf)
+
+        vim.keymap.set("n", "v", "v", keymapsOpts)
+        vim.keymap.set("n", "<A-v>", "v", keymapsOpts)
       end
     })
   end,
