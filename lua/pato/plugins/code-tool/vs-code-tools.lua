@@ -10,27 +10,36 @@ return {
 
     local function set_vm_maps(bufnr)
       local keymapOpts = { buffer = bufnr, noremap = true, silent = true }
-      
-      vim.keymap.set('n', 'i', '<Plug>(VM-a)', keymapOpts)
+
       vim.keymap.set('n', '<C-c>', '"+<Plug>(VM-Yank)<Plug>(VM-Exit)', keymapOpts)
       vim.keymap.set('n', 'k','<Plug>(VM-Motion-j)', keymapOpts)
       vim.keymap.set('n', 'j','<Plug>(VM-Motion-k)', keymapOpts)
+      vim.keymap.set('n', 'l','<Plug>(VM-Motion-l)', keymapOpts)
+      vim.keymap.set('n', 'h','<Plug>(VM-Motion-h)', keymapOpts)
       vim.keymap.set('n', 'J','<C-y>', keymapOpts)
       vim.keymap.set('n', 'K','<C-e>', keymapOpts)
+      vim.keymap.set('n', 'i','<Plug>(VM-a)', keymapOpts)
       vim.keymap.set('n', '<C-l>','<Plug>(VM-Motion-w)', keymapOpts)
       vim.keymap.set('n', '<C-h>','<Plug>(VM-Motion-b)', keymapOpts)
+      vim.keymap.set('n', '<A-l>','<Plug>(VM-Motion-$)', keymapOpts)
+      vim.keymap.set('n', '<A-h>','<Plug>(VM-Motion-0)', keymapOpts)
     end
 
     local function del_vm_maps(bufnr)
-      pcall(vim.keymap.del, 'n', 'i', { buffer = bufnr })
       pcall(vim.keymap.del, 'n', '<C-c>', { buffer = bufnr })
       pcall(vim.keymap.del, 'n', 'k', {buffer = bufnr })
       pcall(vim.keymap.del, 'n', 'j', { buffer = bufnr })
+      pcall(vim.keymap.del, 'n', 'l', {buffer = bufnr })
+      pcall(vim.keymap.del, 'n', 'h', { buffer = bufnr })
       pcall(vim.keymap.del, 'n', 'J', { buffer = bufnr })
       pcall(vim.keymap.del, 'n', 'K', { buffer = bufnr })
+      pcall(vim.keymap.del, 'n', 'i', { buffer = bufnr })
+      pcall(vim.keymap.del, 'n', '<C-l>', { buffer = bufnr })
+      pcall(vim.keymap.del, 'n', '<C-h>', { buffer = bufnr })
+      pcall(vim.keymap.del, 'n', '<A-l>', { buffer = bufnr })
+      pcall(vim.keymap.del, 'n', '<A-h>', { buffer = bufnr })
     end
 
-    -- Quando entrar no Visual Multi
     vim.api.nvim_create_autocmd("User", {
       group = group,
       pattern = "visual_multi_start",
@@ -40,7 +49,6 @@ return {
       end,
     })
 
-    -- Quando sair do Visual Multi
     vim.api.nvim_create_autocmd("User", {
       group = group,
       pattern = "visual_multi_exit",

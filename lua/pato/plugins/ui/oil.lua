@@ -19,6 +19,24 @@ return {
       preview_split = "right",
     },
     delete_to_trash = true,
+    win_options = {
+      wrap = false,
+      signcolumn = "no",
+      cursorcolumn = false,
+      foldcolumn = "0",
+      spell = false,
+      list = false,
+      conceallevel = 0,
+      concealcursor = "",
+    },
+    preview_win = {
+        update_on_cursor_moved = false,
+        preview_method = "fast_scratch",
+        win_options = {
+          conceallevel = 0,
+          concealcursor = "",
+        },
+      },
   },
   config = function(_, opts)
     local oil = require("oil")
@@ -43,12 +61,6 @@ return {
 
         local defaultCoreKeymaps = require("pato.core.keymaps.core")
         defaultCoreKeymaps.setDefaultNavigationKeymaps(ev.buf)
-
-        local defaultRevealInFinderKeymaps = require("pato.core.keymaps.revel-in-finder")
-        defaultRevealInFinderKeymaps.setRevealInFinderKeymaps(ev.buf)
-
-        local defaultVisualKeymaps = require("pato.core.keymaps.visual-multi")
-        defaultVisualKeymaps.setDefaultVisualMultiKeymaps(ev.buf)
 
         vim.keymap.set("n", "v", "v", keymapsOpts)
         vim.keymap.set("n", "<A-v>", "v", keymapsOpts)
