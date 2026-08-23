@@ -51,10 +51,31 @@ return {
       },
     })
 
-    -- Abre apenas o layout inferior (código fica em cima naturalmente)
-    dap.listeners.after.event_initialized["dapui_config"]  = function() dapui.open(1)  end
+    -- Abre layout inferior e devolve foco para a janela do código fonte
+    dap.listeners.after.event_initialized["dapui_config"] = function()
+      local src_win = vim.api.nvim_get_current_win()
+      dapui.open(1)
+      vim.schedule(function()
+        if vim.api.nvim_win_is_valid(src_win) then
+          vim.api.nvim_set_current_win(src_win)
+        end
+      end)
+    end
     dap.listeners.before.event_terminated["dapui_config"]  = function() dapui.close()  end
     dap.listeners.before.event_exited["dapui_config"]      = function() dapui.close()  end
+
+    -- Impede que buffers dap-src:// apareçam: redireciona a janela para o buffer anterior
+    vim.api.nvim_create_autocmd("BufEnter", {
+      pattern = "dap-src://*",
+      callback = function()
+        vim.schedule(function()
+          local alt = vim.fn.bufnr("#")
+          if alt > 0 and vim.api.nvim_buf_is_valid(alt) then
+            vim.api.nvim_win_set_buf(0, alt)
+          end
+        end)
+      end,
+    })
 
     -- Signs para breakpoints (definidos uma vez, signs sobrevivem à troca de tema)
     vim.fn.sign_define("DapBreakpoint",          { text = "●", texthl = "DapBreakpoint",          linehl = "DapBreakpointLine", numhl = "" })
