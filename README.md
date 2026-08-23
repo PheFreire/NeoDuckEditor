@@ -20,6 +20,8 @@ Destaques do setup:
 - Navegação remapeada completamente (sem depender do layout padrão HJKL do Vim)
 - LSP completo com 11 servidores de linguagem configurados e auto-instalados
 - Debugging integrado para C via nvim-dap + CodeLLDB (UI automática, virtual text inline)
+- Hover contextual para C: documentação LSP com fallback para `man` (`<leader>gg` / `<leader><leader>` alterna entre os dois)
+- Comandos `:Define` / `:Undefine` para alinhar (ou remover) automaticamente as continuações `\` de macros C
 - Tema próprio `dark-duck`, construído sobre tonalidades quentes de preto e amarelo
 - File explorer moderno via Oil.nvim (edita arquivos como buffers)
 - Busca poderosa com Telescope + ripgrep
@@ -39,6 +41,7 @@ nvim/
 ├── setup.sh                        # Script de instalação de dependências externas
 ├── Makefile                        # Utilitários de build
 ├── lazy-lock.json                  # Lockfile do lazy.nvim (versões fixas dos plugins)
+├── tutorial-dap-gdb.md             # Guia passo a passo de debug com nvim-dap + CodeLLDB
 └── lua/
     └── pato/
         ├── lazy.lua                # Bootstrap e configuração do lazy.nvim
@@ -48,6 +51,8 @@ nvim/
         │   ├── options.lua         # Opções globais do Vim/Neovim
         │   ├── highlights.lua      # Customizações de highlight e diagnósticos
         │   ├── lsp-buffer.lua      # Comportamento de diagnóstico e hover do LSP
+        │   ├── c-hover.lua         # Hover LSP em C com fallback para man page
+        │   ├── macro-define.lua    # Comandos :Define / :Undefine (alinhamento de macros C)
         │   ├── kitty_spacing.lua   # Integração de espaçamento com Kitty terminal
         │   ├── aesthetics/
         │   │   ├── excluded-themes.lua   # Temas excluídos do seletor
@@ -73,7 +78,7 @@ nvim/
         │       └── visual-multi.lua  # Configuração de multi-cursor
         └── plugins/
             ├── nvim-cmp.lua        # Engine de autocompletion
-            ├── ui/                 # Aparência: temas, lualine, oil, trouble, devicons
+            ├── ui/                 # Aparência: temas, lualine, oil, trouble, devicons, which-key
             ├── code-tool/          # Ferramentas de código: telescope, spectre, leap, flash
             ├── language/           # LSP + DAP: mason, mason-lspconfig, treesitter, nvim-dap
             ├── file-support/       # Suporte a arquivos: obsidian, dotenv
@@ -360,6 +365,7 @@ Configurado em `keymaps/nvim-lsp.lua`, `plugins/language/mason-lsp.lua` e `core/
 | Tecla | Ação |
 |---|---|
 | `<leader>gg` | Hover (documentação inline) |
+| `<leader>gh` | Signature help (assinatura da função sob o cursor) |
 | `<leader>gd` | Ir à definição |
 | `<leader>gr` | Ver referências |
 | `<leader>gs` | Símbolos do documento |
@@ -367,6 +373,8 @@ Configurado em `keymaps/nvim-lsp.lua`, `plugins/language/mason-lsp.lua` e `core/
 | `<leader>er` | Reiniciar LSP |
 | `e` | Abrir float de diagnóstico no cursor |
 | `ee` | Ver erros do workspace (via Telescope) |
+
+Em arquivos `.c`, `<leader>gg` usa um hover customizado (`core/c-hover.lua`): primeiro tenta o hover normal do LSP; se a página que abrir tiver o toggle ativo, `<leader><leader>` alterna entre o hover do LSP e a página de manual (`man`) do símbolo sob o cursor, em uma janela flutuante própria (`q` fecha).
 
 ---
 
@@ -408,28 +416,56 @@ Configurado em `keymaps/terminal.lua`.
 
 Configurado em `keymaps/dap.lua` e `plugins/language/nvim-dap.lua`.
 
-O adaptador **CodeLLDB** é instalado automaticamente pelo Mason. Ao iniciar o debug (`<F5>`), o dapui abre automaticamente com painel lateral (variáveis, breakpoints, call stack, watches) e console inferior. Os valores das variáveis aparecem inline no código via virtual text.
+O adaptador **CodeLLDB** é instalado automaticamente pelo Mason. Ao continuar/iniciar a sessão (`<leader>dc`), o dapui abre automaticamente o layout inferior (console + REPL) e o foco volta para a janela do código-fonte — a janela de disassembly (`dap-src://...`) que o adaptador tentaria abrir é interceptada e escondida automaticamente. Os valores das variáveis aparecem inline no código via virtual text.
 
-**Fluxo de uso:** compile com `gcc -g main.c -o main`, pressione `<F5>` e selecione o binário no input.
+Pressione **`<leader>d`** e aguarde ~400ms para abrir um popup do which-key com todos os comandos do grupo Debug.
+
+**Fluxo de uso:** compile com `gcc -g main.c -o main`, pressione `<leader>dc` e informe o binário no input. Veja `tutorial-dap-gdb.md` para um guia completo com exemplos práticos.
 
 | Tecla | Ação |
 |---|---|
-| `<F5>` | Iniciar / Continuar sessão |
-| `<F10>` | Step Over (próxima linha) |
-| `<F11>` | Step Into (entrar na função) |
-| `<F12>` | Step Out (sair da função) |
-| `<leader>b` | Toggle breakpoint |
-| `<leader>B` | Breakpoint condicional (pede expressão) |
-| `<leader>du` | Toggle UI manualmente |
-| `<leader>dr` | Abrir REPL |
+| `<leader>dc` | Iniciar / Continuar sessão |
+| `<leader>ds` | Step Over (próxima linha) |
+| `<leader>di` | Step Into (entrar na função) |
+| `<leader>do` | Step Out (sair da função) |
 | `<leader>dl` | Repetir última sessão |
+| `<leader>dR` | Reiniciar sessão |
+| `<leader>dq` | Terminar sessão |
+| `<leader>db` | Toggle breakpoint |
+| `<leader>dB` | Breakpoint condicional (pede expressão) |
+| `<leader>dL` | Logpoint (mensagem sem parar a execução) |
+| `<leader>dC` | Limpar todos os breakpoints |
+| `<leader>du` | Toggle UI completa |
+| `<leader>dU` | Toggle apenas o painel lateral (scopes/stacks) |
+| `<leader>dg` | Hover de variável sob o cursor |
+| `<leader>de` | Avaliar expressão (normal) ou seleção (visual) |
+| `<leader>dr` | Abrir REPL |
 
 **Layout do dapui:**
 
 | Posição | Painéis |
 |---|---|
-| Lateral esquerda | Scopes (35%), Breakpoints (15%), Call Stack (30%), Watches (20%) |
-| Inferior | REPL (50%), Console (50%) |
+| Lateral esquerda (toggle via `<leader>dU`) | Scopes (65%), Call Stack (35%) |
+| Inferior (abre automaticamente ao continuar) | Console (50%), REPL (50%) |
+
+---
+
+### Macros C — `:Define` / `:Undefine`
+
+Configurado em `core/macro-define.lua`. Resolve o trabalho manual de alinhar (e desalinhar) as continuações `\` de macros `#define` multi-linha em C.
+
+Selecione o corpo da macro em modo visual e rode o comando (minúsculo ou maiúsculo, tanto faz):
+
+| Comando | Ação |
+|---|---|
+| `:Define` (ou `:define`) | Alinha um `\` ao final de cada linha selecionada, com pelo menos 4 espaços de padding, na coluna da linha mais longa |
+| `:Undefine` (ou `:undefine`) | Remove o `\` e os espaços antes dele de cada linha selecionada |
+
+Detalhes de comportamento:
+- Idempotente: rodar `:Define` várias vezes seguidas não acumula espaços, pois qualquer `\` existente é removido antes de recalcular o alinhamento.
+- Se a seleção cobrir várias linhas, a **última linha não recebe `\`** (ela normalmente fecha a macro, ex. `} while(0)`).
+- Se a seleção for **uma única linha**, essa linha recebe o `\` normalmente (não é tratada como "última linha").
+- Funciona com seleções mistas — linhas que já tinham `\` (bem ou mal alinhado) e linhas sem `\` são todas realinhadas juntas.
 
 ---
 
@@ -477,7 +513,7 @@ O LSP é gerenciado pelo **Mason** com instalação automática. Na primeira abe
 | `biome` | JS / TS | Formatter + linter alternativo |
 | `emmet_ls` | HTML / JSX / TSX | Snippets de expansão HTML |
 | `cssls` | CSS / SCSS / Less | Validação CSS, lint flexível |
-| `clangd` | C / C++ | |
+| `clangd` | C / C++ | `--background-index`, `--completion-style=detailed`, `--function-arg-placeholders`, `--clang-tidy`, `--enable-config` |
 | `html` | HTML | |
 | `tailwindcss` | Tailwind | |
 
@@ -511,6 +547,17 @@ Além dos language servers, o Mason instala automaticamente:
 | Warning | `󰀪` |
 | Info | `󰋽` |
 | Hint | `󰌶` |
+
+### clangd_extensions.nvim
+
+Configurado em `plugins/language/clangd-extensions.lua`, carregado apenas para `c`/`cpp`/`objc`/`objcpp`. Adiciona ao clangd:
+
+| Recurso | Configuração |
+|---|---|
+| Inlay hints | Modo `inline` desabilitado (hints aparecem ao final da linha) |
+| AST view | Ícones customizados por tipo de nó (declaração, expressão, statement, etc.) |
+| Memory usage | Janela com borda `rounded` |
+| Symbol info | Janela com borda `rounded` |
 
 ---
 
@@ -572,6 +619,7 @@ Projetos são detectados automaticamente pela presença de `.git`, `Makefile` ou
 | `LuaSnip` | Completion | Snippets |
 | `mason.nvim` | LSP | Gerenciador de ferramentas LSP |
 | `mason-lspconfig` | LSP | Integração Mason + nvim-lspconfig |
+| `clangd_extensions.nvim` | LSP | Inlay hints, AST view, memory usage e symbol info para clangd |
 | `nvim-treesitter` | Syntax | Highlighting e folding |
 | `telescope.nvim` | Busca | Fuzzy finder |
 | `telescope-fzf-native` | Busca | FZF nativo para Telescope |
@@ -589,6 +637,7 @@ Projetos são detectados automaticamente pela presença de `.git`, `Makefile` ou
 | `trouble.nvim` | UI | Painel de diagnósticos |
 | `fidget.nvim` | UI | Notificações de progresso LSP |
 | `vim-maximizer` | UI | Maximizar/restaurar janela |
+| `which-key.nvim` | UI | Popup com comandos disponíveis (grupo Debug) |
 | `alpha-nvim` | UI | Dashboard de boas-vindas |
 | `gruvbox-material` | Tema | Tema gruvbox |
 | `github-nvim-theme` | Tema | Temas GitHub |
