@@ -17,38 +17,59 @@ return {
     })
 
     require("nvim-dap-virtual-text").setup({
-      enabled             = true,
-      commented           = false,
-      virt_text_pos       = "eol",
+      enabled                      = true,
+      commented                    = false,
+      virt_text_pos                = "eol",
+      highlight_changed_variables  = true,
+      highlight_new_as_changed     = true,
+      show_stop_reason             = true,
+      all_references               = false,
+      only_first_definition        = true,
     })
 
     dapui.setup({
       icons = { expanded = "▾", collapsed = "▸", current_frame = "▸" },
       layouts = {
+        -- Layout 1: abre automaticamente — REPL e console lado a lado embaixo
         {
           elements = {
-            { id = "scopes",      size = 0.35 },
-            { id = "breakpoints", size = 0.15 },
-            { id = "stacks",      size = 0.30 },
-            { id = "watches",     size = 0.20 },
-          },
-          size     = 40,
-          position = "left",
-        },
-        {
-          elements = {
-            { id = "repl",    size = 0.5 },
             { id = "console", size = 0.5 },
+            { id = "repl",    size = 0.5 },
           },
-          size     = 10,
+          size     = 14,
           position = "bottom",
+        },
+        -- Layout 2: toggle manual — variáveis, call stack e watches na lateral
+        {
+          elements = {
+            { id = "scopes", size = 0.65 },
+            { id = "stacks", size = 0.35 },
+          },
+          size     = 38,
+          position = "left",
         },
       },
     })
 
-    dap.listeners.after.event_initialized["dapui_config"]  = function() dapui.open()  end
-    dap.listeners.before.event_terminated["dapui_config"]  = function() dapui.close() end
-    dap.listeners.before.event_exited["dapui_config"]      = function() dapui.close() end
+    -- Abre apenas o layout inferior (código fica em cima naturalmente)
+    dap.listeners.after.event_initialized["dapui_config"]  = function() dapui.open(1)  end
+    dap.listeners.before.event_terminated["dapui_config"]  = function() dapui.close()  end
+    dap.listeners.before.event_exited["dapui_config"]      = function() dapui.close()  end
+
+    -- Signs e highlights para breakpoints (xeno/dark-duck não define debugPC nem DapBreakpoint)
+    vim.fn.sign_define("DapBreakpoint",         { text = "●", texthl = "DapBreakpoint",         linehl = "DapBreakpointLine",  numhl = "" })
+    vim.fn.sign_define("DapBreakpointCondition",{ text = "○", texthl = "DapBreakpointCondition", linehl = "",                  numhl = "" })
+    vim.fn.sign_define("DapBreakpointRejected", { text = "⊘", texthl = "DapBreakpointRejected",  linehl = "",                  numhl = "" })
+    vim.fn.sign_define("DapLogPoint",           { text = "◆", texthl = "DapLogPoint",            linehl = "",                  numhl = "" })
+    vim.fn.sign_define("DapStopped",            { text = "▶", texthl = "DapStopped",             linehl = "DapStoppedLine",    numhl = "" })
+
+    vim.api.nvim_set_hl(0, "DapBreakpoint",        { fg = "#e06c75" })
+    vim.api.nvim_set_hl(0, "DapBreakpointLine",    { bg = "#2d1414" })
+    vim.api.nvim_set_hl(0, "DapBreakpointCondition",{ fg = "#e5c07b" })
+    vim.api.nvim_set_hl(0, "DapBreakpointRejected", { fg = "#5c6370" })
+    vim.api.nvim_set_hl(0, "DapLogPoint",          { fg = "#61afef" })
+    vim.api.nvim_set_hl(0, "DapStopped",           { fg = "#FFCC33" })
+    vim.api.nvim_set_hl(0, "DapStoppedLine",       { bg = "#2d2600" })
 
     local codelldb_bin = vim.fn.stdpath("data") .. "/mason/bin/codelldb"
 
