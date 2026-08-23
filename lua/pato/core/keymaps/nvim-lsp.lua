@@ -1,6 +1,7 @@
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(LSP)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-Km.set('n', '<leader>gg', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = false, silent = true })
+Km.set('n', '<leader>gg', function() require('pato.core.c-hover').hover() end, { noremap = false, silent = true })
+Km.set('n', '<leader>gh', '<cmd>lua vim.lsp.buf.signature_help()<CR>', { noremap = false, silent = true })
 Km.set('n', '<leader>gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap = false, silent = true })
 Km.set('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', { noremap = false, silent = true })
 Km.set('n', '<leader>gs', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', { noremap = false, silent = true })
