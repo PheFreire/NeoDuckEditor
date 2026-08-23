@@ -197,7 +197,16 @@ return {
 					},
 				},
 			},
-			clangd = {},
+			clangd = {
+				cmd = {
+					"clangd",
+					"--enable-config",
+					"--background-index",
+					"--completion-style=detailed",
+					"--function-arg-placeholders",
+					"--clang-tidy",
+				},
+			},
 			pyright = {},
 			pylsp = {},
 			html = {},
