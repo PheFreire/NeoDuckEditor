@@ -3,6 +3,7 @@ require("pato.core.options")
 require("pato.core.aesthetics")
 require("pato.core.keymaps")
 require("pato.core.lsp-buffer")
+require("pato.core.macro-define")
 
 local ks = require("pato.core.kitty_spacing")
 
