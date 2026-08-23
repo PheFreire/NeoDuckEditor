@@ -51,7 +51,8 @@ return {
         { "lemminx" },
         { "marksman" },
         { "quick_lint_js" },
-        { "rust_analyzer" }
+        { "rust_analyzer" },
+        { "python-lsp-server" },
 			},
 			auto_update = true,
 			run_on_start = true,

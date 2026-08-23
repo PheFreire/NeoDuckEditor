@@ -19,6 +19,7 @@ O projeto segue uma filosofia simples: **menos cliques, mais foco**. Cada plugin
 Destaques do setup:
 - Navegação remapeada completamente (sem depender do layout padrão HJKL do Vim)
 - LSP completo com 11 servidores de linguagem configurados e auto-instalados
+- Debugging integrado para C via nvim-dap + CodeLLDB (UI automática, virtual text inline)
 - Tema próprio `dark-duck`, construído sobre tonalidades quentes de preto e amarelo
 - File explorer moderno via Oil.nvim (edita arquivos como buffers)
 - Busca poderosa com Telescope + ripgrep
@@ -57,6 +58,7 @@ nvim/
         │       ├── core.lua        # Navegação, clipboard, buffer, undo (~60 keybinds)
         │       ├── comment.lua     # Toggle de comentários
         │       ├── fold.lua        # Toggle de folding
+        │       ├── dap.lua         # Debug: breakpoints, step, UI toggle
         │       ├── leap.lua        # Salto entre janelas
         │       ├── markdown.lua    # Preview de Markdown
         │       ├── nvim-lsp.lua    # Hover, go-to-def, referências, format
@@ -73,7 +75,7 @@ nvim/
             ├── nvim-cmp.lua        # Engine de autocompletion
             ├── ui/                 # Aparência: temas, lualine, oil, trouble, devicons
             ├── code-tool/          # Ferramentas de código: telescope, spectre, leap, flash
-            ├── language/           # LSP: mason, mason-lspconfig, treesitter
+            ├── language/           # LSP + DAP: mason, mason-lspconfig, treesitter, nvim-dap
             ├── file-support/       # Suporte a arquivos: obsidian, dotenv
             ├── home-page/          # Dashboard de boas-vindas (alpha-nvim)
             ├── utils/              # Markdown preview
@@ -179,7 +181,7 @@ Os plugins são divididos em 8 categorias carregadas como módulos separados:
 | `pato.plugins` | nvim-cmp (autocompletion) |
 | `pato.plugins.ui` | Temas, lualine, oil, trouble, devicons, indent |
 | `pato.plugins.code-tool` | Telescope, Spectre, Leap, Flash, Visual Multi |
-| `pato.plugins.language` | Mason, mason-lspconfig, Treesitter |
+| `pato.plugins.language` | Mason, mason-lspconfig, Treesitter, nvim-dap (C debug) |
 | `pato.plugins.file-support` | Obsidian, dotenv |
 | `pato.plugins.home-page` | Alpha dashboard |
 | `pato.plugins.utils` | Markdown preview |
@@ -402,6 +404,35 @@ Configurado em `keymaps/terminal.lua`.
 
 ---
 
+### Debug — DAP
+
+Configurado em `keymaps/dap.lua` e `plugins/language/nvim-dap.lua`.
+
+O adaptador **CodeLLDB** é instalado automaticamente pelo Mason. Ao iniciar o debug (`<F5>`), o dapui abre automaticamente com painel lateral (variáveis, breakpoints, call stack, watches) e console inferior. Os valores das variáveis aparecem inline no código via virtual text.
+
+**Fluxo de uso:** compile com `gcc -g main.c -o main`, pressione `<F5>` e selecione o binário no input.
+
+| Tecla | Ação |
+|---|---|
+| `<F5>` | Iniciar / Continuar sessão |
+| `<F10>` | Step Over (próxima linha) |
+| `<F11>` | Step Into (entrar na função) |
+| `<F12>` | Step Out (sair da função) |
+| `<leader>b` | Toggle breakpoint |
+| `<leader>B` | Breakpoint condicional (pede expressão) |
+| `<leader>du` | Toggle UI manualmente |
+| `<leader>dr` | Abrir REPL |
+| `<leader>dl` | Repetir última sessão |
+
+**Layout do dapui:**
+
+| Posição | Painéis |
+|---|---|
+| Lateral esquerda | Scopes (35%), Breakpoints (15%), Call Stack (30%), Watches (20%) |
+| Inferior | REPL (50%), Console (50%) |
+
+---
+
 ### Outras Ferramentas
 
 | Tecla | Modo | Ação |
@@ -458,7 +489,9 @@ Além dos language servers, o Mason instala automaticamente:
 
 **Linters:** `eslint-lsp`, `quick_lint_js`, `editorconfig-checker`
 
-**Outros:** `emmet-ls`, `jsonls`, `lemminx`, `marksman`, `js-debug-adapter`, `codelldb`
+**Debug:** `codelldb` (adaptador DAP para C/C++/Rust via CodeLLDB)
+
+**Outros:** `emmet-ls`, `jsonls`, `lemminx`, `marksman`, `js-debug-adapter`
 
 ### Comportamento de Diagnósticos
 
@@ -561,6 +594,11 @@ Projetos são detectados automaticamente pela presença de `.git`, `Makefile` ou
 | `github-nvim-theme` | Tema | Temas GitHub |
 | `gruber-darker` | Tema | Tema escuro minimalista |
 | `xeno.nvim` | Tema | Base do tema dark-duck |
+| `nvim-dap` | Debug | Core do protocolo DAP |
+| `nvim-dap-ui` | Debug | Interface gráfica (variáveis, call stack, REPL) |
+| `nvim-dap-virtual-text` | Debug | Valores de variáveis inline no código |
+| `mason-nvim-dap.nvim` | Debug | Integração Mason → DAP (instala CodeLLDB) |
+| `nvim-nio` | Debug | Dependência assíncrona do nvim-dap-ui |
 | `obsidian.nvim` | Notes | Integração com Obsidian |
 | `dotenv.nvim` | Files | Carregamento de `.env` |
 | `ts-error-translator` | DX | Tradução de erros TypeScript |

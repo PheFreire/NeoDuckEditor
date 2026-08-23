@@ -1,7 +1,7 @@
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Leap)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 Km.set("n", "<leader>sw", function()
-    local target_windows = require('leap.util').get_enterable_windows()
+    local target_windows = require('leap.user').get_enterable_windows()
     local targets = {}
     for _, win in ipairs(target_windows) do
       local wininfo = vim.fn.getwininfo(win)[1]
