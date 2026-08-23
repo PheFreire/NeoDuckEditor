@@ -179,6 +179,12 @@ function M.setDefaultNavigationKeymaps(bufnr)
 
   vim.keymap.set('n', 'm', '<cmd>set wrap!<CR>', keymapOpts)
 
+  -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Copy Buffer Path)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  vim.keymap.set('n', 'cc', function()
+    vim.fn.setreg("+", vim.fn.expand("%:."))
+  end, keymapOpts)
+
   --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Undo/Reundo)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
   -- vim.keymap.set('i', '<C-z>', '<C-o>u', { noremap = true, silent = true, })
