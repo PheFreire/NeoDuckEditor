@@ -6,18 +6,6 @@ return {
       local state = require('spectre.actions').get_state()
       local replace = state.query.replace_query or ""
       local search = state.query.search_query or ""
-      local function table_length(tbl)
-        local count = 0
-        for _ in pairs(tbl) do
-          count = count + 1
-        end
-        return count
-      end
-
-      if table_length(entries) == 0 or search == "" or replace == "" then
-        vim.notify("❌ Spectre: empty search, replace or no matches found.", vim.log.levels.WARN)
-        return
-      end
 
       local function escape(str)
         return str

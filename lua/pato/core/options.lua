@@ -14,6 +14,8 @@ opt.clipboard = "unnamedplus"
 
 opt.ttyfast = true
 opt.cursorline = true
+opt.synmaxcol = 300
+opt.redrawtime = 1500
 
 opt.iskeyword:remove({ '"', '.', '{', '}', '(', ')', '[', ']', '/', '\\', ':', ';', ',', ' ', ' '})
 opt.number = true

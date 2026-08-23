@@ -4,9 +4,9 @@ return {
   opts = {
     filesize = 2, -- MB. Arquivos maiores que isso serão otimizados
     features = {
-      -- "lsp",
-      -- "treesitter",
-      -- "syntax",
+      "lsp",
+      "treesitter",
+      "syntax",
       "illuminate",
       "indent_blankline",
       "matchparen",

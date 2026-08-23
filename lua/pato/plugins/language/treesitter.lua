@@ -63,7 +63,9 @@ return {
       disable = function(_, bufnr)
           local ok, bt = pcall(function() return vim.bo[bufnr].buftype end)
           if not ok then return true end
-          return bt == "nofile" or bt == "prompt" or bt == "nowrite"
+          if bt == "nofile" or bt == "prompt" or bt == "nowrite" then return true end
+          local ok2, lines = pcall(vim.api.nvim_buf_line_count, bufnr)
+          return ok2 and lines > 5000
         end,
 		},
 		inndent = {
