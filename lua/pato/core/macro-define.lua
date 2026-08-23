@@ -3,7 +3,7 @@ local M = {}
 local MIN_PAD = 4
 
 function M.align(line1, line2)
-  if line2 <= line1 then
+  if line2 < line1 then
     return
   end
 
@@ -14,13 +14,18 @@ function M.align(line1, line2)
     lines[i] = line:gsub("%s*\\%s*$", "")
   end
 
+  -- com apenas uma linha selecionada não há "última linha" a preservar:
+  -- a própria linha recebe o \
+  local n = #lines
+  local align_count = (n == 1) and 1 or (n - 1)
+
   local max_len = 0
-  for i = 1, #lines - 1 do
+  for i = 1, align_count do
     max_len = math.max(max_len, #lines[i])
   end
   local target_col = max_len + MIN_PAD
 
-  for i = 1, #lines - 1 do
+  for i = 1, align_count do
     local line = lines[i]
     lines[i] = line .. string.rep(" ", target_col - #line) .. "\\"
   end
