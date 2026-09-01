@@ -11,7 +11,7 @@ return {
 			"let g:gruvbox_material_diagnostic_virtual_text = 'colored'",
 			"let g:gruvbox_material_enable_bold = 1",
 			"let g:gruvbox_material_enable_italic = 1",
-			"colorscheme gruvbox-material",
+			-- theme-selection.lua aplica o tema ativo; aqui só deixamos as g:vars prontas
 		}
 
 		for _, cmd in ipairs(cmds) do
