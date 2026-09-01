@@ -29,5 +29,5 @@ require("lazy").setup({
     notify = false,
   },
 })
-vim.cmd("silent !kitty @ set-spacing margin=0")
+-- espaçamento do Kitty já é zerado (async) pelo autocmd VimEnter em pato/core/init.lua
 
