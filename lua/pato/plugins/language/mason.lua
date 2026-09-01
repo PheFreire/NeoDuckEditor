@@ -1,6 +1,8 @@
 return {
 	"williamboman/mason.nvim",
-	lazy = true,
+	-- VeryLazy: nvim-dap virou lazy e não puxa mais o mason; tool-installer precisa de gatilho próprio
+	event = "VeryLazy",
+	cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonUninstallAll", "MasonLog", "MasonUpdate" },
 	dependencies = {
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 	},

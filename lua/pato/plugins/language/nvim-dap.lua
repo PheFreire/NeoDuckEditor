@@ -1,5 +1,7 @@
 return {
   "mfussenegger/nvim-dap",
+  -- lazy: os keymaps em core/keymaps/dap.lua fazem require("dap") sob demanda
+  lazy = true,
   dependencies = {
     "rcarriga/nvim-dap-ui",
     "nvim-neotest/nvim-nio",

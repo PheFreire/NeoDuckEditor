@@ -1,5 +1,7 @@
 return {
   "nvim-pack/nvim-spectre",
+  -- aberto via <C-f> (core/keymaps/spectre.lua), que faz require("spectre")
+  lazy = true,
   config = function()
     _G.globalSpectreReplacer = function()
       local entries = require('spectre.actions').get_all_entries() or {}

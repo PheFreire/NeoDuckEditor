@@ -1,11 +1,13 @@
 return {
   "nvim-telescope/telescope.nvim",
+  cmd = "Telescope",
   dependencies = {
     'nvim-tree/nvim-web-devicons',
     "nvim-lua/plenary.nvim",
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     "folke/todo-comments.nvim",
     'nvim-telescope/telescope-live-grep-args.nvim',
+    "ahmedkhalf/project.nvim",
   },
   config = function()
     local telescope = require('telescope')
@@ -152,5 +154,6 @@ return {
     })
     -- telescope.load_extension('fzf')
     telescope.load_extension('live_grep_args')
+    pcall(telescope.load_extension, 'projects')
   end,
 }
