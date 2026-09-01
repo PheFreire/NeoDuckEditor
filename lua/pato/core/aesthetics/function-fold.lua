@@ -19,7 +19,8 @@ function _G.custom_fold_text()
 end
 
 vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- foldexpr nativo (0.11): mais rápido que nvim_treesitter#foldexpr() em arquivos grandes
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 99
 vim.opt.foldenable = true
 vim.opt.foldtext = "v:lua.custom_fold_text()"
