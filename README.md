@@ -25,7 +25,7 @@ Destaques do setup:
 - Tema próprio `dark-duck`, construído sobre tonalidades quentes de preto e amarelo
 - File explorer moderno via Oil.nvim (edita arquivos como buffers)
 - Busca poderosa com Telescope + ripgrep
-- Multi-cursor, find & replace global, folding via Treesitter
+- Multi-cursor, find & replace global, folding via `vim.treesitter.foldexpr()` nativo
 
 ---
 
@@ -55,9 +55,9 @@ nvim/
         │   ├── macro-define.lua    # Comandos :Define / :Undefine (alinhamento de macros C)
         │   ├── kitty_spacing.lua   # Integração de espaçamento com Kitty terminal
         │   ├── aesthetics/
+        │   │   ├── init.lua              # Importa os módulos de aesthetics
         │   │   ├── excluded-themes.lua   # Temas excluídos do seletor
-        │   │   ├── function-fold.lua     # Configuração de folding via Treesitter
-        │   │   └── duck-mono.lua         # Variante monocromática do tema
+        │   │   └── function-fold.lua     # Folding via vim.treesitter.foldexpr() nativo
         │   └── keymaps/
         │       ├── init.lua        # Importa todos os módulos de keymaps
         │       ├── core.lua        # Navegação, clipboard, buffer, undo (~60 keybinds)
@@ -78,12 +78,12 @@ nvim/
         │       └── visual-multi.lua  # Configuração de multi-cursor
         └── plugins/
             ├── nvim-cmp.lua        # Engine de autocompletion
-            ├── ui/                 # Aparência: temas, lualine, oil, trouble, devicons, which-key
-            ├── code-tool/          # Ferramentas de código: telescope, spectre, leap, flash
+            ├── ui/                 # Aparência: temas, lualine, oil, trouble, devicons, which-key, render-markdown
+            ├── code-tool/          # Ferramentas de código: telescope, project, spectre, leap, flash
             ├── language/           # LSP + DAP: mason, mason-lspconfig, treesitter, nvim-dap
             ├── file-support/       # Suporte a arquivos: obsidian, dotenv
             ├── home-page/          # Dashboard de boas-vindas (alpha-nvim)
-            ├── utils/              # Markdown preview
+            ├── utils/              # Markdown preview (browser)
             └── optimization-tool/  # Bigfile (desabilita features em arquivos grandes)
 ```
 
@@ -91,7 +91,7 @@ nvim/
 
 ## Instalação
 
-**Pré-requisitos:** Neovim `>= 0.9`, `git`, `ripgrep`, `node`, `npm`, `cargo`
+**Pré-requisitos:** Neovim `>= 0.11` (usa `winborder` e `vim.treesitter.foldexpr()` nativo), `git`, `ripgrep`, `node`, `npm`, `cargo`
 
 ```bash
 # Clone o repositório
@@ -185,14 +185,16 @@ Os plugins são divididos em 8 categorias carregadas como módulos separados:
 |---|---|
 | `pato.plugins` | nvim-cmp (autocompletion) |
 | `pato.plugins.ui` | Temas, lualine, oil, trouble, devicons, indent |
-| `pato.plugins.code-tool` | Telescope, Spectre, Leap, Flash, Visual Multi |
+| `pato.plugins.code-tool` | Telescope, project.nvim, Spectre, Leap, Flash, Visual Multi |
 | `pato.plugins.language` | Mason, mason-lspconfig, Treesitter, nvim-dap (C debug) |
 | `pato.plugins.file-support` | Obsidian, dotenv |
 | `pato.plugins.home-page` | Alpha dashboard |
 | `pato.plugins.utils` | Markdown preview |
 | `pato.plugins.optimization-tool` | Bigfile (desabilita features em arquivos > 2MB) |
 
-> Na inicialização, o lazy também executa `kitty @ set-spacing margin=0` para remover margens do Kitty terminal, integrando o editor à janela.
+A maioria dos plugins carrega sob demanda (`lazy`/`event`/`cmd`/`ft`): nvim-dap, Telescope, Spectre, Leap e as ferramentas de edição só entram quando acionados, encurtando o startup.
+
+> O espaçamento do Kitty terminal é zerado de forma assíncrona por um autocmd `VimEnter` (`core/kitty_spacing.lua`) e restaurado no `VimLeavePre` — sem chamada de shell bloqueante no boot.
 
 ---
 
@@ -571,7 +573,7 @@ Configurado em `plugins/language/treesitter.lua`. Instala parsers automaticament
 
 **Outros:** `diff`, `query`, `vimdoc`, `jsdoc`, `luadoc`, `gitignore`, `regex`, `printf`
 
-**Features habilitadas:** highlighting, folding por expressão, indentação, incremental selection, auto-tag em JSX/TSX.
+**Features habilitadas:** highlighting, folding (via `vim.treesitter.foldexpr()` nativo, configurado em `core/aesthetics/function-fold.lua`), indentação, incremental selection, auto-tag em JSX/TSX.
 
 ---
 
@@ -624,6 +626,7 @@ Projetos são detectados automaticamente pela presença de `.git`, `Makefile` ou
 | `telescope.nvim` | Busca | Fuzzy finder |
 | `telescope-fzf-native` | Busca | FZF nativo para Telescope |
 | `nvim-spectre` | Busca | Find & replace global com regex |
+| `project.nvim` | Busca | Detecção de raiz de projeto + picker `Telescope projects` |
 | `oil.nvim` | Files | File explorer editável como buffer |
 | `oil-lsp-diagnostics` | Files | Diagnósticos LSP no Oil |
 | `leap.nvim` | Navegação | Saltos rápidos no buffer/janelas |
@@ -652,6 +655,7 @@ Projetos são detectados automaticamente pela presença de `.git`, `Makefile` ou
 | `dotenv.nvim` | Files | Carregamento de `.env` |
 | `ts-error-translator` | DX | Tradução de erros TypeScript |
 | `markdown-preview` | Utils | Preview de Markdown no browser |
+| `render-markdown.nvim` | UI | Renderização de Markdown no buffer (`ft = markdown`) |
 | `bigfile.nvim` | Performance | Desabilita features em arquivos grandes |
 
 ---
