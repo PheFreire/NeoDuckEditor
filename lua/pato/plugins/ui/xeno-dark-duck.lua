@@ -9,7 +9,7 @@ return {
     contrast = 0.0,
     -- Compensa a escala fixa de lightness da paleta nova (background_950 = 0.14
     -- por padrão, bem mais escuro que a versão antiga do plugin).
-    lightness = 1.1,
+    lightness = 0.9,
   },
   config = function(_, opts)
     local xeno = require('xeno')

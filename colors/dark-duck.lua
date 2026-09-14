@@ -5,7 +5,7 @@ require("xeno").setup({
     contrast = 0.0,
     variation = 0.0,
     chroma = 0.0,
-    lightness = 1.1,
+    lightness = 0.9,
   },
   transparent = false,
 })
