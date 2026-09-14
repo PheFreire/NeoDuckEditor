@@ -192,7 +192,7 @@ Os plugins são divididos em 8 categorias carregadas como módulos separados:
 | `pato.plugins.utils` | Markdown preview |
 | `pato.plugins.optimization-tool` | Bigfile (desabilita features em arquivos > 2MB) |
 
-A maioria dos plugins carrega sob demanda (`lazy`/`event`/`cmd`/`ft`): nvim-dap, Telescope, Spectre, Leap e as ferramentas de edição só entram quando acionados, encurtando o startup.
+A maioria dos plugins carrega sob demanda (`lazy`/`event`/`cmd`/`ft`): nvim-dap, Telescope, Spectre, Leap e as ferramentas de edição só entram quando acionados, encurtando o startup. `project.nvim` é a exceção — carrega de forma eager (`lazy = false`) para já detectar a raiz do projeto e corrigir o `cwd` antes do primeiro buffer ser aberto, garantindo que `<leader>ff`/`<leader>fg` busquem a partir do diretório certo desde o início.
 
 > O espaçamento do Kitty terminal é zerado de forma assíncrona por um autocmd `VimEnter` (`core/kitty_spacing.lua`) e restaurado no `VimLeavePre` — sem chamada de shell bloqueante no boot.
 
@@ -334,6 +334,8 @@ Configurado em `keymaps/telescope.lua` e `plugins/code-tool/telescope.lua`.
 | `<A-k>` | Ir ao final da lista |
 | `<CR>` | Selecionar |
 | `<C-v>` | Colar no campo de busca |
+
+> O sorter nativo `telescope-fzf-native` (C) está ativo (`load_extension('fzf')`), evitando que o matcher em Lua puro fique lento/incompleto em buscas com muitos resultados.
 
 ---
 
