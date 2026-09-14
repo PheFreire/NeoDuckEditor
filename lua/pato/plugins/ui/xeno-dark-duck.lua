@@ -12,8 +12,8 @@ return {
     local xeno = require('xeno')
     xeno.config(opts)
 
-    xeno.new_theme('dark-duck', {
-      base = "#11100f",
+    xeno.theme('dark-duck', {
+      background = "#11100f",
       accent = "#FFCC33",
       transparent = false,
     })
