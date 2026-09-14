@@ -2,7 +2,9 @@
 return {
   "ahmedkhalf/project.nvim",
   main = "project_nvim",
-  event = "VeryLazy",
+  -- Precisa carregar antes do primeiro BufEnter para detectar a raiz do
+  -- projeto já na abertura do Neovim; VeryLazy dispara tarde demais para isso.
+  lazy = false,
   opts = {
     detection_methods = { "pattern" },
     patterns = { ".git", "Makefile", "package.json" },
