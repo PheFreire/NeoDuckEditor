@@ -1,8 +1,12 @@
 require("xeno").setup({
-  base = "#11100f",
+  background = "#11100f",
   accent = "#FFCC33",
-  variation = 0.0,
-  contrast = 0.0,
+  properties = {
+    contrast = 0.0,
+    variation = 0.0,
+    chroma = 0.0,
+    lightness = 0.3,
+  },
   transparent = false,
 })
 vim.g.colors_name = "dark-duck"
