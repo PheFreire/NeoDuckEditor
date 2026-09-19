@@ -24,6 +24,7 @@ Destaques do setup:
 - Comandos `:Define` / `:Undefine` para alinhar (ou remover) automaticamente as continuações `\` de macros C
 - Tema próprio `dark-duck`, construído sobre tonalidades quentes de preto e amarelo
 - File explorer moderno via Oil.nvim (edita arquivos como buffers)
+- Documentação pessoal versionada no próprio repo, acessível de qualquer projeto via `:doc` / `:doct` / `:docd`
 - Busca poderosa com Telescope + ripgrep
 - Multi-cursor, find & replace global, folding via `vim.treesitter.foldexpr()` nativo
 
@@ -38,6 +39,7 @@ nvim/
 │   └── dark-duck.lua               # Tema customizado baseado em xeno.nvim
 ├── assets/
 │   └── logo.png                    # Logo do projeto
+├── doc/                             # Documentação pessoal (:doc / :doct / :docd) — hoje: libc (memória, hash, I/O, file descriptors)
 ├── setup.sh                        # Script de instalação de dependências externas
 ├── Makefile                        # Utilitários de build
 ├── lazy-lock.json                  # Lockfile do lazy.nvim (versões fixas dos plugins)
@@ -53,6 +55,7 @@ nvim/
         │   ├── lsp-buffer.lua      # Comportamento de diagnóstico e hover do LSP
         │   ├── c-hover.lua         # Hover LSP em C com fallback para man page
         │   ├── macro-define.lua    # Comandos :Define / :Undefine (alinhamento de macros C)
+        │   ├── docs.lua            # Comandos :doc / :doct / :docd (documentação pessoal)
         │   ├── kitty_spacing.lua   # Integração de espaçamento com Kitty terminal
         │   ├── aesthetics/
         │   │   ├── init.lua              # Importa os módulos de aesthetics
@@ -470,6 +473,20 @@ Detalhes de comportamento:
 - Se a seleção cobrir várias linhas, a **última linha não recebe `\`** (ela normalmente fecha a macro, ex. `} while(0)`).
 - Se a seleção for **uma única linha**, essa linha recebe o `\` normalmente (não é tratada como "última linha").
 - Funciona com seleções mistas — linhas que já tinham `\` (bem ou mal alinhado) e linhas sem `\` são todas realinhadas juntas.
+
+---
+
+### Documentação Pessoal — `:doc` / `:doct` / `:docd`
+
+Configurado em `core/docs.lua`. Mantém uma base de anotações técnicas versionada no próprio repositório (`doc/`), acessível de qualquer projeto aberto no Neovim — hoje reúne notas sobre a libc (`doc/c/`): memória, strings, hashing, I/O e file descriptors.
+
+| Comando | Ação |
+|---|---|
+| `:doc` | Telescope filtrando pelo **nome** dos arquivos em `doc/` |
+| `:doct` | Telescope filtrando pelo **conteúdo** dos arquivos em `doc/` |
+| `:docd` | Abre o Oil em `doc/` num split vertical (não mexe na janela atual) |
+
+Como o Neovim não aceita comandos definidos em minúsculo, `:doc`/`:doct`/`:docd` são `cnoreabbrev` para os comandos reais `:Doc`/`:DocTxt`/`:DocDir` — a abreviação só expande quando a linha de comando é exatamente essa palavra, então não interfere se ela aparecer no meio de outro comando. O diretório raiz é sempre `stdpath("config") .. "/doc"`, então os três comandos funcionam do mesmo jeito não importa qual projeto esteja aberto (e `project.nvim` ignora esse diretório, então visitar um buffer de doc nunca troca o `cwd` do projeto atual).
 
 ---
 
