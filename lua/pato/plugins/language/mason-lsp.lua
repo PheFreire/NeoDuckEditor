@@ -14,15 +14,49 @@ return {
     capabilities.workspace.didChangeWatchedFiles = capabilities.workspace.didChangeWatchedFiles or {}
     capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
 
+    -- resolve o venv de um projeto poetry (criado fora do projeto por padrão)
+    -- para que o pyright consiga indexar site-packages e navegar até elas
+    local function poetry_venv_python(root_dir)
+      if not root_dir or vim.fn.filereadable(root_dir .. "/pyproject.toml") == 0 then
+        return nil
+      end
+      if vim.fn.executable("poetry") == 0 then
+        return nil
+      end
+      local out = vim.fn.system({ "poetry", "env", "info", "--path", "--directory", root_dir })
+      if vim.v.shell_error ~= 0 then
+        return nil
+      end
+      out = vim.trim(out)
+      local python = out ~= "" and (out .. "/bin/python") or nil
+      if not python or vim.fn.executable(python) == 0 then
+        return nil
+      end
+      return python
+    end
+
     vim.lsp.config("pyright", {
       capabilities = capabilities,
+      before_init = function(_, config)
+        local python_path = poetry_venv_python(config.root_dir)
+        if python_path then
+          config.settings = vim.tbl_deep_extend("force", config.settings or {}, {
+            python = { pythonPath = python_path },
+          })
+        end
+      end,
       on_attach = function(client, bufnr)
         for _, c in pairs(vim.lsp.get_clients()) do
           if c.name == "pyright" and c.id ~= client.id and c.config.root_dir == client.config.root_dir then
             c.stop()
           end
         end
-        vim.notify("✅ Pyright attached.")
+        local python_path = client.config.settings and client.config.settings.python and client.config.settings.python.pythonPath
+        if python_path then
+          vim.notify("✅ Pyright attached (venv: " .. python_path .. ")")
+        else
+          vim.notify("✅ Pyright attached (venv não detectado — usando interpretador padrão)")
+        end
       end,
       settings = {
         python = {
