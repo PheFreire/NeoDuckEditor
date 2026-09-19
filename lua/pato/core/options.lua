@@ -3,6 +3,9 @@ local g = vim.g
 
 g.netrw_liststyle = 3
 
+-- nunca mostrar __pycache__ (wildmenu, :e, :find, etc.)
+opt.wildignore:append({ "*/__pycache__/*", "__pycache__" })
+
 -- Wrap Configs
 opt.fileencoding = "utf-8"
 opt.wrap = false
