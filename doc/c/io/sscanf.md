@@ -4,6 +4,8 @@
 
 O `sscanf` funciona como um `scanf` que, em vez de ler a entrada do teclado (`stdin`), lê e interpreta o conteúdo de uma string que você já possui em memória, extraindo valores dela de acordo com um formato
 
+> Um `stream` é uma abstração para uma fonte ou destino de dados que pode ser lido ou escrito sequencialmente, representada em C pelo tipo `FILE *`. Pode ser um arquivo aberto com `fopen`, ou um dos streams padrão que já vêm prontos, como `stdin`, `stdout` e `stderr`
+
 ```c
 int sscanf(const char *str, const char *format, ...);
 ```

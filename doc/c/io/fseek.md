@@ -4,6 +4,8 @@
 
 O `fseek` move o cursor do stream para uma posição específica, permitindo pular partes do arquivo sem precisar ler byte a byte até chegar lá
 
+> Um `stream` é uma abstração para uma fonte ou destino de dados que pode ser lido ou escrito sequencialmente, representada em C pelo tipo `FILE *`. Pode ser um arquivo aberto com `fopen`, ou um dos streams padrão que já vêm prontos, como `stdin`, `stdout` e `stderr`
+
 ```c
 int fseek(FILE *stream, long offset, int whence);
 ```

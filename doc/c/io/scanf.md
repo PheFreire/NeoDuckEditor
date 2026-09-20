@@ -4,6 +4,8 @@
 
 O `scanf` lê a entrada padrão (`stdin`) e interpreta o que foi digitado de acordo com um formato, guardando os valores extraídos direto nas variáveis passadas por ponteiro
 
+> Um `stream` é uma abstração para uma fonte ou destino de dados que pode ser lido ou escrito sequencialmente, representada em C pelo tipo `FILE *`. Pode ser um arquivo aberto com `fopen`, ou um dos streams padrão que já vêm prontos, como `stdin`, `stdout` e `stderr`
+
 ```c
 int scanf(const char *format, ...);
 ```

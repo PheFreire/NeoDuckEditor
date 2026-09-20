@@ -2,6 +2,8 @@
 
 O `fclose` fecha um `stream` aberto com `fopen`, garantindo que todo dado ainda pendente no buffer interno da `stdio.h` seja de fato escrito no arquivo antes de encerrar
 
+> Um `stream` é uma abstração para uma fonte ou destino de dados que pode ser lido ou escrito sequencialmente, representada em C pelo tipo `FILE *`. Pode ser um arquivo aberto com `fopen`, ou um dos streams padrão que já vêm prontos, como `stdin`, `stdout` e `stderr`
+
 ```c
 int fclose(FILE *stream);
 ```

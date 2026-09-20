@@ -19,57 +19,7 @@ struct file_operations {
 };
 ```
 
-Cada campo dessa struct é implementado pelo driver ou sistema de arquivos correspondente, e é chamado pelo kernel quando o processo em userspace faz a chamada de sistema equivalente:
-
-**flush**
-
-O `flush` é chamado no caminho de fechamento do fd, antes do `release`, para limpar ou finalizar qualquer estado pendente daquela abertura específica
-
-```c
-int flush(struct file *file, fl_owner_t id);
-```
-
-- `file`: a estrutura interna do kernel que representa aquela abertura do objeto
-- `id`: identifica o dono daquela abertura, usado para distinguir entre diferentes processos que compartilham o mesmo fd
-
-- Diferente do `release`, que só roda quando a última referência é fechada, o `flush` roda toda vez que um fd é fechado, mesmo que existam outras referências à mesma abertura
-- Muito usado para garantir que erros pendentes de operações anteriores sejam reportados no `close`
-
-> O `flush` não é chamado diretamente por uma função de userspace, ele roda internamente como parte do `close(fd)`
-
-**fsync**
-
-O `fsync` força os dados pendentes daquele objeto a serem sincronizados com o armazenamento/dispositivo real, garantindo que eles não fiquem apenas em cache
-
-```c
-int fsync(struct file *file, loff_t start, loff_t end, int datasync);
-```
-
-- `file`: a estrutura interna do kernel que representa aquela abertura do objeto
-- `start` e `end`: o intervalo de bytes do objeto que deve ser sincronizado
-- `datasync`: quando diferente de `0`, sincroniza apenas os dados, sem esperar por metadados que não afetam a próxima leitura
-
-- Corresponde à chamada de sistema `fsync(fd)` feita em userspace
-- Necessário porque, por padrão, escritas em arquivo costumam ficar em cache na memória (page cache) antes de serem gravadas fisicamente no disco
-
-```c
-fsync(fd); // chamada feita em userspace
-```
-
-**sendfile**
-
-O `sendfile` transfere dados diretamente entre dois fds já abertos, sem precisar copiar os bytes para um buffer em espaço de usuário no meio do caminho
-
-```c
-ssize_t sendfile(struct file *out_file, loff_t *offset, size_t count, read_actor_t actor, void *target);
-```
-
-- Evita o caminho tradicional de `read` (kernel para buffer em userspace) seguido de `write` (buffer em userspace para kernel), copiando os dados diretamente dentro do próprio kernel
-- Muito usado para servir arquivos estáticos em servidores web, onde os dados só precisam sair de um arquivo em disco e ir para um socket de rede
-
-```c
-sendfile(fd_destino, fd_origem, NULL, tamanho); // chamada feita em userspace
-```
+Cada campo dessa struct é implementado pelo driver ou sistema de arquivos correspondente, e é chamado pelo kernel quando o processo em userspace faz a chamada de sistema equivalente
 
 ---
 
