@@ -8,7 +8,7 @@ return {
   opts = {
     detection_methods = { "pattern" },
     patterns = { ".git", "Makefile", "package.json" },
-    -- documentação pessoal (:doc/:doct/:docd) não deve trocar o cwd do projeto atual
+    -- documentação pessoal (:doc/:docs/:docd) não deve trocar o cwd do projeto atual
     exclude_dirs = {
       vim.fn.stdpath("config") .. "/doc",
       vim.fn.stdpath("config") .. "/doc/*",

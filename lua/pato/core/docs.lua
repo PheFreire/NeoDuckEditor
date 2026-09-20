@@ -1,6 +1,6 @@
 -- Documentações pessoais, acessíveis de qualquer projeto:
 --   :Doc     (:doc)   -> telescope filtrando pelo nome dos arquivos
---   :DocTxt  (:doct)  -> telescope filtrando pelo conteúdo dos arquivos
+--   :DocTxt  (:docs)  -> telescope filtrando pelo conteúdo dos arquivos
 --   :DocDir  (:docd)  -> oil aberto na raiz do diretório de docs
 
 local M = {}
@@ -46,7 +46,7 @@ function M.setup()
   end, { desc = "Abrir diretório de documentações no oil (split vertical)" })
 
   cmd_abbrev("doc", "Doc")
-  cmd_abbrev("doct", "DocTxt")
+  cmd_abbrev("docs", "DocTxt")
   cmd_abbrev("docd", "DocDir")
 end
 
