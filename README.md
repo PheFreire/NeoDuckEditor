@@ -478,7 +478,7 @@ Detalhes de comportamento:
 
 ### Documentação Pessoal — `:doc` / `:docs` / `:docd`
 
-Configurado em `core/docs.lua`. Mantém uma base de anotações técnicas versionada no próprio repositório (`doc/`), acessível de qualquer projeto aberto no Neovim — hoje reúne notas sobre a libc (`doc/c/`): memória, strings, hashing, I/O, file descriptors, chamadas de sistema (os), sockets e threads (pthread), além de notas de arquitetura em Python (`doc/python/`).
+Configurado em `core/docs.lua`. Mantém uma base de anotações técnicas versionada no próprio repositório (`doc/`), acessível de qualquer projeto aberto no Neovim — hoje reúne notas sobre a libc (`doc/c/`): memória, strings (conversão numérica em `casting/`, concatenação em `concatenation/`, tokenização em `split/`, além de `strlen`/`strcmp`/`strncpy`), hashing, I/O, file descriptors, chamadas de sistema (os), sockets e threads (pthread), além de notas de arquitetura em Python (`doc/python/`).
 
 | Comando | Ação |
 |---|---|

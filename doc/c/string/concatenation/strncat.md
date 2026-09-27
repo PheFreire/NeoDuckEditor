@@ -7,7 +7,11 @@ O `strncat` concatena (junta) uma string ao final de outra, limitando quantos ca
 ```c
 #include <string.h>
 
-char *strncat(char *dest, const char *src, size_t n);
+char *strncat(
+    char *dest, 
+    const char *src, 
+    size_t n,
+);
 ```
 
 - `dest`: a string de destino, que já deve conter espaço suficiente alocado para receber o resultado; a concatenação começa a partir do `'\0'` que já existe nela
@@ -21,15 +25,26 @@ char *strncat(char *dest, const char *src, size_t n);
 - Combinando `strncat` em um laço, é possível juntar vários pedaços de string com um separador entre eles, do jeito que `str.join()` faz em Python, embora seja preciso calcular o tamanho total e alocar/declarar o buffer de destino manualmente antes
 
 ```c
-char resultado[50] = "";
-const char *palavras[] = {"maca", "banana", "uva"};
+char dst[50] = "";
+const char *src[] = {"maca", "banana", "uva"};
 
 for (int i = 0; i < 3; i++) {
+    int max_copy_len;
+
     if (i > 0) {
-        strncat(resultado, ", ", sizeof(resultado) - strlen(resultado) - 1);
+        max_copy_len = (
+            sizeof(dst) - 
+            strlen(dst) - 1
+        );
+        strncat(dst, ", ", max_copy_len);
     }
-    strncat(resultado, palavras[i], sizeof(resultado) - strlen(resultado) - 1);
+
+    max_copy_len = (
+        sizeof(dst) - 
+        strlen(dst) - 1
+    );
+    strncat(dst, src[i], max_copy_len);
 }
-// resultado == "maca, banana, uva"
+// dst == "maca, banana, uva"
 ```
 
