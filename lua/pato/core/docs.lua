@@ -29,6 +29,12 @@ function M.setup()
     require("telescope.builtin").find_files({
       prompt_title = "Docs",
       cwd = M.root,
+      -- abre em split vertical (à direita), igual ao :docd
+      attach_mappings = function()
+        local actions = require("telescope.actions")
+        actions.select_default:replace(actions.select_vertical)
+        return true
+      end,
     })
   end, { desc = "Buscar documentação pelo nome do arquivo" })
 
@@ -36,6 +42,12 @@ function M.setup()
     require("telescope.builtin").live_grep({
       prompt_title = "Docs (texto)",
       cwd = M.root,
+      -- abre em split vertical (à direita), igual ao :docd
+      attach_mappings = function()
+        local actions = require("telescope.actions")
+        actions.select_default:replace(actions.select_vertical)
+        return true
+      end,
     })
   end, { desc = "Buscar documentação pelo conteúdo" })
 

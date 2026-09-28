@@ -482,8 +482,8 @@ Configurado em `core/docs.lua`. Mantém uma base de anotações técnicas versio
 
 | Comando | Ação |
 |---|---|
-| `:doc` | Telescope filtrando pelo **nome** dos arquivos em `doc/` |
-| `:docs` | Telescope filtrando pelo **conteúdo** dos arquivos em `doc/` |
+| `:doc` | Telescope filtrando pelo **nome** dos arquivos em `doc/`; o arquivo escolhido abre num split vertical à direita |
+| `:docs` | Telescope filtrando pelo **conteúdo** dos arquivos em `doc/`; o resultado escolhido abre num split vertical à direita |
 | `:docd` | Abre o Oil em `doc/` num split vertical (não mexe na janela atual) |
 
 Como o Neovim não aceita comandos definidos em minúsculo, `:doc`/`:docs`/`:docd` são `cnoreabbrev` para os comandos reais `:Doc`/`:DocTxt`/`:DocDir` — a abreviação só expande quando a linha de comando é exatamente essa palavra, então não interfere se ela aparecer no meio de outro comando. O diretório raiz é sempre `stdpath("config") .. "/doc"`, então os três comandos funcionam do mesmo jeito não importa qual projeto esteja aberto (e `project.nvim` ignora esse diretório, então visitar um buffer de doc nunca troca o `cwd` do projeto atual).
