@@ -14,7 +14,7 @@ int pthread_mutex_lock(pthread_mutex_t *mutex);
 
 - Retorna `0` em caso de sucesso, ou um código de erro em caso de falha
 - Se o mutex já estiver travado por outra thread, a chamada bloqueia até que ele seja liberado com `pthread_mutex_unlock`
-- Só uma thread pode manter um mutex travado por vez; envolver a leitura/escrita de um dado compartilhado entre um `lock` e um `unlock` garante que apenas uma thread mexa naquele dado a cada momento
+- Só uma thread pode manter um mutex travado por vez. Envolver a leitura/escrita de um dado compartilhado entre um `lock` e um `unlock` garante que apenas uma thread mexa naquele dado a cada momento
 
 ```c
 pthread_mutex_lock(&mutex);

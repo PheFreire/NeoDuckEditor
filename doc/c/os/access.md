@@ -22,6 +22,6 @@ if (access("arquivo.txt", F_OK) == 0) {
 }
 ```
 
-> Existe uma janela de tempo entre o `access` e o uso real do arquivo (TOCTOU - time-of-check to time-of-use) onde ele pode ser removido ou ter suas permissões alteradas; por isso, para abrir um arquivo, geralmente é mais seguro tentar abrir diretamente e tratar o erro do que checar a existência antes
+> Existe uma janela de tempo entre o `access` e o uso real do arquivo (TOCTOU - time-of-check to time-of-use) onde ele pode ser removido ou ter suas permissões alteradas. Por isso, para abrir um arquivo, geralmente é mais seguro tentar abrir diretamente e tratar o erro do que checar a existência antes
 
 

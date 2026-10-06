@@ -16,7 +16,7 @@ int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 
 - Retorna `0` em caso de sucesso, ou `-1` em caso de erro, por exemplo se a porta já estiver em uso por outro processo
 - `INADDR_ANY` no campo `sin_addr.s_addr` faz o socket aceitar conexões chegando por qualquer interface de rede da máquina, e não apenas um IP específico
-- Só faz sentido no lado que vai receber conexões (servidor); o cliente normalmente não precisa chamar `bind`, deixando o sistema escolher automaticamente uma porta local disponível ao chamar `connect`
+- Só faz sentido no lado que vai receber conexões (servidor). O cliente normalmente não precisa chamar `bind`, deixando o sistema escolher automaticamente uma porta local disponível ao chamar `connect`
 
 ```c
 struct sockaddr_in address;

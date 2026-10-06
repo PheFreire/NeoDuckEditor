@@ -16,7 +16,7 @@ int stat(const char *pathname, struct stat *statbuf);
 - Retorna `0` em caso de sucesso, preenchendo `statbuf`, ou `-1` em caso de erro, por exemplo se o caminho não existir
 - `S_ISREG(statbuf.st_mode)` verifica se é um arquivo regular
 - `S_ISDIR(statbuf.st_mode)` verifica se é um diretório
-- Se `pathname` for um link simbólico, `stat` segue o link e reporta sobre o alvo; para inspecionar o link em si, sem seguir, existe a variante `lstat`
+- Se `pathname` for um link simbólico, `stat` segue o link e reporta sobre o alvo. Para inspecionar o link em si, sem seguir, existe a variante `lstat`
 
 ```c
 struct stat info;

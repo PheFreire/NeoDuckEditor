@@ -39,7 +39,7 @@ nvim/
 │   └── dark-duck.lua               # Tema customizado baseado em xeno.nvim
 ├── assets/
 │   └── logo.png                    # Logo do projeto
-├── doc/                             # Documentação pessoal (:doc / :docs / :docd) — hoje: libc (memória, string, hash, I/O, fds, os, socket, thread) e arquitetura em Python
+├── doc/                             # Documentação pessoal (:doc / :docs / :docd) — hoje: C (libc, GCC, termios, controle de fluxo, macros) e arquitetura em Python
 ├── setup.sh                        # Script de instalação de dependências externas
 ├── Makefile                        # Utilitários de build
 ├── lazy-lock.json                  # Lockfile do lazy.nvim (versões fixas dos plugins)
@@ -478,7 +478,14 @@ Detalhes de comportamento:
 
 ### Documentação Pessoal — `:doc` / `:docs` / `:docd`
 
-Configurado em `core/docs.lua`. Mantém uma base de anotações técnicas versionada no próprio repositório (`doc/`), acessível de qualquer projeto aberto no Neovim — hoje reúne notas sobre a libc (`doc/c/`): memória, strings (conversão numérica em `casting/`, concatenação em `concatenation/`, tokenização em `split/`, além de `strlen`/`strcmp`/`strncpy`), hashing, I/O, file descriptors, chamadas de sistema (os), sockets e threads (pthread), além de notas de arquitetura em Python (`doc/python/`).
+Configurado em `core/docs.lua`. Mantém uma base de anotações técnicas versionada no próprio repositório (`doc/`), acessível de qualquer projeto aberto no Neovim — hoje reúne notas sobre C (`doc/c/`):
+
+- **libc**: memória, strings (conversão numérica e formatação em `casting/`, concatenação em `concatenation/`, tokenização em `split/`, além de `strlen`/`strcmp`/`strncpy`/`strstr`/`strcspn`/`strdup`), classificação de caracteres (`ctype/`), I/O, matemática (`math/`), tempo (`time/`), tipos (`types/`), hashing, file descriptors, chamadas de sistema (`os/`), sockets (com um resumo dos conceitos de rede) e threads (pthread)
+- **Linguagem**: controle de fluxo (`control_flow/`) e pré-processador (`macros/`)
+- **Terminal**: `termios/`, com TTY, line discipline, modo canônico, raw mode, flags e porta serial
+- **Compilação**: `compilers/gcc/`, com o pipeline do GCC, flags, warnings, otimização, debug, sanitizers, linking e bibliotecas, além de um nível avançado (`advanced/`) sobre assembly, ELF, Mach-O, relocations, linking estático e dinâmico e loader
+
+Também há notas de arquitetura em Python (`doc/python/`).
 
 | Comando | Ação |
 |---|---|

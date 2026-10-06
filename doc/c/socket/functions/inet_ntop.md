@@ -13,7 +13,7 @@ const char *inet_ntop(int af, const void *src, char *dst, socklen_t size);
 - `af`: a família de endereços do valor binário informado, por exemplo `AF_INET` ou `AF_INET6`
 - `src`: o ponteiro para o endereço em formato binário, tipicamente o campo `sin_addr` de uma `struct sockaddr_in`
 - `dst`: o buffer onde o texto resultante será escrito
-- `size`: o tamanho do buffer `dst`; a constante `INET_ADDRSTRLEN` já define o tamanho suficiente para um endereço IPv4
+- `size`: o tamanho do buffer `dst`. A constante `INET_ADDRSTRLEN` já define o tamanho suficiente para um endereço IPv4
 
 - Retorna `dst` em caso de sucesso, ou `NULL` em caso de erro, por exemplo se `dst` for pequeno demais
 - Muito usado depois de um `accept`, para exibir de forma legível o endereço IP do cliente que acabou de se conectar

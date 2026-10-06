@@ -10,7 +10,7 @@ int close(int fd);
 
 - Retorna `0` em caso de sucesso, ou `-1` em caso de erro, por exemplo se `fd` não for um descritor válido
 - Depois de fechado, aquele número de `fd` fica livre e pode ser reaproveitado pela próxima chamada a `open` que precisar do menor descritor disponível
-- Se o mesmo fd tiver sido duplicado (`dup`) e compartilhado por outro processo ou outra parte do programa, `close` apenas remove esta referência específica; o `release` só roda quando a última referência de fato é fechada
+- Se o mesmo fd tiver sido duplicado (`dup`) e compartilhado por outro processo ou outra parte do programa, `close` apenas remove esta referência específica. O `release` só roda quando a última referência de fato é fechada
 
 ```c
 int fd = open("/dev/meu_dispositivo", O_RDWR);

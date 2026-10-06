@@ -14,6 +14,8 @@ char *fgets(char *str, int numChars, FILE *stream);
 - `numChars`: o tamanho total do buffer `str`, usado para o `fgets` saber o limite de caracteres que pode escrever sem ultrapassar o espaço reservado
 - `stream`: de onde os caracteres serão lidos, como um arquivo aberto com `fopen` ou o `stdin`
 
+- Devolve o próprio ponteiro `str` em caso de sucesso, ou `NULL` se chegar ao fim do arquivo sem ler nenhum caractere ou se ocorrer algum erro de leitura (para diferenciar os dois casos, use `feof` e `ferror`)
+
 Sobre o comportamento da leitura:
 - Lê no máximo `numChars - 1` caracteres, guardando sempre o último espaço do buffer para o `\0` que ela mesma adiciona no final
 - Se encontrar uma quebra de linha antes de atingir o limite, o `\n` é incluído na string lida
@@ -23,6 +25,28 @@ Sobre o comportamento da leitura:
 char nome[50];
 fgets(nome, 50, stdin); // lê no máximo 49 caracteres, o 50º espaço fica para o '\0'
 ```
+
+Removendo o `\n` que fica no final da string lida, usando `strcspn` de `string.h`:
+
+```c
+char nome[50];
+if (fgets(nome, sizeof(nome), stdin) != NULL) {
+  nome[strcspn(nome, "\n")] = '\0'; // troca o '\n' (se existir) por '\0'
+}
+```
+
+Lendo um arquivo inteiro linha por linha, usando o retorno `NULL` como condição de parada:
+
+```c
+FILE *file = fopen("dados.txt", "r");
+char linha[256];
+while (fgets(linha, sizeof(linha), file) != NULL) {
+  printf("%s", linha); // a linha já contém o '\n'
+}
+fclose(file);
+```
+
+> Se uma linha for maior que o buffer, o `fgets` lê só o que cabe e o restante fica no stream para a próxima chamada. Dá para detectar isso verificando se a string lida não termina em `\n` (exceto na última linha do arquivo, que pode não ter quebra de linha)
 
 > Diferente do `strcpy`, o `fgets` nunca escreve além do tamanho passado em `numChars`, por isso é a forma segura de ler uma linha para dentro de um buffer de tamanho fixo, sem correr o risco de um buffer overflow
 

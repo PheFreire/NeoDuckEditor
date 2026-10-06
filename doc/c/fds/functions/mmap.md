@@ -9,7 +9,7 @@ int mmap(struct file *file, struct vm_area_struct *vma);
 ```
 
 - `file`: a estrutura interna do kernel que representa aquela abertura do objeto
-- `vma`: a área de memória virtual do processo que vai ser mapeada para aquele recurso; é essa estrutura que o driver/sistema de arquivos configura para associar endereços de memória às páginas do objeto I/O
+- `vma`: a área de memória virtual do processo que vai ser mapeada para aquele recurso. É essa estrutura que o driver/sistema de arquivos configura para associar endereços de memória às páginas do objeto I/O
 
 Em userspace, esse mapeamento é solicitado através da própria chamada de sistema `mmap`:
 

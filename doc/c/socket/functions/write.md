@@ -15,7 +15,7 @@ ssize_t write(int fd, const void *buf, size_t count);
 - `count`: quantos bytes de `buf` devem ser enviados
 
 - Retorna quantos bytes foram de fato enviados, podendo ser menor que `count`, ou `-1` em caso de erro
-- Como um socket é apenas mais um tipo de `fd`, as mesmas funções genéricas de I/O (`write`/`read`) funcionam sobre ele; a diferença para `send` é que este último aceita `flags` específicas de rede, úteis em casos mais avançados
+- Como um socket é apenas mais um tipo de `fd`, as mesmas funções genéricas de I/O (`write`/`read`) funcionam sobre ele. A diferença para `send` é que este último aceita `flags` específicas de rede, úteis em casos mais avançados
 
 ```c
 char *msg = "ola servidor";

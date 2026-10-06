@@ -2,22 +2,20 @@
 
 > `stdlib.h`
 
-O `strtol` também converte uma string em um número inteiro, mas de forma mais robusta que `atoi`, permitindo escolher a base numérica, detectar overflow e saber exatamente até onde a conversão avançou na string
+O `strtol` converte uma string em um número inteiro de forma mais robusta que o `atoi`, permitindo escolher a base numérica, detectar overflow e saber exatamente até onde a conversão avançou na string
 
 ```c
-#include <stdlib.h>
-
 long strtol(const char *str, char **endptr, int base);
 ```
 
 - `str`: a string a ser convertida para inteiro
-- `endptr`: ponteiro para um `char *` que vai receber o endereço do primeiro caractere não convertido em `str`, logo após o número lido; pode ser `NULL` se essa informação não for necessária
-- `base`: a base numérica usada na conversão (por exemplo `10` para decimal, `16` para hexadecimal); `0` faz a função deduzir a base pelo prefixo da string (`0x`/`0X` para hexadecimal, `0` para octal, decimal caso contrário)
+- `endptr`: ponteiro para um `char *` que vai receber o endereço do primeiro caractere não convertido em `str`, logo após o número lido. Pode ser `NULL` se essa informação não for necessária
+- `base`: a base numérica usada na conversão (por exemplo `10` para decimal, `16` para hexadecimal). `0` faz a função deduzir a base pelo prefixo da string (`0x`/`0X` para hexadecimal, `0` para octal, decimal caso contrário)
 
-- Retorna o valor convertido como `long`; se nenhum número puder ser reconhecido, retorna `0` e, se `endptr` não for `NULL`, ele é preenchido apontando para o início de `str`, permitindo distinguir esse caso de uma conversão bem-sucedida do número `0`
-- Se o número representado for grande demais para caber em um `long`, retorna `LONG_MAX` ou `LONG_MIN` (dependendo do sinal) e ajusta a variável global `errno` para `ERANGE`, ao contrário de `atoi`, que tem comportamento indefinido nesse mesmo caso
-- Assim como `atoi`, ignora espaços em branco no início da string e aceita um sinal opcional (`+` ou `-`) antes dos dígitos
-- Ler o valor apontado por `endptr` depois da chamada é a forma recomendada de checar se a conversão de fato encontrou algum número, já que `str` inteiro sendo consumido significa que `endptr` aponta para o `'\0'` no final da string
+- Devolve o valor convertido como `long`. Se nenhum número puder ser reconhecido, devolve `0` e faz `endptr` apontar para o início de `str`, permitindo distinguir esse caso de uma conversão bem-sucedida do número `0`
+- Se o número for grande demais para caber em um `long`, devolve `LONG_MAX` ou `LONG_MIN` (dependendo do sinal) e ajusta a variável global `errno` para `ERANGE`
+- Assim como o `atoi`, ignora espaços em branco no início da string e aceita um sinal opcional (`+` ou `-`) antes dos dígitos
+- Se a string inteira foi consumida, `endptr` aponta para o `\0` final, o que permite checar se o texto era composto apenas pelo número
 
 ```c
 char *fim;
@@ -27,3 +25,4 @@ long n3 = strtol("abc", &fim, 10);      // 0, fim aponta para o início de "abc"
 long n4 = strtol("ff", &fim, 16);       // 255
 ```
 
+> Diferente do `atoi`, que tem comportamento indefinido quando o número não cabe no tipo e não diferencia `"0"` de um texto inválido, o `strtol` sinaliza os dois casos, sendo a forma recomendada de converter entradas vindas do usuário ou de arquivos

@@ -14,7 +14,7 @@ int listen(int sockfd, int backlog);
 - `backlog`: o número máximo de conexões que podem ficar esperando na fila para serem aceitas via `accept`, antes de novas tentativas de conexão serem recusadas
 
 - Retorna `0` em caso de sucesso, ou `-1` em caso de erro
-- Só é usado no lado servidor; depois dessa chamada, o socket não é mais usado para enviar/receber dados diretamente, apenas para aceitar novas conexões com `accept`
+- Só é usado no lado servidor. Depois dessa chamada, o socket não é mais usado para enviar/receber dados diretamente, apenas para aceitar novas conexões com `accept`
 
 ```c
 listen(server_fd, 5);

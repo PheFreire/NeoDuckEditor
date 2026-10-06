@@ -13,7 +13,7 @@ char *getenv(const char *name);
 - `name`: o nome da variável de ambiente a ser consultada
 
 - Retorna um ponteiro para o valor da variável, ou `NULL` caso ela não exista
-- O ponteiro retornado aponta para uma área interna do ambiente do processo; não deve ser modificado ou liberado (`free`) diretamente
+- O ponteiro retornado aponta para uma área interna do ambiente do processo. Não deve ser modificado ou liberado (`free`) diretamente
 
 ```c
 char *home = getenv("HOME");

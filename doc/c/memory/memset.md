@@ -11,12 +11,12 @@ void *memset(void *ptr, int value, size_t num);
 ```
 
 - `ptr`: o ponteiro para o início do bloco de memória a ser preenchido
-- `value`: o valor a ser escrito em cada byte; embora o parâmetro seja um `int`, apenas o byte menos significativo é usado, já que o valor é convertido para `unsigned char` antes de ser escrito
+- `value`: o valor a ser escrito em cada byte. Embora o parâmetro seja um `int`, apenas o byte menos significativo é usado, já que o valor é convertido para `unsigned char` antes de ser escrito
 - `num`: a quantidade de bytes a serem preenchidos a partir de `ptr`
 
 - Retorna o próprio ponteiro `ptr`
-- Preenche byte a byte, então só serve para valores que cabem em 1 byte (`0` a `255`); não é possível usar `memset` para inicializar um array de `int` com um valor diferente de `0`, pois cada `int` acabaria com o mesmo byte repetido em suas 4 posições, e não com o número esperado
-- `num` deve respeitar o tamanho real do bloco apontado por `ptr`; preencher além dele é um *buffer overflow*
+- Preenche byte a byte, então só serve para valores que cabem em 1 byte (`0` a `255`). Não é possível usar `memset` para inicializar um array de `int` com um valor diferente de `0`, pois cada `int` acabaria com o mesmo byte repetido em suas 4 posições, e não com o número esperado
+- `num` deve respeitar o tamanho real do bloco apontado por `ptr`. Preencher além dele é um *buffer overflow*
 
 > Diferente do `memmove`, o `memset` não precisa de um segundo ponteiro, pois o mesmo valor é repetido em todos os bytes
 

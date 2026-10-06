@@ -1,6 +1,6 @@
 **Tutorial Prático: Produtor/Consumidor com Variável de Condição**
 
-Um mutex protege dados compartilhados, mas não resolve sozinho o problema de uma thread precisar esperar até que uma determinada condição se torne verdadeira (por exemplo, "até que exista um item para consumir"). Fazer essa espera girando em loop e checando a condição repetidamente (*busy waiting*) desperdiça CPU; as variáveis de condição resolvem isso, colocando a thread para dormir até ser avisada
+Um mutex protege dados compartilhados, mas não resolve sozinho o problema de uma thread precisar esperar até que uma determinada condição se torne verdadeira (por exemplo, "até que exista um item para consumir"). Fazer essa espera girando em loop e checando a condição repetidamente (*busy waiting*) desperdiça CPU. As variáveis de condição resolvem isso, colocando a thread para dormir até ser avisada
 
 ```c
 #include <stdio.h>
@@ -43,4 +43,4 @@ int main() {
 }
 ```
 
-O `consumidor` trava o mutex e entra em `pthread_cond_wait`, que libera o mutex e dorme até ser avisado; quando o `produtor` seta `pronto = 1` e chama `pthread_cond_signal`, o `consumidor` acorda, retrava o mutex automaticamente e volta a checar a condição no `while`. Esse exemplo também usa `PTHREAD_MUTEX_INITIALIZER` e `PTHREAD_COND_INITIALIZER`, as versões estáticas de inicialização, como alternativa a chamar `pthread_mutex_init`/`pthread_cond_init` explicitamente
+O `consumidor` trava o mutex e entra em `pthread_cond_wait`, que libera o mutex e dorme até ser avisado. Quando o `produtor` seta `pronto = 1` e chama `pthread_cond_signal`, o `consumidor` acorda, retrava o mutex automaticamente e volta a checar a condição no `while`. Esse exemplo também usa `PTHREAD_MUTEX_INITIALIZER` e `PTHREAD_COND_INITIALIZER`, as versões estáticas de inicialização, como alternativa a chamar `pthread_mutex_init`/`pthread_cond_init` explicitamente

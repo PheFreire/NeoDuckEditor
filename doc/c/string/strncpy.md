@@ -2,71 +2,33 @@
 
 > `string.h`
 
-O `strncpy` copia uma quantidade fixa de caracteres de uma string de origem para uma string de destino, funcionando de forma semelhante ao fatiamento de strings de outras linguagens (como `str[0:n]`), mas com comportamentos específicos de preenchimento e terminação que exigem atenção manual.
+O `strncpy` copia uma quantidade fixa de caracteres de uma string de origem para uma string de destino, funcionando de forma semelhante ao fatiamento de strings de outras linguagens (como `str[0:n]`), mas com comportamentos específicos de preenchimento e terminação que exigem atenção manual
+
+> Uma `string` em C não é um tipo próprio, é apenas um array de `char` terminado pelo caractere `\0`, que marca onde o texto acaba. As funções da `string.h` recebem um ponteiro para o primeiro caractere e percorrem a memória até encontrar esse `\0`
 
 ```c
-#include <string.h>
-
-char *strncpy(
-    char *dest, 
-    const char *src, 
-    size_t n
-);
+char *strncpy(char *dest, const char *src, size_t n);
 ```
 
-- `dest`: a string de destino, que deve ter espaço alocado suficiente para receber os caracteres copiados
-- `src`: a string de origem, de onde os caracteres serão extraídos
-- `n`: o número exato de bytes/caracteres a serem copiados de `src`
+- `dest`: a string de destino, que deve ter espaço suficiente para receber os caracteres copiados
+- `src`: a string de origem, de onde os caracteres serão copiados
+- `n`: o número exato de caracteres a serem escritos em `dest`
 
-- Retorna o próprio ponteiro `dest`
-- **Não garante o `'\0'` final:** Se os primeiros `n` caracteres de `src` não contiverem um caractere nulo (`'\0'`), o `strncpy` **não** adicionará o terminador nulo ao final de `dest`; o resultado será uma sequência de caracteres sem terminação, o que causará bugs se for tratada como string posteriormente
-- **Preenchimento com zeros (Padding):** Se a string `src` for menor que `n` caracteres, o `strncpy` continuará copiando caracteres `'\0'` para `dest` até que o total de `n` bytes tenha sido escrito; isso pode causar uma perda de desempenho desnecessária se `n` for muito grande e a string de origem for muito curta
-- É a ferramenta ideal para extrair sub-strings (fatiamento), desde que o programador se lembre de adicionar manualmente o caractere `'\0'` na posição correta do destino após a cópia
-
-Para extrair com segurança os 3 primeiros caracteres de uma string (o equivalente a `str[0:3]` do Python):
+- Devolve o próprio ponteiro `dest`
+- Não garante o `\0` final: se os primeiros `n` caracteres de `src` não contiverem um `\0`, ele não é adicionado ao final de `dest`, e o resultado vira uma sequência de caracteres sem terminação, causando bugs se for tratada como string depois
+- Se `src` for menor que `n` caracteres, o `strncpy` continua escrevendo `\0` em `dest` até completar os `n` bytes, o que pode ser um desperdício quando `n` é muito grande e `src` muito curta
+- Somando um deslocamento ao ponteiro de `src` (aritmética de ponteiros), é possível copiar qualquer trecho do meio da string, como um `str[5:9]`
 
 ```c
-#include <stdio.h>
-#include <string.h>
+char str[] = "Programacao";
+char inicio[4]; // 3 caracteres + 1 para o '\0'
+char meio[5];   // 4 caracteres + 1 para o '\0'
 
-int main() {
-    char str[] = "TextoOriginal";
-    char sub_str[4]; // Espaço para 3 caracteres + 1 para o '\0'
+strncpy(inicio, str, 3);
+inicio[3] = '\0'; // inicio == "Pro"
 
-    // Copia exatamente 3 caracteres
-    strncpy(sub_str, str, 3);
-    
-    // IMPORTANTE: Garante manualmente que a string foi terminada
-    sub_str[3] = '\0'; 
-
-    printf("Resultado: %s\n", sub_str); // Saída: "Tex"
-    return 0;
-}
+strncpy(meio, str + 5, 4); // str + 5 aponta para o 'a' de "amacao"
+meio[4] = '\0'; // meio == "amac"
 ```
 
-Utilizando aritmética de ponteiros, você pode deslocar o início da string de origem para fatiar qualquer trecho do meio do texto (como `str[5:9]`):
-
-```c
-#include <stdio.h>
-#include <string.h>
-
-int main() {
-    char str[] = "Programacao";
-
-    // Espaço para 4 caracteres + 1 para o '\0'
-    char sub_str[5]; 
-
-    // str + 5 aponta para o inicio da index 5 ('m')
-    // copia 4 caracteres a partir dali ("maca")
-    strncpy(sub_str, str + 5, 4);
-    
-    // Garante a terminação
-    sub_str[4] = '\0'; 
-
-    // Saída: "maca"
-    printf("Resultado: %s\n", sub_str);
-
-    return 0;
-}
-```
-
+> Diferente do `fgets`, que sempre termina o buffer com `\0`, o `strncpy` deixa essa responsabilidade para quem chama, por isso depois de usá-lo para fatiar uma string é preciso escrever manualmente o `\0` na posição correta do destino

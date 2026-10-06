@@ -21,7 +21,7 @@ int idade;
 scanf("%d", &idade);
 ```
 
-> Diferente do `fgets`, o `%s` do `scanf` não tem como saber o tamanho do buffer de destino, então não protege sozinho contra buffer overflow; por isso, para ler texto do usuário com segurança, é comum usar `fgets` para pegar a linha inteira e depois `sscanf` para extrair os valores dela
+> Diferente do `fgets`, o `%s` do `scanf` não tem como saber o tamanho do buffer de destino, então não protege sozinho contra buffer overflow. Por isso, para ler texto do usuário com segurança, é comum usar `fgets` para pegar a linha inteira e depois `sscanf` para extrair os valores dela
 
 **sscanf**
 

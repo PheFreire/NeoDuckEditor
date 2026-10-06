@@ -16,4 +16,3 @@ long ftell(FILE *stream);
 fseek(file, 0, SEEK_END);
 long tamanho = ftell(file); // tamanho total do arquivo em bytes
 ```
-

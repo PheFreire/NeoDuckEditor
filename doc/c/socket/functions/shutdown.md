@@ -11,7 +11,7 @@ int shutdown(int sockfd, int how);
 ```
 
 - `sockfd`: o descritor do socket cuja comunicação será encerrada
-- `how`: qual direção da comunicação encerrar; `SHUT_RD` para leitura, `SHUT_WR` para escrita, ou `SHUT_RDWR` para ambas
+- `how`: qual direção da comunicação encerrar. `SHUT_RD` para leitura, `SHUT_WR` para escrita, ou `SHUT_RDWR` para ambas
 
 - Retorna `0` em caso de sucesso, ou `-1` em caso de erro
 - Diferente de `close`, o `shutdown` não libera o `fd`: ele apenas avisa o outro lado da conexão (via TCP) que não virão mais dados naquela direção, permitindo, por exemplo, terminar de enviar dados enquanto ainda espera uma resposta

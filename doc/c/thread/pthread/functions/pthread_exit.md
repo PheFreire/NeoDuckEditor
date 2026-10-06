@@ -13,7 +13,7 @@ void pthread_exit(void *retval);
 - `retval`: o valor que a thread terminada vai "retornar", recuperável por outra thread através do parâmetro `retval` de `pthread_join`
 
 - Não retorna: nenhum código depois de `pthread_exit` roda naquela thread
-- Se chamado pela thread principal (`main`), termina apenas essa thread, não o processo inteiro; as demais threads continuam rodando normalmente, diferente de uma chamada a `exit()`
+- Se chamado pela thread principal (`main`), termina apenas essa thread, não o processo inteiro. As demais threads continuam rodando normalmente, diferente de uma chamada a `exit()`
 - Chamar `pthread_exit(NULL)` dentro de uma função de thread tem o mesmo efeito prático de um `return NULL;` no final dela
 
 ```c

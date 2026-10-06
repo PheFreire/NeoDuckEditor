@@ -11,7 +11,7 @@ int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr);
 ```
 
 - `mutex`: ponteiro para a variável do mutex a ser inicializada
-- `attr`: ponteiro para uma estrutura de atributos que controla o comportamento do mutex, como seu tipo; `NULL` para usar os atributos padrão
+- `attr`: ponteiro para uma estrutura de atributos que controla o comportamento do mutex, como seu tipo. `NULL` para usar os atributos padrão
 
 - Retorna `0` em caso de sucesso, ou um código de erro em caso de falha
 - Para mutexes alocados estaticamente ou globais, existe a alternativa `pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;`, que dispensa a chamada explícita a `pthread_mutex_init` com atributos padrão
