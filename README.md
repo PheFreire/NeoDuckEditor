@@ -19,7 +19,7 @@ O projeto segue uma filosofia simples: **menos cliques, mais foco**. Cada plugin
 Destaques do setup:
 - Navegação remapeada completamente (sem depender do layout padrão HJKL do Vim)
 - LSP completo com 11 servidores de linguagem configurados e auto-instalados
-- Debugging integrado para C via nvim-dap + CodeLLDB (UI automática, virtual text inline)
+- Debugging integrado para C via nvim-dap + CodeLLDB (compila o arquivo atual com `-g`/ASan, UI automática, virtual text inline, stack que acompanha o cursor)
 - Hover contextual para C: documentação LSP com fallback para `man` (`<leader>gg` / `<leader><leader>` alterna entre os dois)
 - Comandos `:Define` / `:Undefine` para alinhar (ou remover) automaticamente as continuações `\` de macros C
 - Tema próprio `dark-duck`, construído sobre tonalidades quentes de preto e amarelo
@@ -66,7 +66,7 @@ nvim/
         │       ├── core.lua        # Navegação, clipboard, buffer, undo (~60 keybinds)
         │       ├── comment.lua     # Toggle de comentários
         │       ├── fold.lua        # Toggle de folding
-        │       ├── dap.lua         # Debug: breakpoints, step, UI toggle
+        │       ├── dap.lua         # Debug: breakpoints, step, frames, watches, UI toggle
         │       ├── leap.lua        # Salto entre janelas
         │       ├── markdown.lua    # Preview de Markdown
         │       ├── nvim-lsp.lua    # Hover, go-to-def, referências, format
@@ -423,11 +423,25 @@ Configurado em `keymaps/terminal.lua`.
 
 Configurado em `keymaps/dap.lua` e `plugins/language/nvim-dap.lua`.
 
-O adaptador **CodeLLDB** é instalado automaticamente pelo Mason. Ao continuar/iniciar a sessão (`<leader>dc`), o dapui abre automaticamente o layout inferior (console + REPL) e o foco volta para a janela do código-fonte — a janela de disassembly (`dap-src://...`) que o adaptador tentaria abrir é interceptada e escondida automaticamente. Os valores das variáveis aparecem inline no código via virtual text.
+O adaptador **CodeLLDB** é instalado automaticamente pelo Mason. Ao continuar/iniciar a sessão (`<leader>dc`), o dapui abre os dois layouts (lateral com variáveis, watches e call stack, inferior com console e REPL) e o foco volta para a janela do código-fonte. A janela de disassembly (`dap-src://...`) que o adaptador tentaria abrir é interceptada e escondida automaticamente, e esses buffers são marcados como `nofile` para não bloquear o `:q!`. Os valores das variáveis aparecem inline no código via virtual text.
 
 Pressione **`<leader>d`** e aguarde ~400ms para abrir um popup do which-key com todos os comandos do grupo Debug.
 
-**Fluxo de uso:** compile com `gcc -g main.c -o main`, pressione `<leader>dc` e informe o binário no input. Veja `tutorial-dap-gdb.md` para um guia completo com exemplos práticos.
+**Fluxo de uso:** pressione `<leader>dc` e escolha uma das configurações:
+
+| Configuração | O que faz |
+|---|---|
+| Compile current file & debug | Salva e compila o arquivo atual com `cc -g -O0 -Wall -Wextra` e abre no debugger. Se a compilação falhar, mostra o erro e não inicia |
+| Compile current file & debug (AddressSanitizer) | Igual, com `-fsanitize=address,undefined`. Pega acesso fora do array, use-after-free e double free mostrando a linha exata no console |
+| Launch executable | Pede o caminho de um binário já compilado (projetos com Makefile). Compile com `-g -O0` |
+
+Veja `tutorial-dap-gdb.md` para um guia completo com exemplos práticos.
+
+**Comportamentos automáticos:**
+
+- **Crash dentro da libc**: quando o programa para dentro de código sem fonte (`free`, `strlen`, `abort`...), a seleção sobe a call stack até o primeiro frame que é um arquivo seu e uma notificação mostra o motivo (ex: `signal SIGABRT`)
+- **Stack acompanha o cursor**: com o programa parado, mover o cursor para dentro de uma função que está na call stack seleciona aquele frame, e o painel Scopes passa a mostrar as variáveis dela (como `<leader>dk`/`<leader>dj`, sem mover o cursor). Liga/desliga com `<leader>df`
+- **Funções da stack sublinhadas**: o nome de cada função na call stack e a linha onde a execução está dentro dela ficam sublinhados. Amarelo para o frame selecionado, azul para o resto. As cores ficam em `set_dap_highlights` (`DapStackFunc*`, `DapStackLine*`)
 
 | Tecla | Ação |
 |---|---|
@@ -443,16 +457,20 @@ Pressione **`<leader>d`** e aguarde ~400ms para abrir um popup do which-key com 
 | `<leader>dL` | Logpoint (mensagem sem parar a execução) |
 | `<leader>dC` | Limpar todos os breakpoints |
 | `<leader>du` | Toggle UI completa |
-| `<leader>dU` | Toggle apenas o painel lateral (scopes/stacks) |
+| `<leader>dU` | Toggle apenas o painel lateral (scopes/watches/stacks) |
 | `<leader>dg` | Hover de variável sob o cursor |
 | `<leader>de` | Avaliar expressão (normal) ou seleção (visual) |
 | `<leader>dr` | Abrir REPL |
+| `<leader>dk` | Subir um frame na call stack (função que chamou) |
+| `<leader>dj` | Descer um frame na call stack |
+| `<leader>dw` | Adicionar a palavra sob o cursor aos watches |
+| `<leader>df` | Liga/desliga a stack acompanhando o cursor |
 
 **Layout do dapui:**
 
 | Posição | Painéis |
 |---|---|
-| Lateral esquerda (toggle via `<leader>dU`) | Scopes (65%), Call Stack (35%) |
+| Lateral esquerda (abre automaticamente, toggle via `<leader>dU`) | Scopes (55%), Watches (20%), Call Stack (25%) |
 | Inferior (abre automaticamente ao continuar) | Console (50%), REPL (50%) |
 
 ---

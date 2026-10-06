@@ -26,3 +26,14 @@ Km.set("n", "<leader>dg", function() require("dap.ui.widgets").hover() end,   { 
 Km.set("n", "<leader>de", function() require("dapui").eval() end,             { noremap = true, silent = true, desc = "DAP: Eval Expression" })
 Km.set("v", "<leader>de", function() require("dapui").eval() end,             { noremap = true, silent = true, desc = "DAP: Eval Selection" })
 Km.set("n", "<leader>dr", function() require("dap").repl.open() end,          { noremap = true, silent = true, desc = "DAP: Open REPL" })
+
+-- Call stack: navegar entre frames (ver variáveis de quem chamou a função)
+Km.set("n", "<leader>dk", function() require("dap").up() end,                 { noremap = true, silent = true, desc = "DAP: Frame Up (caller)" })
+Km.set("n", "<leader>dj", function() require("dap").down() end,               { noremap = true, silent = true, desc = "DAP: Frame Down" })
+Km.set("n", "<leader>dw", function()
+  require("dapui").elements.watches.add(vim.fn.expand("<cword>"))
+end,                                                                           { noremap = true, silent = true, desc = "DAP: Watch word under cursor" })
+Km.set("n", "<leader>df", function()
+  vim.g.dap_follow_cursor = not vim.g.dap_follow_cursor
+  vim.notify("DAP follow cursor: " .. (vim.g.dap_follow_cursor and "on" or "off"))
+end,                                                                           { noremap = true, silent = true, desc = "DAP: Toggle stack follows cursor" })
