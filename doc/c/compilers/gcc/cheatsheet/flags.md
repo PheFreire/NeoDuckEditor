@@ -9,6 +9,8 @@ gcc -std=c17 -g3 -Og -Wall -Wextra -Iinclude -DDEBUG -c src/main.c -o build/main
 gcc build/main.o build/lista.o -Llib -lm -pthread -o app
 ```
 
+---
+
 **Saída e etapas** (ver `compilation-pipeline.md`)
 
 - `-o arquivo`: nome da saída. Sem ele: `a.out`, `main.o`, `main.s` ou `stdout`, conforme a etapa
@@ -18,12 +20,16 @@ gcc build/main.o build/lista.o -Llib -lm -pthread -o app
 - `-save-temps`: guarda todos os intermediários (`.i`, `.s`, `.o`)
 - `-v` / `-###`: mostra (ou apenas lista) os programas chamados pelo driver, inclusive os diretórios de busca de headers e bibliotecas
 
+---
+
 **Preprocessor** (ver `preprocessor.md`)
 
 - `-I dir`: adiciona `dir` à lista de diretórios onde procurar headers de `#include`. Procurado **antes** dos diretórios do sistema
 - `-D NOME` / `-D NOME=valor`: define uma macro, como se houvesse `#define NOME 1` (ou `valor`) no topo de cada arquivo. Muito usado para `-DDEBUG` ou `-DNDEBUG` (que desliga os `assert`)
 - `-U NOME`: remove a definição de uma macro, inclusive as predefinidas pelo compilador
 - `-include arquivo.h`: inclui um header no início de todo arquivo, sem precisar de `#include`
+
+---
 
 **Linker** (ver `linking.md` e `libraries.md`)
 
@@ -34,10 +40,14 @@ gcc build/main.o build/lista.o -Llib -lm -pthread -o app
 - `-shared` / `-fPIC`: gera uma biblioteca compartilhada / gera código independente de posição, necessário para ela
 - `-pthread`: habilita threads POSIX tanto na compilação (define `_REENTRANT`) quanto no link (adiciona a biblioteca de threads). Prefira-o a `-lpthread`, que só faz a parte do link. Precisa estar nas duas etapas
 
+---
+
 **Linguagem**
 
 - `-std=c17`, `-std=gnu17`, `-std=c23`...: escolhe o padrão de C. `c` = ISO puro, `gnu` = com extensões GNU (ver `gcc.md`)
 - `-x c`: força a linguagem, ignorando a extensão do arquivo (útil com `-` para ler do `stdin`)
+
+---
 
 **Debug** (ver `debugging.md`)
 
@@ -45,10 +55,14 @@ gcc build/main.o build/lista.o -Llib -lm -pthread -o app
 - `-g3`: o mesmo que `-g`, incluindo também as definições de macros, permitindo usá-las dentro do GDB/LLDB
 - `-fno-omit-frame-pointer`: mantém o frame pointer, deixando os stack traces de profilers e sanitizers mais confiáveis
 
+---
+
 **Otimização** (ver `optimization.md`)
 
 - `-O0` (padrão), `-Og`, `-O1`, `-O2`, `-O3`, `-Os`: o quanto o compilador transforma o código para ficar mais rápido ou menor
 - `-march=native`: gera instruções específicas da CPU atual (AVX, etc). O binário pode não rodar em outras máquinas
+
+---
 
 **Warnings** (ver `warnings.md`)
 
@@ -56,6 +70,8 @@ gcc build/main.o build/lista.o -Llib -lm -pthread -o app
 - `-Wpedantic`: avisa sobre código fora do padrão ISO definido em `-std`
 - `-Werror`: transforma todo warning em erro
 - `-Wnome` liga um warning específico, `-Wno-nome` desliga
+
+---
 
 **Instrumentação** (ver `sanitizers.md`)
 

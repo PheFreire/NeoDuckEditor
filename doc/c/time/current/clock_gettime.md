@@ -28,6 +28,8 @@ printf("%lld.%09ld\n", (long long)agora.tv_sec, agora.tv_nsec);
 // 1791136800.123456789
 ```
 
+---
+
 **Medindo quanto tempo algo levou**
 
 ```c
@@ -44,6 +46,8 @@ printf("levou %.3f ms\n", ms);
 ```
 
 > Usar `CLOCK_REALTIME` para medir intervalos é um erro sutil: se o sistema sincronizar o relógio durante a medição, o resultado pode sair maior, menor ou até negativo. O `CLOCK_MONOTONIC` nunca tem esse problema
+
+---
 
 **Tempo de CPU x tempo real**
 
@@ -63,6 +67,8 @@ clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &c1);
 // tempo real: ~1.000 s
 // tempo de CPU: ~0.000 s, o processo ficou parado
 ```
+
+---
 
 **Timestamp em milissegundos**
 

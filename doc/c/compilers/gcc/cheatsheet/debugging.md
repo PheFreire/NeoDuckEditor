@@ -14,6 +14,8 @@ lldb ./main    # macOS
 - `-Og`: otimiza só o que não atrapalha o debug
 - `-Wall -Wextra`: warnings úteis (ver `warnings.md`)
 
+---
+
 **O que o -g grava**
 
 O formato usado no Linux e no macOS é o **DWARF**, com tabelas como:
@@ -31,12 +33,16 @@ como desfazer a pilha a partir deste endereço           (.eh_frame / .debug_fra
 
 > **Linux (ELF)**: o DWARF fica em sections `.debug_*` dentro do próprio executável. `strip main` remove essas sections. **macOS (Mach-O)**: o linker **não** copia o DWARF para o executável. Ele deixa apenas um "debug map" apontando para os `.o`. Se os `.o` forem apagados, o LLDB perde as informações, a não ser que você gere um pacote `.dSYM` com `dsymutil main`. Compilando e linkando em um único comando, o driver costuma rodar o `dsymutil` automaticamente
 
+---
+
 **-O0 vs -Og**
 
 - `-O0`: nenhuma otimização. Toda variável existe na pilha durante toda a função e cada linha vira um bloco de instruções. É a correspondência mais fiel com o fonte, mas o programa fica bem mais lento
 - `-Og`: aplica apenas otimizações que preservam a experiência de debug. Gera código mais rápido que `-O0` e ainda permite mais warnings que dependem de análise de fluxo
 - Use `-Og` por padrão. Mude para `-O0` quando o debugger mostrar `<optimized out>` em uma variável que você precisa ver, ou quando o `step` estiver pulando linhas
 - Com `-O2`, o debug ainda funciona, mas com as estranhezas descritas em `optimization.md`
+
+---
 
 **-fno-omit-frame-pointer**
 
@@ -55,6 +61,8 @@ como desfazer a pilha a partir deste endereço           (.eh_frame / .debug_fra
 - Debuggers usam as tabelas de unwind (`.eh_frame`) e continuam montando o backtrace normalmente, mas profilers (`perf`), sanitizers e alguns crash reporters usam o caminho rápido do frame pointer e podem gerar stack traces cortados
 - `-fno-omit-frame-pointer` mantém essa lista, custando um registrador. Recomendado junto com sanitizers e profilers
 - No macOS ARM64 a ABI da Apple exige o frame pointer, então ele já é mantido
+
+---
 
 **Usando o debugger**
 

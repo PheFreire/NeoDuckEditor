@@ -24,6 +24,8 @@ trunc(-2.9);  // -2.0
 trunc(-2.1);  // -2.0
 ```
 
+---
+
 **trunc x cast**
 
 ```c
@@ -32,6 +34,8 @@ double grande = 1e20;
 trunc(grande);  // 1e20, continua correto
 (int)grande;    // comportamento indefinido, 1e20 não cabe em um int
 ```
+
+---
 
 **Comparação com as outras funções de arredondamento**
 
@@ -43,6 +47,8 @@ trunc(grande);  // 1e20, continua correto
 | `-2.4` | `-3`    | `-2`   | `-2`    | `-2`    |
 | `-2.5` | `-3`    | `-2`   | `-3`    | `-2`    |
 | `-2.6` | `-3`    | `-2`   | `-3`    | `-2`    |
+
+---
 
 **modf**
 

@@ -30,6 +30,8 @@ log(0.0);      // -inf
 log(-1.0);     // nan
 ```
 
+---
+
 **Logaritmo em qualquer base**
 
 Não existe uma função para bases arbitrárias, mas qualquer logaritmo pode ser obtido dividindo dois logaritmos da mesma base:
@@ -41,6 +43,8 @@ double log_base(double x, double base) {
 
 log_base(81.0, 3.0); // 4.0, pois 3^4 == 81
 ```
+
+---
 
 **Quantidade de dígitos de um número**
 
@@ -56,12 +60,16 @@ digitos(7);      // 1
 digitos(12345);  // 5
 ```
 
+---
+
 **Quantos bits são necessários**
 
 ```c
 unsigned int valores = 1000;
 int bits = (int)ceil(log2(valores)); // 10, pois 2^10 == 1024 >= 1000
 ```
+
+---
 
 **Escala logarítmica**
 

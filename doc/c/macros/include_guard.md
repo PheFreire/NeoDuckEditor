@@ -22,6 +22,8 @@ O include guard é um padrão com `#ifndef`, `#define` e `#endif` colocado em vo
 - Os nomes não devem começar com `_` seguido de maiúscula (`_LISTA_H`) nem conter `__`, pois esses são reservados para o compilador e a biblioteca padrão
 - Se dois headers diferentes usarem o mesmo nome de guard, o segundo é apagado sem nenhum aviso, o que causa erros confusos de "tipo não declarado"
 
+---
+
 **O problema sem o guard**
 
 ```c
@@ -45,6 +47,8 @@ struct linha {
 // erro: redefinition of 'struct ponto'
 ```
 
+---
+
 **Com o guard**
 
 ```c
@@ -61,6 +65,8 @@ struct ponto {
 ```
 
 Agora, quando `linha.h` inclui `ponto.h` pela segunda vez, `PONTO_H` já está definida e o conteúdo é apagado
+
+---
 
 **#pragma once**
 

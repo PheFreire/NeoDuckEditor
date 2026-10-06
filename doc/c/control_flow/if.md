@@ -39,6 +39,8 @@ if (nota >= 90) {
 }
 ```
 
+---
+
 **Usando o próprio valor como condição**
 
 Como `0` e `NULL` são falsos, é comum testar um valor ou ponteiro diretamente, sem comparar:
@@ -56,6 +58,8 @@ if (restantes) { // o mesmo que restantes != 0
 }
 ```
 
+---
+
 **Curto-circuito protegendo o acesso**
 
 A ordem das condições importa: com `&&`, o lado direito só é avaliado se o esquerdo for verdadeiro, o que evita acessar um ponteiro nulo ou um índice fora do array:
@@ -69,6 +73,8 @@ if (i < total && nums[i] > 0) {
   // nums[i] só é lido se i estiver dentro do array
 }
 ```
+
+---
 
 **O perigo de omitir as chaves**
 
@@ -85,6 +91,8 @@ if (erro) {
   return 1;
 }
 ```
+
+---
 
 **Dangling else**
 
@@ -106,6 +114,8 @@ if (a) {
   printf("não a\n");
 }
 ```
+
+---
 
 **Operador ternário**
 

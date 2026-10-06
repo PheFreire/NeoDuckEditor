@@ -28,6 +28,8 @@ double r4 = fmod(7.0, -3.0);  // 1.0, o sinal de y não importa
 // int r = 7.5 % 2; // erro de compilação: % não aceita double
 ```
 
+---
+
 **Mantendo um ângulo entre 0 e 360**
 
 Como o resultado pode ser negativo, para "dar a volta" em um intervalo é preciso corrigir o caso negativo:
@@ -45,6 +47,8 @@ normalizar_angulo(370.0);  // 10.0
 normalizar_angulo(-90.0);  // 270.0
 ```
 
+---
+
 **Separando horas e minutos**
 
 ```c
@@ -52,6 +56,8 @@ double total_minutos = 135.5;
 double minutos = fmod(total_minutos, 60.0);     // 15.5
 double horas = floor(total_minutos / 60.0);     // 2
 ```
+
+---
 
 **remainder**
 

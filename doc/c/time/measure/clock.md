@@ -30,6 +30,8 @@ printf("CPU: %.3f s\n", segundos); // CPU: 0.250 s
 
 > O cast para `double` é obrigatório: `(fim - inicio) / CLOCKS_PER_SEC` com dois inteiros faz divisão inteira e dá `0` para qualquer trecho que leve menos de um segundo
 
+---
+
 **O que o clock não mede**
 
 Tempo parado (`sleep`, leitura de arquivo, rede, `scanf`) não conta:
@@ -42,6 +44,8 @@ clock_t fim = clock();
 printf("%.3f s\n", (double)(fim - inicio) / CLOCKS_PER_SEC);
 // 0.000 s, e não 2 s
 ```
+
+---
 
 **Comparando dois algoritmos**
 

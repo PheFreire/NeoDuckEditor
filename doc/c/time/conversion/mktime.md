@@ -29,6 +29,8 @@ time_t t = mktime(&data);
 // data.tm_wday == 0 (domingo), data.tm_yday == 276
 ```
 
+---
+
 **Somando dias, meses e anos**
 
 Basta mexer no campo desejado e chamar o `mktime`, que acerta a virada de mês, de ano e os anos bissextos:
@@ -54,6 +56,8 @@ mktime(&data);
 
 > Somar um mês a `31 de janeiro` dá `31 de fevereiro`, que o `mktime` normaliza para `3 de março` (ou `2`, em ano bissexto). Se o resultado precisa ser "o último dia de fevereiro", é preciso tratar esse caso à mão
 
+---
+
 **Último dia do mês**
 
 O dia `0` de um mês é o último dia do mês anterior:
@@ -68,6 +72,8 @@ data.tm_isdst = -1;
 mktime(&data);
 // data.tm_mday == 29, 2028 é bissexto
 ```
+
+---
 
 **Dia da semana de uma data**
 
@@ -84,6 +90,8 @@ mktime(&data);
 const char *dias[] = {"domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"};
 printf("%s\n", dias[data.tm_wday]); // sábado
 ```
+
+---
 
 **Validando uma data digitada**
 

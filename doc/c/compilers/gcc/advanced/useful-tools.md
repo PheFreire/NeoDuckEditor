@@ -4,6 +4,8 @@
 
 Cada etapa do pipeline produz um arquivo que pode ser inspecionado. Saber qual ferramenta abre qual etapa transforma erros misteriosos ("por que essa função não está aqui?", "de onde vem essa biblioteca?") em perguntas com respostas diretas. No Linux, a maioria vem do **GNU binutils**. No macOS, das **Xcode Command Line Tools** (que incluem versões LLVM de `nm`, `objdump`, `size`, etc)
 
+---
+
 **Equivalências Linux / macOS**
 
 | Para | Linux | macOS |
@@ -26,6 +28,8 @@ Cada etapa do pipeline produz um arquivo que pode ser inspecionado. Saber qual f
 | arquiteturas de um binário | — | `lipo -info` |
 | assinatura de código | — | `codesign -dv` |
 
+---
+
 **Do próprio GCC**
 
 ```bash
@@ -36,6 +40,8 @@ gcc -print-search-dirs         # onde procura programas e bibliotecas
 gcc -print-file-name=libc.a    # caminho de uma biblioteca específica
 gcc -Q --help=optimizers -O2   # otimizações ativas em um nível
 ```
+
+---
 
 **Fluxos comuns**
 
@@ -61,6 +67,8 @@ DYLD_PRINT_LIBRARIES=1 ./app             # macOS
 # ver os bytes crus
 xxd app | head                           # ou: hexdump -C app | head
 ```
+
+---
 
 **Utilitários auxiliares**
 

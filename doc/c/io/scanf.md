@@ -23,6 +23,8 @@ scanf("%d", &idade);
 
 > Diferente do `fgets`, o `%s` do `scanf` não tem como saber o tamanho do buffer de destino, então não protege sozinho contra buffer overflow. Por isso, para ler texto do usuário com segurança, é comum usar `fgets` para pegar a linha inteira e depois `sscanf` para extrair os valores dela
 
+---
+
 **sscanf**
 
 O `sscanf` funciona como um `scanf` que, em vez de ler a entrada do teclado (`stdin`), lê e interpreta o conteúdo de uma string que você já possui em memória, extraindo valores dela de acordo com um formato

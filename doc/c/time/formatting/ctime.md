@@ -30,6 +30,8 @@ printf("%s", asctime(&utc));
 // Sun Oct  4 18:00:00 2026
 ```
 
+---
+
 **O \n no final**
 
 ```c
@@ -46,6 +48,8 @@ texto[strcspn(texto, "\n")] = '\0';
 printf("agora: %s.\n", texto);
 // agora: Sun Oct  4 15:00:00 2026.
 ```
+
+---
 
 **Versões seguras**
 

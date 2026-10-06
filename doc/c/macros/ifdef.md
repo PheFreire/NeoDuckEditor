@@ -26,6 +26,8 @@ O `#ifdef` e o `#ifndef` mantêm ou apagam um trecho de código antes da compila
 - Os blocos podem ser aninhados, e cada `#ifdef` / `#ifndef` precisa do seu próprio `#endif`
 - Por ser fácil se perder em blocos longos, é comum comentar o `#endif` com o nome da macro: `#endif // DEBUG`
 
+---
+
 **Definindo a macro pelo compilador**
 
 Em vez de escrever o `#define` no código, a macro pode ser definida na linha de compilação com `-D`, o que permite trocar de versão sem editar nenhum arquivo:
@@ -35,6 +37,8 @@ gcc main.c -o programa           # DEBUG não definida
 gcc -DDEBUG main.c -o programa   # equivale a #define DEBUG 1 no topo do arquivo
 gcc -DNIVEL=3 main.c -o programa # equivale a #define NIVEL 3
 ```
+
+---
 
 **Código só para debug**
 
@@ -49,6 +53,8 @@ int dividir(int a, int b) {
 
 Compilado normalmente, o `printf` nem chega ao compilador. Compilado com `-DDEBUG`, ele aparece em toda chamada
 
+---
+
 **Valor padrão para uma configuração**
 
 O `#ifndef` permite definir um valor só se ninguém tiver definido antes, deixando quem compila sobrescrever com `-D`:
@@ -60,6 +66,8 @@ O `#ifndef` permite definir um valor só se ninguém tiver definido antes, deixa
 
 char buffer[TAMANHO_BUFFER]; // 1024, ou o valor passado em -DTAMANHO_BUFFER=...
 ```
+
+---
 
 **Macro de log que some em produção**
 

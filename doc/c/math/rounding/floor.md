@@ -24,6 +24,8 @@ floor(-2.1);  // -3.0
 floor(-2.9);  // -3.0
 ```
 
+---
+
 **floor x cast para int**
 
 Converter um `double` para `int` com um cast também remove a parte decimal, mas em direção ao zero, o que só dá o mesmo resultado para números positivos:
@@ -36,6 +38,8 @@ Converter um `double` para `int` com um cast também remove a parte decimal, mas
 (int)floor(-2.7);  // -3, foi para baixo
 ```
 
+---
+
 **Convertendo uma coordenada em índice de grade**
 
 Em jogos e gráficos, para descobrir em qual célula de uma grade um ponto está, o `floor` funciona também com coordenadas negativas, onde o cast daria a célula errada:
@@ -47,6 +51,8 @@ double x = -10.0;
 int coluna_certa = (int)floor(x / tamanho_celula); // -1
 int coluna_errada = (int)(x / tamanho_celula);     // 0, mesma célula de x = 10
 ```
+
+---
 
 **Separando parte inteira e decimal**
 

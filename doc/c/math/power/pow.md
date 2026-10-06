@@ -30,11 +30,15 @@ pow(10, 3);    // 1000.0
 int errado = 2 ^ 3; // 1, XOR, não potência
 ```
 
+---
+
 **Erros**
 
 - Base negativa com expoente fracionário não tem resultado real e devolve `NAN`: `pow(-8, 1.0 / 3)` é `NAN`, e não `-2` (para isso existe o `cbrt`)
 - `pow(0, negativo)` é uma divisão por zero e devolve `INFINITY`
 - Um resultado grande demais devolve `HUGE_VAL`: `pow(10, 400)` é `inf`
+
+---
 
 **Potências inteiras**
 

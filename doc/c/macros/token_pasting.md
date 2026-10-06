@@ -21,6 +21,8 @@ int JUNTAR(valor, 1) = 10; // int valor1 = 10;
 JUNTAR(pr, intf)("oi\n");  // printf("oi\n");
 ```
 
+---
+
 **Gerando funções para vários tipos**
 
 Como C não tem templates nem generics, o `##` é a forma de escrever uma vez só uma função que precisa existir para vários tipos:
@@ -38,6 +40,8 @@ int m1 = max_int(3, 7);         // 7
 double m2 = max_double(1.5, 0.5); // 1.5
 ```
 
+---
+
 **Gerando uma struct de lista para cada tipo**
 
 ```c
@@ -53,6 +57,8 @@ DEFINIR_LISTA(float); // typedef struct { float *itens; size_t total; } lista_fl
 lista_int numeros = {0};
 ```
 
+---
+
 **Acessando campos com prefixo**
 
 ```c
@@ -67,6 +73,8 @@ struct config c = {8080, 30};
 OPT(c, porta);   // c.opt_porta   -> 8080
 OPT(c, timeout); // c.opt_timeout -> 30
 ```
+
+---
 
 **Juntando com o valor de outra macro**
 

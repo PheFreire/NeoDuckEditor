@@ -22,6 +22,8 @@ int tcsetattr(int fd, int optional_actions, const struct termios *termios_p);
 	- `EINVAL`: `optional_actions` inválido
 	- `EINTR`: interrompido por um sinal (`tcsetattr`)
 
+---
+
 **O ciclo**
 
 ```c
@@ -62,6 +64,8 @@ tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig);     // 5. restaura a original
 - `novo = orig;` copia a `struct` inteira (atribuição de struct copia todos os campos, inclusive o array `c_cc`)
 - Começar de `tcgetattr` garante que os campos que você não conhece (velocidade, campos específicos do sistema) continuem válidos. Uma `struct termios` zerada com `memset` desliga inclusive `CREAD` e `CS8`
 
+---
+
 **Qual optional_actions usar**
 
 ```text
@@ -77,6 +81,8 @@ TCSAFLUSH  espera o prompt sair, descarta "abc", depois aplica
 - `TCSAFLUSH` ao **entrar** em raw mode ou desligar o echo: evita que teclas digitadas antes (com outra configuração) sejam lidas depois
 - `TCSADRAIN` ou `TCSAFLUSH` ao **sair**: garante que a saída escrita em raw mode seja mostrada antes de voltar ao modo normal
 - `TCSANOW` em handlers de sinal e quando a velocidade de resposta importa mais que a fila
+
+---
 
 **Armadilhas**
 

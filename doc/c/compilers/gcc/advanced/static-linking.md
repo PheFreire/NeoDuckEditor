@@ -10,6 +10,8 @@ gcc -static main.c -o app                   # Linux: tudo estático, inclusive a
 file app                                    # ... statically linked
 ```
 
+---
+
 **Como o linker processa os argumentos**
 
 ```text
@@ -28,6 +30,8 @@ libb.a          → membro y.o define g, z.o define h → entram  indefinidos = 
 - Um membro extraído pode criar novos indefinidos, e o linker volta a varrer **o mesmo** `.a` até ele não fornecer mais nada, mas não volta aos `.a` anteriores. Daí a regra de ordem: quem usa vem antes de quem define
 - Granularidade: um membro entra inteiro. Se `utils.o` tiver 50 funções e você usar uma, as 50 vão para o executável. Bibliotecas como a libc colocam cada função em um `.o` separado por isso
 
+---
+
 **Removendo código não usado**
 
 ```bash
@@ -37,6 +41,8 @@ gcc -Wl,-dead_strip *.o -o app                   # macOS: equivalente
 gcc -Wl,--print-gc-sections ...                  # mostra o que foi removido
 ```
 
+---
+
 **Forçando a inclusão de um .a inteiro**
 
 Se um `.o` dentro do `.a` não é referenciado por nome (por exemplo, ele só tem um `__attribute__((constructor))` que se registra sozinho), o linker nunca o extrai:
@@ -45,6 +51,8 @@ Se um `.o` dentro do `.a` não é referenciado por nome (por exemplo, ele só te
 gcc main.o -Wl,--whole-archive -lplugins -Wl,--no-whole-archive -o app   # Linux
 gcc main.o -Wl,-force_load,libplugins.a -o app                           # macOS
 ```
+
+---
 
 **Binário totalmente estático**
 
@@ -60,6 +68,8 @@ gcc main.o -Wl,-Bstatic -lfila -Wl,-Bdynamic -o app   # Linux: libfila.a, o rest
 gcc main.o ./libfila.a -o app                         # qualquer sistema: caminho direto do .a
 gcc -static-libgcc main.c -o app                      # só a libgcc estática
 ```
+
+---
 
 **Armadilhas**
 

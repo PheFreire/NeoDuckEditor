@@ -13,11 +13,15 @@ A `time.h` é a biblioteca de data e hora do C, com funções para obter o momen
 - No Linux e no macOS, a `time.h` não precisa de nenhuma flag extra de compilação (em versões muito antigas do glibc, o `clock_gettime` precisava de `-lrt`)
 - Algumas funções muito usadas (`clock_gettime`, `nanosleep`, `localtime_r`, `strptime`) vêm do POSIX e não do padrão C: funcionam no Linux e no macOS, mas não no Windows sem adaptações
 
+---
+
 **Os três tipos de tempo**
 
 - **Tempo de calendário** (wall clock): a data e hora do mundo real, como `2026-10-04 15:30:00`. Obtido com `time` ou `clock_gettime(CLOCK_REALTIME)`, e pode "pular" se o relógio do sistema for ajustado
 - **Tempo monotônico**: um contador que só anda para frente, sem relação com a data. Obtido com `clock_gettime(CLOCK_MONOTONIC)`, é o certo para medir quanto tempo algo demorou
 - **Tempo de processador** (CPU): quanto tempo o processador gastou executando o seu programa. Obtido com `clock`, não conta o tempo em que o programa ficou parado esperando
+
+---
 
 **O caminho entre os tipos**
 
@@ -27,6 +31,8 @@ A `time.h` é a biblioteca de data e hora do C, com funções para obter o momen
 //   (número) ◄──────────────────────────  (campos)  ◄─────────  (texto)
 //                 mktime / timegm                   strptime
 ```
+
+---
 
 **Fusos horários**
 

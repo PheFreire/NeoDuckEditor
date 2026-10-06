@@ -23,6 +23,8 @@ run:   ./app (não precisa de nada)      run:   ./app → loader carrega libfila
 | Atualizar a biblioteca | precisa linkar o programa de novo | basta trocar o arquivo |
 | Memória | cada processo tem sua cópia | o código é compartilhado entre processos |
 
+---
+
 **Biblioteca estática (.a)**
 
 Um `.a` é só um arquivo (`archive`) contendo vários `.o`, criado com o `ar`:
@@ -36,6 +38,8 @@ gcc main.c -L. -lestruturas -o app
 - `ar rcs`: `r` insere/substitui os `.o`, `c` cria o arquivo se não existir, `s` gera o índice de símbolos usado pelo linker
 - O linker copia para o executável apenas os `.o` do `.a` que resolvem algum símbolo indefinido, e não a biblioteca inteira. Por isso a ordem dos argumentos importa (ver `linking.md`)
 - `ar t libestruturas.a` lista os `.o` dentro dele. `nm libestruturas.a` lista os símbolos de cada um
+
+---
 
 **Biblioteca compartilhada (.so / .dylib)**
 
@@ -55,6 +59,8 @@ gcc main.c -L. -lestruturas -o app
 - `-shared` / `-dynamiclib`: diz ao linker para gerar uma biblioteca, e não um executável (sem `main`, sem `_start`)
 - No link, o código **não** é copiado: o linker apenas confere que os símbolos existem e grava no executável o nome da biblioteca necessária
 
+---
+
 **Carregamento em tempo de execução**
 
 Quando o programa roda, o dynamic loader (`ld-linux.so` no Linux, `dyld` no macOS) encontra e carrega as bibliotecas antes do `main`. Se não encontrar:
@@ -72,6 +78,8 @@ gcc main.c -L. -lestruturas -Wl,-rpath,@executable_path -o app   # macOS: equiva
 ldd ./app          # Linux: lista as bibliotecas e onde cada uma foi encontrada
 otool -L ./app     # macOS: lista as dylibs necessárias
 ```
+
+---
 
 **Static linking vs dynamic linking**
 

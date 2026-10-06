@@ -23,6 +23,8 @@ printf("linha: %d\n", __LINE__);    // linha: 2
 printf("compilado em %s às %s\n", __DATE__, __TIME__);
 ```
 
+---
+
 **__func__**
 
 Não é uma macro, mas costuma ser usado junto com elas: dentro de toda função, existe uma variável `static const char __func__[]` com o nome da função atual
@@ -34,6 +36,8 @@ void conectar(void) {
 ```
 
 > Por não ser uma macro, `__func__` não pode ser juntado com outras strings literais (`"erro em " __func__` não compila). Ele precisa ser passado como argumento, com `%s`
+
+---
 
 **Macro de erro com localização**
 
@@ -48,6 +52,8 @@ void carregar(void) {
   // saída: main.c:7 (carregar): arquivo corrompido
 }
 ```
+
+---
 
 **Macros de plataforma**
 

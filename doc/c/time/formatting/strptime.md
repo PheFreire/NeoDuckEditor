@@ -33,6 +33,8 @@ if (strptime("25/12/2026 20:30", "%d/%m/%Y %H:%M", &t) == NULL) {
 // t.tm_hour == 20, t.tm_min == 30
 ```
 
+---
+
 **Convertendo texto em time_t**
 
 ```c
@@ -50,6 +52,8 @@ time_t texto_para_time(const char *texto) {
 time_t natal = texto_para_time("2026-12-25 20:00:00");
 ```
 
+---
+
 **Exigindo que o texto inteiro seja lido**
 
 Como o retorno aponta para o que sobrou, é possível rejeitar textos com lixo depois da data:
@@ -63,6 +67,8 @@ if (resto == NULL || *resto != '\0') {
   // inválido: formato errado ou sobrou texto ("abc")
 }
 ```
+
+---
 
 **Convertendo entre formatos**
 

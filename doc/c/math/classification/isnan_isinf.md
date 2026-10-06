@@ -32,6 +32,8 @@ isfinite(a);   // falso
 isfinite(b);   // falso
 ```
 
+---
+
 **Por que não comparar com NAN**
 
 Toda comparação com `NAN` dá falso, inclusive com ele mesmo, então `x == NAN` nunca é verdadeiro:
@@ -50,6 +52,8 @@ if (isnan(x)) {
 x != x; // verdadeiro apenas para NAN, um truque antigo que o isnan substitui
 ```
 
+---
+
 **NAN se espalha**
 
 Qualquer conta com `NAN` resulta em `NAN`, então um único valor inválido no começo de um cálculo contamina o resultado final:
@@ -64,6 +68,8 @@ for (int i = 0; i < 4; i++) {
 // soma == nan
 ```
 
+---
+
 **Validando o resultado de uma conta**
 
 ```c
@@ -74,6 +80,8 @@ if (!isfinite(resultado)) {
   return -1;
 }
 ```
+
+---
 
 **fpclassify**
 

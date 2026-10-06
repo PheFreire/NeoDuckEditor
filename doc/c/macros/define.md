@@ -20,6 +20,8 @@ O `#define` cria uma macro, um nome que o pré-processador substitui por um text
 - Nomes dentro de strings (`"TAMANHO"`) e partes de outros nomes (`TAMANHO_MAX`) não são substituídos
 - Uma macro pode usar outras macros no seu texto, e elas também são expandidas
 
+---
+
 **Constantes**
 
 ```c
@@ -33,6 +35,8 @@ printf("%s\n", MENSAGEM);       // vira: printf("%s\n", "ola mundo");
 ```
 
 Diferente de uma variável `const`, uma constante com `#define` pode ser usada para definir o tamanho de arrays globais e em `case` de `switch`, pois depois do pré-processamento ela é só um número literal
+
+---
 
 **Macros com parâmetros**
 
@@ -54,6 +58,8 @@ double d = MAX(2.5, 1.0); // 2.5
 char c = MAX('a', 'z');   // 'z'
 ```
 
+---
+
 **ARRAY_SIZE**
 
 Uma das macros mais usadas em C, que calcula quantos elementos um array tem dividindo o tamanho total pelo tamanho de um elemento:
@@ -69,6 +75,8 @@ for (size_t i = 0; i < ARRAY_SIZE(nums); i++) {
 ```
 
 > O `ARRAY_SIZE` só funciona com o array de verdade. Se ele tiver sido recebido como parâmetro de função, já virou um ponteiro, e `sizeof(arr)` devolve o tamanho do ponteiro (8 bytes), dando um resultado errado sem nenhum erro de compilação
+
+---
 
 **Macros em mais de uma linha**
 

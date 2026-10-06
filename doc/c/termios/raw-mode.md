@@ -4,6 +4,8 @@
 
 Raw mode é a configuração em que o terminal entrega ao programa **cada byte exatamente como foi recebido, assim que chega**: sem esperar o Enter, sem mostrar o que foi digitado, sem transformar `\r` em `\n`, sem gerar sinais com `Ctrl+C`. É o modo usado por editores (vim, nano), `less`, `top`, jogos de terminal e qualquer interface que reaja a teclas individuais
 
+---
+
 **Três níveis**
 
 | Modo | O que muda | `read()` |
@@ -14,6 +16,8 @@ Raw mode é a configuração em que o terminal entrega ao programa **cada byte e
 
 - **Não canônico** e **raw** não são sinônimos: desligar o `ICANON` só acaba com o buffer de linha. Os outros processamentos (`ISIG`, `ICRNL`, `IXON`, `OPOST`...) continuam ativos até serem desligados um por um
 - "Raw" não é uma flag: é o nome para a combinação de desligar praticamente todas
+
+---
 
 **Recebendo teclas sem esperar o Enter** (não canônico)
 
@@ -43,6 +47,8 @@ tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig);  // restaura
 - `&=`: um AND com essa máscara zera os dois bits em `c_lflag` e preserva todos os outros (`ISIG`, `IEXTEN`...)
 - Detalhes das operações em `terminal-attributes.md`
 
+---
+
 **VMIN e VTIME**
 
 Com `ICANON` desligado, `c_cc[VMIN]` e `c_cc[VTIME]` decidem quando o `read()` retorna:
@@ -57,6 +63,8 @@ Com `ICANON` desligado, `c_cc[VMIN]` e `c_cc[VTIME]` decidem quando o `read()` r
 - `VTIME` é em **décimos** de segundo (`VTIME = 10` → 1 segundo), e cabe em um `cc_t` (máximo 255 → 25,5 s)
 - `VMIN=0`/`VTIME=1` é muito usado em editores: o `read()` retorna a cada 0,1 s mesmo sem tecla, permitindo atualizar a tela e distinguir um `ESC` sozinho do início de uma sequência de seta (ver `examples.md`)
 - O `read()` pode retornar menos que `VMIN` se for interrompido por um sinal (`EINTR`)
+
+---
 
 **Raw mode completo**
 
@@ -87,6 +95,8 @@ tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 | | `IEXTEN` | `Ctrl+V` (e `Ctrl+O` no macOS) chegam como bytes em vez de serem interpretados |
 | `c_cflag` | `CSIZE`, `PARENB` → `CS8` | caracteres de 8 bits, sem paridade |
 
+---
+
 **cfmakeraw()**
 
 ```c
@@ -99,6 +109,8 @@ tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 - **Não é POSIX**: é uma extensão BSD, presente na glibc (Linux) e no macOS, mas pode faltar em outros sistemas. No Linux, pode exigir `#define _DEFAULT_SOURCE` antes dos includes quando compilado com `-std=c17`
 - A glibc também define `VMIN=1` e `VTIME=0`. Não conte com isso em outros sistemas e defina os dois explicitamente
 - Desliga **tudo**, inclusive `ISIG`: se o programa não tratar o byte `3` (`Ctrl+C`), não há como interrompê-lo pelo teclado
+
+---
 
 **Armadilhas**
 

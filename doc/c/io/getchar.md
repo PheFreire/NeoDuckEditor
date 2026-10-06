@@ -41,6 +41,8 @@ while ((c = getchar()) != '\n' && c != EOF) {
 }
 ```
 
+---
+
 **Por que o getchar espera o Enter**
 
 O `getchar` não lê direto do teclado. Ele pega o próximo caractere do buffer do `stdin`, e quando esse buffer está vazio, pede mais dados ao sistema com `read()`:
@@ -62,6 +64,8 @@ getchar()  → espera a próxima linha
 - A primeira chamada fica bloqueada até o usuário apertar Enter, porque o terminal só entrega a linha completa (ver `../termios/canonical-mode.md`)
 - As chamadas seguintes devolvem os caracteres restantes da mesma linha na hora, inclusive o `\n` final
 - Para ler uma tecla sem esperar o Enter, é preciso mudar a configuração do terminal com `termios`, e nesse caso é melhor usar `read()` diretamente, pois o buffer do `stdin` pode guardar bytes além do primeiro (ver `../termios/examples.md`)
+
+---
 
 **Armadilhas**
 

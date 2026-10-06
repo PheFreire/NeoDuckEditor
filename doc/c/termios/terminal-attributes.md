@@ -21,6 +21,8 @@ struct termios {
 - `c_cc`: indexado por constantes como `VINTR`, `VEOF`, `VMIN`. Cada posição guarda um byte (ver `control-characters.md`)
 - `NCCS` é o tamanho do array: 32 no Linux (glibc), 20 no macOS
 
+---
+
 **O que é uma flag**
 
 Cada constante é um número com **exatamente um bit** ligado (ou, em campos como `CSIZE`, um grupo de bits):
@@ -37,6 +39,8 @@ c_lflag = 0b1000_1010_1011   ← vários bits ligados ao mesmo tempo
 - Os valores numéricos variam entre sistemas (no macOS, `ICANON` vale `0x100`). Use sempre os nomes, nunca os números
 - Um `tcflag_t` de 32 ou 64 bits guarda dezenas de opções independentes em uma única variável. É por isso que APIs de sistema (`termios`, `open()` com `O_RDONLY | O_CREAT`, `mmap()` com `PROT_READ | PROT_WRITE`) usam bitmasks: compacto, rápido de testar e fácil de combinar várias opções em um único argumento
 
+---
+
 **Os três operadores**
 
 ```text
@@ -44,6 +48,8 @@ c_lflag = 0b1000_1010_1011   ← vários bits ligados ao mesmo tempo
   bit:  0|0=0 0|1=1 1|1=1     0&0=0 0&1=0 1&1=1      ~0=1 ~1=0
   uso:  ligar bits            testar / manter bits   inverter todos os bits
 ```
+
+---
 
 **Ligando uma flag**: `|=`
 
@@ -59,6 +65,8 @@ result.  0b0000_1010   ECHO ligado, ICANON intacto
 ```
 
 - O OR copia para o resultado todo bit que estiver ligado em **qualquer** um dos lados. Os bits que já estavam ligados continuam, e só o bit de `ECHO` é forçado para 1
+
+---
 
 **Desligando uma flag**: `&= ~`
 
@@ -80,6 +88,8 @@ result.  0b0000_0010   ECHO desligado, ICANON intacto
 - O AND só mantém um bit se ele estiver ligado nos **dois** lados: onde a máscara tem 1, o bit original é preservado. Onde tem 0 (a posição de `ECHO`), o resultado é 0
 - `term.c_lflag = ~ECHO` (sem o `&`) seria um erro grave: ligaria todas as outras flags
 
+---
+
 **Várias flags de uma vez**
 
 ```c
@@ -90,6 +100,8 @@ term.c_lflag &= ~(ICANON | ECHO);
 2. `~(...)`: inverte, gerando uma máscara com todos os bits ligados exceto esses dois
 3. `&=`: zera exatamente esses dois bits em `c_lflag` e mantém todos os outros
 
+---
+
 **Testando uma flag**: `&`
 
 ```c
@@ -97,6 +109,8 @@ if (term.c_lflag & ECHO) {
   // ECHO está ligado: o resultado é ECHO (diferente de 0)
 }
 ```
+
+---
 
 **Campos de vários bits**
 

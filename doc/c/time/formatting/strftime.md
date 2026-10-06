@@ -29,6 +29,8 @@ strftime(texto, sizeof(texto), "%d/%m/%Y %H:%M:%S", &local);
 printf("%s\n", texto); // 04/10/2026 15:00:00
 ```
 
+---
+
 **Especificadores mais usados**
 
 Data:
@@ -59,6 +61,8 @@ Fuso e outros:
 - `%w`: dia da semana de `0` (domingo) a `6`
 - `%%`: o caractere `%`
 
+---
+
 **Formatos comuns**
 
 ```c
@@ -70,6 +74,8 @@ strftime(s, n, "%a, %d %b %Y", &t);       // Sun, 04 Oct 2026
 strftime(s, n, "%Y%m%d_%H%M%S", &t);      // 20261004_150000
 ```
 
+---
+
 **Nome de arquivo com data**
 
 O formato `%Y%m%d_%H%M%S` não tem caracteres proibidos em nomes de arquivo e ordena alfabeticamente na mesma ordem cronológica:
@@ -79,6 +85,8 @@ char nome[64];
 strftime(nome, sizeof(nome), "backup_%Y%m%d_%H%M%S.tar", &local);
 // backup_20261004_150000.tar
 ```
+
+---
 
 **Nomes em português**
 

@@ -19,6 +19,8 @@ int tcsendbreak(int fd, int duration);
 
 - Todas devolvem `0` em caso de sucesso, ou `-1` com `errno` (`ENOTTY` se `fd` não for um terminal)
 
+---
+
 **tcflush**
 
 - `queue_selector`:
@@ -35,6 +37,8 @@ printf("Confirma? (s/n) ");
 - Em serial, `TCIOFLUSH` logo depois de abrir e configurar a porta descarta bytes antigos ou lixo recebido durante a configuração
 - Descarta só a fila do **kernel**. Dados já lidos para o buffer do `stdio` (`FILE *`) não são afetados. Misturar `tcflush` com `scanf`/`fgets` pode deixar sobras no buffer do `stdin`
 
+---
+
 **tcdrain**
 
 - Bloqueia até que **todos** os bytes da fila de saída tenham sido transmitidos
@@ -50,6 +54,8 @@ close(fd);             // sem o tcdrain, fechar cedo pode cortar o fim da transm
 - O `TCSADRAIN` de `tcsetattr` é equivalente a `tcdrain` seguido da mudança de configuração (ver `tcgetattr-tcsetattr.md`)
 - Não confunda com o `fflush` do `stdio`: o `fflush(stdout)` move os bytes do buffer do processo para o kernel com `write()`. O `tcdrain` espera eles saírem do kernel para o dispositivo. Para garantir que um `printf` chegou ao dispositivo serial, são necessários os dois
 
+---
+
 **tcflow**
 
 - `action`:
@@ -58,6 +64,8 @@ close(fd);             // sem o tcdrain, fechar cedo pode cortar o fim da transm
 	- `TCIOFF`: envia o caractere `VSTOP` ao dispositivo, pedindo que ele pare de transmitir
 	- `TCION`: envia `VSTART`, pedindo que ele volte a transmitir
 - Controle de fluxo manual. Com `IXON`/`IXOFF` (ver `input-flags.md`) o kernel faz isso automaticamente
+
+---
 
 **tcsendbreak**
 

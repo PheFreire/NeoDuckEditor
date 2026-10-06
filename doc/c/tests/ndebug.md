@@ -11,6 +11,8 @@ gcc -DNDEBUG main.c -o programa   # asserts removidos
 
 - `-DNDEBUG`: define a macro `NDEBUG` para todos os arquivos daquele comando, como se houvesse `#define NDEBUG 1` no topo de cada um (ver `../compilers/gcc/doc/preprocessor.md`)
 
+---
+
 **O que acontece por baixo**
 
 O `assert.h` define o `assert` de um jeito ou de outro, dependendo do `NDEBUG`:
@@ -32,6 +34,8 @@ com NDEBUG:      ((void)0);
 - Com `NDEBUG`, a expressão **nunca é avaliada**: ela some antes da compilação, junto com qualquer chamada de função ou efeito colateral que estivesse dentro dela
 - O `static_assert` não é afetado, pois não existe em tempo de execução (ver `static_assert.md`)
 
+---
+
 **O momento do #include importa**
 
 O `NDEBUG` é verificado **no ponto em que o `assert.h` é incluído**, e não no ponto em que o `assert` é usado:
@@ -49,12 +53,16 @@ O `NDEBUG` é verificado **no ponto em que o `assert.h` é incluído**, e não n
 - O `assert.h` é o único header padrão sem include guard, de propósito: incluí-lo de novo depois de definir ou remover o `NDEBUG` redefine o `assert`, permitindo ligar e desligar as asserções em partes diferentes de um mesmo arquivo
 - Na prática, é mais simples e seguro controlar pelo comando de compilação (`-DNDEBUG`) do que com `#define` dentro do código
 
+---
+
 **Quando usar**
 
 - **Desenvolvimento e testes**: sem `NDEBUG`. As asserções pegam bugs no ponto exato em que acontecem
 - **Versão final (release)**: é comum usar `-DNDEBUG` junto com `-O2`, removendo o custo das verificações
 - Otimização **não** define o `NDEBUG` sozinha: `gcc -O2` mantém os `assert` ativos. Ferramentas de build como o CMake adicionam `-DNDEBUG` automaticamente no modo `Release`
 - Muitos projetos preferem manter os `assert` ativos também na versão final, pois o custo costuma ser pequeno e um programa que para com uma mensagem clara é melhor que um que continua com dados corrompidos
+
+---
 
 **Armadilhas**
 

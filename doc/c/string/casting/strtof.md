@@ -58,6 +58,8 @@ float f = strtof("0.1", NULL);
 printf("%.10f\n", f); // 0.1000000015
 ```
 
+---
+
 **Família strtof**
 
 - `strtof`: devolve `float` (C99)

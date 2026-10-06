@@ -30,6 +30,8 @@ dividir(10, 0);
 // e o programa é encerrado (Aborted)
 ```
 
+---
+
 **Desligando com NDEBUG**
 
 Se a macro `NDEBUG` estiver definida antes do `#include <assert.h>`, todo `assert` vira `((void)0)` e some do programa, o que é comum em builds de produção:
@@ -48,6 +50,8 @@ int r = fclose(file);      // correto: a ação acontece sempre
 assert(r == 0);            // e só a checagem some
 ```
 
+---
+
 **Mensagem junto com a condição**
 
 O `assert` não aceita uma mensagem, mas como uma string literal é sempre verdadeira, ela pode ser adicionada com `&&` e aparece no texto do erro:
@@ -56,6 +60,8 @@ O `assert` não aceita uma mensagem, mas como uma string literal é sempre verda
 assert(indice < total && "indice fora do limite");
 // Assertion `indice < total && "indice fora do limite"' failed.
 ```
+
+---
 
 **static_assert**
 

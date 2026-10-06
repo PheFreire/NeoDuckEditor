@@ -4,6 +4,8 @@
 
 Um teste unitário é uma função que chama uma parte pequena do código com entradas conhecidas e verifica se o resultado é o esperado. Em C, a forma mais simples de escrever testes não precisa de nenhuma biblioteca: um programa separado, com uma função por caso de teste, usando `assert` para verificar cada resultado
 
+---
+
 **Estrutura**
 
 ```text
@@ -58,6 +60,8 @@ gcc -g -Wall -Wextra -fsanitize=address,undefined src/lista.c tests/test_lista.c
 - `-fsanitize=address,undefined`: além dos `assert`, detecta erros de memória e comportamento indefinido durante os testes (ver `../compilers/gcc/cheatsheet/sanitizers.md`)
 - Nunca compile os testes com `-DNDEBUG`: todos os `assert` somem e os testes passam sem verificar nada (ver `ndebug.md`)
 
+---
+
 **Como o resultado é lido**
 
 ```text
@@ -76,6 +80,8 @@ test: test_lista
 test_lista: src/lista.c tests/test_lista.c
 	gcc -g -Wall -Wextra -fsanitize=address,undefined $^ -o $@
 ```
+
+---
 
 **Limitação: para no primeiro erro**
 
@@ -111,6 +117,8 @@ int main(void) {
 - O `do { ... } while (0)` faz a macro se comportar como um único comando, inclusive dentro de um `if` sem chaves (ver `../macros/do_while_0.md`)
 - Os frameworks de teste costumam ter os dois tipos: `ASSERT_*`, que interrompe o teste atual ao falhar (como o `assert`), e `EXPECT_*` ou `CHECK`, que registra a falha e continua
 - Use o `assert` para condições sem as quais o resto do teste não faz sentido (como a lista ser `NULL`) e o `CHECK` para os valores comparados
+
+---
 
 **Boas práticas**
 

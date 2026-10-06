@@ -29,6 +29,8 @@ printf("%d-%02d-%02d %02d:%02d\n",
 // 1970-01-01 00:00
 ```
 
+---
+
 **Data em formato ISO 8601**
 
 O formato padrão para guardar e trocar datas entre sistemas, sempre em UTC e indicado pelo `Z` no final:
@@ -43,6 +45,8 @@ strftime(iso, sizeof(iso), "%Y-%m-%dT%H:%M:%SZ", &utc);
 printf("%s\n", iso); // 2026-10-04T18:00:00Z
 ```
 
+---
+
 **Diferença do fuso local para UTC**
 
 Comparando o resultado do `localtime` com o do `gmtime` para o mesmo instante:
@@ -56,6 +60,8 @@ gmtime_r(&agora, &utc);
 int diferenca = local.tm_hour - utc.tm_hour; // -3 em Brasília
 // pode errar na virada do dia; no Linux e no macOS, local.tm_gmtoff dá o valor exato em segundos
 ```
+
+---
 
 **timegm: o caminho inverso**
 

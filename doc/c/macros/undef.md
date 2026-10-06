@@ -15,6 +15,8 @@ O `#undef` apaga uma macro definida antes com `#define`, fazendo com que, das li
 - Dar `#undef` em um nome que não é uma macro não é erro, simplesmente não faz nada
 - Redefinir uma macro com um texto diferente sem dar `#undef` antes gera um aviso (ou erro) de redefinição. Com o `#undef` no meio, a redefinição é limpa
 
+---
+
 **Limitando uma macro a um trecho**
 
 Uma macro auxiliar usada só em um pedaço do arquivo pode ser apagada logo depois, evitando que o nome vaze para o resto do código (ou para quem incluir o header):
@@ -31,6 +33,8 @@ void imprimir(struct ponto p) {
 // a partir daqui, CAMPO volta a ser um nome livre
 ```
 
+---
+
 **Redefinindo uma macro**
 
 ```c
@@ -41,6 +45,8 @@ int a[TAMANHO]; // int a[10];
 #define TAMANHO 20
 int b[TAMANHO]; // int b[20];
 ```
+
+---
 
 **Removendo uma macro que conflita com um nome seu**
 

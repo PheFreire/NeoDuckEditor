@@ -21,6 +21,8 @@ PRINT("ola\n");             // printf("ola\n");
 PRINT("%d + %d\n", 1, 2);   // printf("%d + %d\n", 1, 2);
 ```
 
+---
+
 **Macro de log com prefixo**
 
 Usando um parâmetro fixo para o formato, é possível juntar um texto antes dele (strings lado a lado são juntadas pelo compilador):
@@ -32,6 +34,8 @@ LOG("usuario %s entrou", "pato");
 // vira:  fprintf(stderr, "[log] " "usuario %s entrou" "\n", "pato");
 // saída: [log] usuario pato entrou
 ```
+
+---
 
 **O problema da vírgula sobrando**
 
@@ -57,6 +61,8 @@ LOG("iniciando");           // fprintf(stderr, "[log] " "iniciando" "\n");
 LOG("porta %d", 8080);      // fprintf(stderr, "[log] " "porta %d" "\n", 8080);
 ```
 
+---
+
 **Log com arquivo e linha**
 
 Combinando com as macros predefinidas, cada mensagem mostra de onde veio, sem precisar escrever isso em cada chamada:
@@ -68,6 +74,8 @@ Combinando com as macros predefinidas, cada mensagem mostra de onde veio, sem pr
 LOG("abrindo %s", "dados.txt");
 // saída: main.c:12: abrindo dados.txt
 ```
+
+---
 
 **Log que some sem DEBUG**
 

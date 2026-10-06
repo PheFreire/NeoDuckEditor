@@ -12,6 +12,8 @@ readelf -l app           # program headers / segments (visão do loader)
 readelf -d app           # seção dinâmica: bibliotecas necessárias, rpath...
 ```
 
+---
+
 **Estrutura**
 
 ```text
@@ -33,6 +35,8 @@ readelf -d app           # seção dinâmica: bibliotecas necessárias, rpath...
 └──────────────────────┘
 ```
 
+---
+
 **ELF header** — `readelf -h`
 
 - Começa com os bytes mágicos `7f 45 4c 46` (`\x7fELF`). É assim que o kernel e o `file` reconhecem o formato
@@ -44,11 +48,15 @@ readelf -d app           # seção dinâmica: bibliotecas necessárias, rpath...
 	- `CORE`: core dump
 - `Entry point address`: endereço da primeira instrução (`_start`). Zero em `.o`
 
+---
+
 **Sections** — visão do linker (`readelf -S`)
 
 - Cada section é um bloco com nome, tipo, flags (`A` alocado na memória, `W` gravável, `X` executável) e conteúdo
 - Os `.o` **só** precisam de sections. O linker junta as sections de mesmo nome dos vários `.o` (ver `../linking.md`)
 - Principais: `.text`, `.rodata`, `.data`, `.bss` (ver `executable-sections.md`), `.symtab`/`.strtab` (ver `symbol-table.md`), `.rela.text` (ver `relocations.md`), `.dynsym`, `.dynamic`, `.plt`, `.got` (ver `dynamic-linking.md`)
+
+---
 
 **Segments** — visão do loader (`readelf -l`)
 

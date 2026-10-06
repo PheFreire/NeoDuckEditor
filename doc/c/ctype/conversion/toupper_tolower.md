@@ -23,6 +23,8 @@ toupper('7');   // '7': não é letra
 tolower('Q');   // 'q'
 ```
 
+---
+
 **Convertendo uma string**
 
 ```c
@@ -40,6 +42,8 @@ maiusculas(nome);   // "O PATO"
 
 - A string precisa ser modificável: chamar `maiusculas("o pato")` diretamente com uma string literal escreve em memória somente leitura e derruba o programa
 - O cast para `unsigned char` na entrada evita comportamento indefinido com bytes acima de `127`, e o cast para `char` na saída deixa explícita a conversão de volta
+
+---
 
 **Comparando sem diferenciar maiúsculas**
 
@@ -59,6 +63,8 @@ iguais_sem_caixa("Pato", "pATO");   // 1
 ```
 
 - No Linux e no macOS, o `strcasecmp` (de `strings.h`, POSIX) já faz essa comparação e devolve o mesmo resultado que o `strcmp` (ver `../../string/strcmp.md`), mas não faz parte do padrão C
+
+---
 
 **Respostas de sim ou não**
 

@@ -16,12 +16,16 @@ main.c:5:12: warning: unused variable 'x' [-Wunused-variable]
 
 - O nome entre colchetes (`[-Wunused-variable]`) é a flag que controla aquele aviso: use-o para pesquisar, para desligar (`-Wno-unused-variable`) ou para transformar só ele em erro (`-Werror=unused-variable`)
 
+---
+
 **As flags principais**
 
 - `-Wall`: **não** significa "todos os warnings". É um conjunto escolhido pelos desenvolvedores do GCC com avisos úteis e poucos falsos positivos: `-Wunused-variable`, `-Wformat`, `-Wuninitialized`, `-Wparentheses`, `-Wreturn-type`, `-Wsign-compare` (só em C++), etc. O nome ficou histórico. O GCC tem centenas de warnings e a maioria fica fora do `-Wall`
 - `-Wextra`: mais um conjunto, um pouco mais exigente: `-Wsign-compare` em C, `-Wunused-parameter`, `-Wmissing-field-initializers`, `-Wimplicit-fallthrough`, etc
 - `-Wpedantic`: avisa sobre tudo que não é ISO C no padrão escolhido com `-std`, como extensões GNU. Só faz sentido junto com `-std=cXX`
 - `-Werror`: transforma todos os warnings em erros, impedindo a compilação. `-Werror=nome` faz isso só para um warning específico
+
+---
 
 **Warnings importantes fora do -Wall/-Wextra**
 
@@ -34,6 +38,8 @@ main.c:5:12: warning: unused variable 'x' [-Wunused-variable]
 - `-Wvla`: uso de arrays de tamanho variável, que podem estourar a pilha
 - `-Wcast-align`, `-Wdouble-promotion`, `-Wundef`: casts que pioram alinhamento, `float` promovido a `double` sem intenção, `#if` usando macro não definida
 
+---
+
 **Configuração recomendada para desenvolvimento**
 
 ```bash
@@ -45,6 +51,8 @@ gcc -std=c17 -g3 -Og \
 ```
 
 - Em projetos próprios, ligar `-Werror` desde o início mantém a base sem warnings acumulados. Em código que outras pessoas vão compilar com outras versões do GCC, prefira deixá-lo só no CI, pois versões novas adicionam warnings e podem quebrar o build
+
+---
 
 **Armadilhas**
 

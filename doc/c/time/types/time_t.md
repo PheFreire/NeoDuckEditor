@@ -21,6 +21,8 @@ time_t epoch = 0;           // 1970-01-01 00:00:00 UTC
 time_t ontem = agora - 24 * 60 * 60; // 86400 segundos atrás
 ```
 
+---
+
 **Imprimindo um time_t**
 
 Como o tamanho real depende da plataforma, não existe um especificador próprio no `printf`. A forma portável é converter para `long long` ou `intmax_t`:
@@ -31,6 +33,8 @@ time_t agora = time(NULL);
 printf("%lld\n", (long long)agora);
 printf("%jd\n", (intmax_t)agora); // intmax_t vem de stdint.h
 ```
+
+---
 
 **Contas com time_t**
 
@@ -48,6 +52,8 @@ if (expira_em < agora) {
 ```
 
 > Somar `24 * 60 * 60` dá exatamente 24 horas depois, mas não necessariamente "o mesmo horário no dia seguinte": em lugares com horário de verão, um dia pode ter 23 ou 25 horas. Para somar dias, meses ou anos de calendário, o certo é usar a `struct tm` com o `mktime`
+
+---
 
 **O problema do ano 2038**
 

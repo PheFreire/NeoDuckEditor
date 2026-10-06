@@ -25,6 +25,8 @@ strcspn("pato", "xyz");         // 4: nenhum aparece, devolve strlen("pato")
 strcspn(",pato", ",");          // 0: o primeiro caractere já está no conjunto
 ```
 
+---
+
 **Removendo o \n deixado pelo fgets**
 
 O uso mais comum: o `fgets` guarda o `\n` do Enter no final da string, e o `strcspn` encontra a posição dele para trocá-lo por `\0`
@@ -46,6 +48,8 @@ nome[4] = '\0'      → "pato"
 - Funciona também quando não há `\n` (a linha não coube no buffer, ou a entrada terminou sem quebra de linha): nesse caso o `strcspn` devolve a posição do `\0`, e a atribuição só reescreve o `\0` que já estava lá
 - Por isso é mais seguro que `nome[strlen(nome) - 1] = '\0'`, que apaga o último caractere mesmo quando ele não é `\n`, e escreve fora do array se a string estiver vazia
 - Para remover também o `\r` de arquivos vindos do Windows, use `"\r\n"` como conjunto
+
+---
 
 **Extraindo o primeiro campo de um texto**
 

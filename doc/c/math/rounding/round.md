@@ -30,6 +30,8 @@ round(-2.4);  // -2.0
 long n = lround(7.5); // 8
 ```
 
+---
+
 **Arredondando para casas decimais**
 
 O `round` só arredonda para inteiros. Para manter `n` casas, multiplica-se por `10ⁿ`, arredonda-se e divide-se de volta:
@@ -40,6 +42,8 @@ double arredondado = round(preco * 100.0) / 100.0; // 19.99
 ```
 
 > O resultado continua sendo uma aproximação em binário: `19.99` não tem representação exata, então ele é guardado como `19.989999999999998...`. Para exibir, o `printf("%.2f", preco)` já arredonda sozinho. Para dinheiro, o recomendado é guardar os valores em centavos, como inteiros
+
+---
 
 **rint e nearbyint**
 

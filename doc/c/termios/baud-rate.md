@@ -27,6 +27,8 @@ tcsetattr(fd, TCSANOW, &t);
 - Quase todos os dispositivos usam a mesma velocidade nos dois sentidos. Chamar os dois `cfset*` (ou o `cfsetspeed`) é o padrão
 - `B0` tem um significado especial na saída: "desligar a linha" (baixa o `DTR`, o que equivale a desligar um modem)
 
+---
+
 **As constantes não são números**
 
 ```c
@@ -50,11 +52,15 @@ speed_t para_speed(int baud) {
 }
 ```
 
+---
+
 **Velocidades não padronizadas**
 
 - O POSIX só garante as velocidades até `B38400`. `B57600` e acima são extensões, presentes no Linux e no macOS
 - Velocidades fora da lista (como 250000, usada em algumas impressoras 3D) exigem interfaces específicas: no Linux, `ioctl` com `struct termios2` e a flag `BOTHER`. No macOS, `ioctl(fd, IOSSIOSPEED, &speed)`
 - O adaptador USB-serial também precisa suportar a velocidade. O `tcsetattr` pode retornar sucesso e o hardware usar outra (leia de volta para conferir, ver `tcgetattr-tcsetattr.md`)
+
+---
 
 **Velocidade e tempo de transmissão**
 
@@ -66,6 +72,8 @@ Em 8N1, cada byte usa 10 bits na linha (1 start + 8 dados + 1 stop):
 ```
 
 - `write()` retorna antes da transmissão terminar. Use `tcdrain` para esperar (ver `tcflush-tcdrain.md`)
+
+---
 
 **Abrindo uma porta serial**
 

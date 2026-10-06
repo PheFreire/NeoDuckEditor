@@ -18,6 +18,8 @@ double tan(double x);
 - `tan` é `sin(x) / cos(x)`, e cresce sem limite perto de `π / 2`, `3π / 2`, etc, onde o cosseno é zero
 - Todas existem também com os sufixos `f` e `l` (`sinf`, `cosl`, etc)
 
+---
+
 **Convertendo graus e radianos**
 
 ```c
@@ -31,6 +33,8 @@ tan(GRAUS_PARA_RAD(45));   // 1.0 (aproximadamente)
 sin(30);                   // -0.988, 30 radianos, e não 30 graus
 ```
 
+---
+
 **Os resultados são aproximados**
 
 `M_PI` não é exatamente π (ele não tem fim), então valores que deveriam ser zero ficam muito próximos de zero, mas não exatamente:
@@ -41,6 +45,8 @@ cos(M_PI / 2);   // 6.123233995736766e-17, e não 0
 ```
 
 > Por isso o resultado nunca deve ser comparado com `==`. Use uma tolerância, como explicado em `classification/float_compare.md`
+
+---
 
 **Ponto em um círculo**
 
@@ -55,6 +61,8 @@ double x = cx + raio * cos(angulo); // 100.0
 double y = cy + raio * sin(angulo); // 150.0
 ```
 
+---
+
 **Rotacionando um ponto**
 
 Para girar um ponto `(x, y)` em torno da origem por um ângulo `a`:
@@ -67,6 +75,8 @@ double nx = x * cos(a) - y * sin(a); // 0.0 (aproximadamente)
 double ny = x * sin(a) + y * cos(a); // 1.0
 ```
 
+---
+
 **Movendo na direção de um ângulo**
 
 Em jogos, para mover um objeto "para frente" na direção em que ele está virado:
@@ -78,6 +88,8 @@ double direcao = GRAUS_PARA_RAD(45);
 pos_x += cos(direcao) * velocidade;
 pos_y += sin(direcao) * velocidade;
 ```
+
+---
 
 **Onda**
 

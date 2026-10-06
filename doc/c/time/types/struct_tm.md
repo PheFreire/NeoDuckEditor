@@ -26,6 +26,8 @@ struct tm {
 - `tm_wday` e `tm_yday` são calculados pelas funções de conversão. Ao montar uma data à mão, eles são ignorados e preenchidos pelo `mktime`
 - O Linux e o macOS ainda têm os campos extras `tm_gmtoff` (diferença para UTC em segundos) e `tm_zone` (nome do fuso, como `"-03"`), que não são padrão
 
+---
+
 **Lendo os campos**
 
 ```c
@@ -43,6 +45,8 @@ printf("%02d/%02d/%04d %02d:%02d\n",
 const char *dias[] = {"dom", "seg", "ter", "qua", "qui", "sex", "sab"};
 printf("%s\n", dias[t->tm_wday]); // dom
 ```
+
+---
 
 **Montando uma data à mão**
 

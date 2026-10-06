@@ -32,6 +32,8 @@ double medido = 9.7;
 double erro = fabs(medido - esperado); // 0.3, mesmo que medido seja menor
 ```
 
+---
+
 **fabs x abs**
 
 Para inteiros existem funções diferentes, na `stdlib.h`, e misturar os dois é um erro comum:

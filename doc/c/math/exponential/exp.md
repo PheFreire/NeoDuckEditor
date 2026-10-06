@@ -27,6 +27,8 @@ exp(-1.0);   // 0.36787944117144233
 exp(1000.0); // inf
 ```
 
+---
+
 **Juros compostos contínuos**
 
 ```c
@@ -36,6 +38,8 @@ double anos = 10.0;
 
 double montante = capital * exp(taxa * anos); // 1648.72
 ```
+
+---
 
 **Decaimento**
 
@@ -54,6 +58,8 @@ for (int t = 0; t <= 3; t++) {
 // 40.66
 ```
 
+---
+
 **Sigmoid**
 
 Função muito usada em redes neurais e regressão logística, que transforma qualquer número em um valor entre `0` e `1`:
@@ -67,6 +73,8 @@ sigmoid(0.0);   // 0.5
 sigmoid(5.0);   // 0.9933
 sigmoid(-5.0);  // 0.0067
 ```
+
+---
 
 **Variações**
 

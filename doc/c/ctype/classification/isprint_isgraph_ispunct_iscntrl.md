@@ -38,6 +38,8 @@ iscntrl('\n');   // verdadeiro
 isprint('\n');   // falso
 ```
 
+---
+
 **Mostrando bytes invisíveis**
 
 Ao imprimir dados que podem ter qualquer byte (um arquivo binário, uma mensagem recebida pela rede), os caracteres de controle podem bagunçar o terminal. Mostrá-los como código evita isso:
@@ -57,6 +59,8 @@ void mostrar(const char *buf, size_t n) {
 
 mostrar("ola\n\x1b[31m", 9);   // ola\x0a\x1b[31m
 ```
+
+---
 
 **Removendo pontuação**
 

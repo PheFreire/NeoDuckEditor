@@ -12,6 +12,8 @@ t.c_cc[VTIME]  = 0;      // modo não canônico: sem timeout
 t.c_cc[VSUSP]  = _POSIX_VDISABLE;  // desliga o Ctrl+Z
 ```
 
+---
+
 **Como as teclas viram bytes**
 
 Teclas com `Ctrl` geram bytes de 0 a 31: o terminal pega a letra e zera os bits altos (`'C' & 0x1f = 3`). Por isso a notação `^C` significa "byte 3"
@@ -22,6 +24,8 @@ Teclas com `Ctrl` geram bytes de 0 a 31: o terminal pega a letra e zera os bits 
 ```
 
 - Por isso `Ctrl+M` é igual ao Enter, `Ctrl+I` é igual ao Tab e `Ctrl+[` é igual ao `Esc`: são o mesmo byte
+
+---
 
 **Índices**
 
@@ -48,6 +52,8 @@ Teclas com `Ctrl` geram bytes de 0 a 31: o terminal pega a letra e zera os bits 
 - `VMIN` e `VTIME` são números, não caracteres. O significado das combinações está em `raw-mode.md`
 - Os índices e o tamanho do array (`NCCS`) variam entre sistemas. Sempre use os nomes
 
+---
+
 **Desativando um caractere**
 
 ```c
@@ -59,6 +65,8 @@ t.c_cc[VSUSP] = _POSIX_VDISABLE;   // Ctrl+Z deixa de suspender, mas ISIG contin
 - `_POSIX_VDISABLE` é o valor que significa "nenhum caractere": `0` (`'\0'`) no Linux, `0xff` no macOS. Use a constante, nunca o número
 - Desativar um único caractere é mais preciso que desligar a flag inteira: aqui `Ctrl+C` continua gerando `SIGINT`
 
+---
+
 **Mudando uma tecla**
 
 ```c
@@ -67,6 +75,8 @@ t.c_cc[VINTR]  = 7;    // Ctrl+G passa a gerar SIGINT
 ```
 
 - O Backspace dos terminais modernos normalmente envia `^?` (127). Alguns enviam `^H` (8). Se o `VERASE` não bater com o que o terminal envia, apertar Backspace mostra `^H` ou `^?` em vez de apagar. `stty erase ^H` corrige no shell
+
+---
 
 **Armadilhas**
 

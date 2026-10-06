@@ -19,6 +19,8 @@ void *memmove(void *dest, const void *src, size_t n);
 - Trabalha com bytes crus (`void *`), então serve para qualquer tipo: `char`, `int`, structs, etc, e não para no `\0` como as funções de string
 - Nem `dest` nem `src` podem ultrapassar o tamanho real do bloco a que pertencem. Copiar além dele é um buffer overflow
 
+---
+
 **Por que a sobreposição é um problema**
 
 Uma cópia ingênua lê e escreve um byte de cada vez, da esquerda para a direita. Se `dest` estiver à direita de `src` e as regiões se sobrepuserem, a cópia sobrescreve bytes de `src` antes de lê-los:
@@ -50,6 +52,8 @@ memmove(s + 1, s, 4);
 // s[1] = s[0] -> "AABCD"   resultado correto
 ```
 
+---
+
 **Removendo um elemento do meio de um array**
 
 Para apagar um item, desloca-se tudo o que vem depois dele uma posição para a esquerda, por cima dele:
@@ -68,6 +72,8 @@ total--;
 // memória: {10, 30, 40, 50, 50}
 // o último 50 continua lá, mas fica fora dos 4 elementos considerados válidos
 ```
+
+---
 
 **Inserindo um elemento no meio de um array**
 
@@ -89,6 +95,8 @@ total++;
 ```
 
 > O array precisa ter capacidade para o elemento extra antes do `memmove`. Se ele estiver cheio, é preciso aumentá-lo primeiro com `realloc`
+
+---
 
 **Removendo espaços do início de uma string**
 

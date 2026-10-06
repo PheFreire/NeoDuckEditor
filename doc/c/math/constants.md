@@ -6,6 +6,8 @@ A `math.h` define macros com valores especiais de ponto flutuante, como infinito
 
 > Algumas dessas constantes fazem parte do padrão C (`NAN`, `INFINITY`, `HUGE_VAL`), e outras, como `M_PI`, vêm do POSIX: funcionam no Linux e no macOS, mas não são garantidas em todo compilador
 
+---
+
 **Constantes padrão (C99)**
 
 - `INFINITY`: infinito positivo, do tipo `float`. `-INFINITY` é o negativo
@@ -24,6 +26,8 @@ printf("%d\n", nan == nan);    // 0, NAN nunca é igual a nada, nem a ele mesmo
 ```
 
 > Por `NAN == NAN` ser falso, a única forma de saber se um valor é `NAN` é com a macro `isnan`, explicada em `classification/isnan_isinf.md`
+
+---
 
 **Constantes matemáticas (POSIX)**
 
@@ -60,6 +64,8 @@ Uma forma portável de obter π sem depender do `M_PI`, já que o arco cujo coss
 // ou, calculado em tempo de execução:
 const double pi = acos(-1.0);
 ```
+
+---
 
 **Limites dos tipos (float.h)**
 

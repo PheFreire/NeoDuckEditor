@@ -23,6 +23,8 @@ main.c:3:2: error: #error "sistema operacional não suportado"
 main.c:7:2: warning: #warning "modo debug ativado" [-Wcpp]
 ```
 
+---
+
 **Plataforma não suportada**
 
 ```c
@@ -35,6 +37,8 @@ main.c:7:2: warning: #warning "modo debug ativado" [-Wcpp]
 #endif
 ```
 
+---
+
 **Configuração obrigatória**
 
 ```c
@@ -42,6 +46,8 @@ main.c:7:2: warning: #warning "modo debug ativado" [-Wcpp]
 #error "defina TAMANHO_BUFFER, por exemplo com -DTAMANHO_BUFFER=1024"
 #endif
 ```
+
+---
 
 **Valores inválidos**
 
@@ -53,6 +59,8 @@ main.c:7:2: warning: #warning "modo debug ativado" [-Wcpp]
 #endif
 ```
 
+---
+
 **Versão mínima do C**
 
 ```c
@@ -60,6 +68,8 @@ main.c:7:2: warning: #warning "modo debug ativado" [-Wcpp]
 #error "este projeto precisa de C11 ou mais recente (-std=c11)"
 #endif
 ```
+
+---
 
 **Lembrete durante o desenvolvimento**
 

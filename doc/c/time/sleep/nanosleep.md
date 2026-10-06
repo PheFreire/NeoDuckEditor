@@ -25,6 +25,8 @@ struct timespec espera = {0, 100 * 1000000}; // 100 ms
 nanosleep(&espera, NULL);
 ```
 
+---
+
 **Função para dormir em milissegundos**
 
 ```c
@@ -40,6 +42,8 @@ dormir_ms(1500); // 1.5 s, tv_sec == 1 e tv_nsec == 500000000
 
 > Passar `1500 ms` direto como `tv_nsec = 1500000000` é inválido, pois passa de `999999999`. É preciso separar a parte inteira em `tv_sec`, como acima
 
+---
+
 **Dormindo o tempo todo mesmo com sinais**
 
 Se a espera for interrompida, o `restante` já vem preenchido, e basta chamar de novo com ele:
@@ -53,6 +57,8 @@ void dormir_completo(struct timespec t) {
   }
 }
 ```
+
+---
 
 **Laço com taxa fixa (como um jogo a 60 FPS)**
 

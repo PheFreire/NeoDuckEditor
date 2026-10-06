@@ -58,6 +58,8 @@ O endereço IP identifica uma **máquina** (mais precisamente, uma interface de 
 	- `192.168.x.x`, `10.x.x.x`, `172.16.x.x` a `172.31.x.x`: endereços **privados**, válidos só dentro de uma rede local. Para sair para a internet, o roteador troca o IP privado pelo público (NAT)
 - A conversão entre texto e o formato binário que a API usa é feita com `inet_pton` (texto → binário) e `inet_ntop` (binário → texto). Ver `functions/inet_pton.md` e `functions/inet_ntop.md`
 
+---
+
 **Nomes e DNS**
 
 Pessoas usam nomes (`example.com`), mas os pacotes só conhecem IPs. O **DNS** é o serviço que traduz um nome para um ou mais IPs. Em C, isso é feito com `getaddrinfo`, que também já preenche a `struct sockaddr` pronta para o `connect` (ver `functions/getaddrinfo.md`)
@@ -81,6 +83,8 @@ O IP leva o pacote até a máquina, mas uma máquina tem vários programas usand
 - O servidor escolhe uma porta fixa com `bind`. O cliente normalmente não chama `bind`, e o kernel escolhe uma porta efêmera no `connect`
 - Uma conexão TCP é identificada pelo conjunto **IP de origem, porta de origem, IP de destino, porta de destino**. Por isso um servidor na porta `8080` atende vários clientes ao mesmo tempo: cada cliente tem um IP ou uma porta de origem diferente
 - TCP e UDP têm portas separadas: a porta `53/tcp` e a porta `53/udp` são coisas diferentes
+
+---
 
 **Byte order**
 
@@ -132,6 +136,8 @@ servidor pode receber:
 - Um `recv` pode devolver **menos** bytes do que foram enviados, ou partes de dois `send` juntos. O programa precisa definir onde cada mensagem termina: com um delimitador (como `\n` em protocolos de texto) ou com o tamanho enviado antes da mensagem
 - Usado quando todos os dados precisam chegar inteiros: HTTP, SSH, banco de dados, transferência de arquivos
 
+---
+
 **Three-way handshake**
 
 É a troca de três pacotes que estabelece uma conexão TCP, antes de qualquer dado ser enviado:
@@ -154,6 +160,8 @@ connect() retorna                        accept() retorna um novo fd
 - O `backlog` do `listen(fd, backlog)` limita quantas conexões completas podem ficar esperando um `accept()` (ver `functions/listen.md`)
 - Se não houver nenhum programa escutando na porta, o servidor responde com um pacote **RST** (reset), e o `connect()` falha com `ECONNREFUSED` ("Connection refused")
 - O `accept()` devolve um **novo** socket para aquela conexão. O socket original continua escutando novos clientes (ver `functions/accept.md`)
+
+---
 
 **Encerramento**
 
@@ -191,6 +199,8 @@ recvfrom(fd, buf, sizeof(buf), 0, (struct sockaddr *)&origem, &origem_len);
 
 - Não usa `listen`, `accept` nem (obrigatoriamente) `connect`: o servidor faz `bind` e chama `recvfrom`, que informa quem enviou cada datagrama
 - Se o buffer do `recvfrom` for menor que o datagrama, o excesso é **descartado**
+
+---
 
 **TCP vs UDP**
 

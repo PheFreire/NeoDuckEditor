@@ -26,6 +26,8 @@ double segundos = difftime(fim, inicio);
 printf("levou %.0f segundos\n", segundos);
 ```
 
+---
+
 **Dias entre duas datas**
 
 Combinando com o `mktime` para montar as datas:
@@ -50,6 +52,8 @@ printf("%.0f dias\n", dias); // 358 dias
 ```
 
 > Usar o meio-dia (`tm_hour = 12`) em vez da meia-noite evita que uma mudança de horário de verão entre as duas datas faça a divisão dar `357.958` em vez de `358`. Arredondar com `round` também resolve
+
+---
 
 **Idade de uma pessoa em anos (aproximada)**
 

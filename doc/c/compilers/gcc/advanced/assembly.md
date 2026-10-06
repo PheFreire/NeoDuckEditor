@@ -15,6 +15,8 @@ objdump -d -M intel main.o                         # desmonta um .o já compilad
 - O `.s` gerado pelo GCC está na sintaxe **AT&T** em x86. `-masm=intel` troca para a Intel, usada pela maioria dos manuais e tutoriais
 - O site Compiler Explorer (godbolt.org) mostra o assembly de vários compiladores lado a lado, com cada linha de C colorida junto das instruções correspondentes
 
+---
+
 **Exemplo**
 
 ```c
@@ -46,6 +48,8 @@ soma:
     ret
 ```
 
+---
+
 **AT&T vs Intel**
 
 | | AT&T | Intel |
@@ -55,6 +59,8 @@ soma:
 | Constante | `$5` | `5` |
 | Tamanho | sufixo: `movl`, `movq` | pelo operando: `DWORD PTR` |
 | Memória | `-8(%rbp)` | `[rbp-8]` |
+
+---
 
 **ABI: a convenção de chamada**
 
@@ -72,6 +78,8 @@ A ABI (Application Binary Interface) define como funções compiladas separadame
 - Argumentos que não cabem nos registradores vão para a pilha
 - x86-64 System V tem a `red zone`: 128 bytes abaixo do `rsp` que funções folha podem usar sem ajustar a pilha
 - **macOS ARM64** difere do AAPCS64 padrão em detalhes: argumentos variádicos (os `...` do `printf`) vão **sempre** pela pilha, e o registrador `x18` é reservado pelo sistema. Isso importa ao escrever assembly à mão ou ao declarar mal uma função variádica
+
+---
 
 **Diretivas**
 

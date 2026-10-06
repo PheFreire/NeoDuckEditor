@@ -13,6 +13,8 @@ byte recebido ──► c_iflag ──► c_lflag / c_cc ──► fila de leitu
                   IXON/IXOFF     (controle de fluxo)
 ```
 
+---
+
 **Conversões de fim de linha** (terminal interativo)
 
 O Enter do teclado envia `\r` (carriage return, 13), herança dos terminais físicos. O Unix usa `\n` (line feed, 10) como fim de linha. Estas flags fazem a ponte:
@@ -25,6 +27,8 @@ O Enter do teclado envia `\r` (carriage return, 13), herança dos terminais fís
 - `IGNCR`: descarta todo `\r` recebido. Útil para dispositivos que enviam `\r\n`, para não ficar com um `\r` sobrando antes de cada `\n`
 - Se `IGNCR` estiver ligada, `ICRNL` não tem efeito
 
+---
+
 **Controle de fluxo por software** (terminal e serial)
 
 - `IXON`: liga o controle de fluxo da **saída**. **Ligada por padrão**
@@ -33,6 +37,8 @@ O Enter do teclado envia `\r` (carriage return, 13), herança dos terminais fís
 	- Com `IXON` ligada, um `Ctrl+S` acidental faz o terminal parecer **congelado**: o programa continua rodando, mas toda escrita fica bloqueada. `Ctrl+Q` resolve
 - `IXANY`: com `IXON`, qualquer tecla (e não só `Ctrl+Q`) retoma a saída. Não é POSIX base, mas existe no Linux e no macOS
 - `IXOFF`: controle de fluxo da **entrada**: quando a fila de entrada está quase cheia, o terminal **envia** `VSTOP` para o outro lado parar de transmitir, e `VSTART` quando houver espaço. Relevante em serial com dispositivos que respeitam XON/XOFF. Desligada por padrão
+
+---
 
 **Break** (principalmente serial)
 
@@ -43,12 +49,16 @@ Uma "condição de break" é a linha serial mantida em nível zero por mais temp
 - Com as duas desligadas, o break chega ao programa como um byte `\0` (ou como `\377 \0 \0`, com `PARMRK`)
 - Em PTYs, não existe break físico. O emulator raramente gera um. Por isso essas flags quase não importam em terminais interativos, mas são desligadas em raw mode por segurança
 
+---
+
 **Paridade e bits** (serial)
 
 - `INPCK`: liga a **verificação** de paridade na entrada. Só faz sentido se `PARENB` estiver ligada em `c_cflag` (ver `control-flags.md`)
 - `IGNPAR`: bytes com erro de paridade ou de framing são descartados
 - `PARMRK`: bytes com erro são entregues marcados com o prefixo `\377 \0`. Um byte `\377` legítimo chega duplicado (`\377 \377`). Permite ao programa detectar o erro, mas complica a leitura
 - `ISTRIP`: zera o 8º bit de cada byte, deixando só 7 bits. Herança de linhas de 7 bits. Ligada, ela **corrompe** UTF-8 e qualquer dado binário. Desligada por padrão nos sistemas modernos e em raw mode
+
+---
 
 **Outras**
 

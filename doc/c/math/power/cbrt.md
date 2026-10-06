@@ -23,6 +23,8 @@ cbrt(-8.0);   // -2.0
 cbrt(2.0);    // 1.2599210498948732
 ```
 
+---
+
 **cbrt x pow**
 
 O `pow` com expoente `1.0 / 3` não funciona para negativos, e para positivos pode ser menos preciso:
@@ -33,6 +35,8 @@ pow(-8.0, 1.0 / 3);   // nan, base negativa com expoente fracionário
 
 pow(27.0, 1.0 / 3);   // 3.0 (aproximadamente), já que 1.0 / 3 não é exatamente um terço
 ```
+
+---
 
 **Lado de um cubo a partir do volume**
 

@@ -50,6 +50,8 @@ for (int i = 0; i < 20; i++) {
 putchar('\n');   // --------------------
 ```
 
+---
+
 **Buffer**
 
 O `putchar` não escreve direto na tela. Ele coloca o caractere no buffer do `stdout`, que só é enviado ao sistema (com `write()`) quando enche, quando aparece um `\n` (se o `stdout` estiver ligado a um terminal) ou quando o programa termina:
@@ -64,6 +66,8 @@ putchar('\n')  → buffer enviado ao terminal: "ola\n"
 - Por isso chamar o `putchar` muitas vezes é barato: cada chamada não é uma escrita no sistema
 - Se o texto não terminar com `\n` e o programa precisar mostrá-lo antes de esperar algo (como um prompt), use `fflush(stdout)` (ver `fflush.md`)
 - Com o `stdout` redirecionado para um arquivo ou pipe, o buffer só é enviado quando enche ou com `fflush`, e não a cada `\n`
+
+---
 
 **Armadilhas**
 

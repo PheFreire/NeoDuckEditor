@@ -10,6 +10,8 @@ Como o pré-processador apenas copia e cola o texto dos argumentos dentro da mac
 - O texto inteiro da macro também deve ser envolvido em parênteses: `((x) * (x))`
 - Um argumento com efeito colateral (`i++`, chamada de função) não deve ser passado para uma macro que usa o parâmetro mais de uma vez
 
+---
+
 **Problema 1: faltam parênteses nos parâmetros**
 
 ```c
@@ -29,6 +31,8 @@ Envolvendo cada parâmetro em parênteses, o argumento é calculado antes da mul
 int r = QUADRADO(1 + 2);
 // vira: (1 + 2) * (1 + 2) = 9
 ```
+
+---
 
 **Problema 2: faltam parênteses na macro inteira**
 
@@ -51,6 +55,8 @@ Envolvendo o texto inteiro, a macro se comporta como um valor único:
 int r = 10 * DOBRO(3);
 // vira: 10 * ((3) + (3)) = 60
 ```
+
+---
 
 **Problema 3: argumento avaliado mais de uma vez**
 

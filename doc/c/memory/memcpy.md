@@ -19,6 +19,8 @@ void *memcpy(void *dest, const void *src, size_t n);
 - Copia exatamente `n` bytes, nem mais nem menos. `dest` precisa ter pelo menos `n` bytes de espaço, caso contrário ocorre um buffer overflow
 - Se `src` e `dest` se sobrepuserem, o comportamento é indefinido: o resultado pode sair certo em uma máquina e corrompido em outra, dependendo de como a biblioteca implementa a cópia
 
+---
+
 **Copiando um array inteiro**
 
 Arrays em C não podem ser atribuídos com `=`, então para duplicar um array é preciso copiar os bytes dele:
@@ -35,6 +37,8 @@ memcpy(copia, origem, sizeof(origem)); // sizeof(origem) == 5 * sizeof(int) == 2
 
 > O `sizeof(origem)` só devolve o tamanho do array inteiro quando `origem` é o próprio array. Se ele tiver sido recebido como parâmetro de função, já virou um ponteiro e `sizeof` devolve apenas o tamanho do ponteiro (8 bytes), então o tamanho precisa ser calculado como `quantidade * sizeof(int)`
 
+---
+
 **Copiando um pedaço de um array para outro**
 
 Somando um deslocamento aos ponteiros, é possível copiar apenas um trecho, para qualquer posição do destino:
@@ -48,6 +52,8 @@ memcpy(destino, &origem[1], 3 * sizeof(int));
 
 // destino == {20, 30, 40}
 ```
+
+---
 
 **Duplicando dados para a heap**
 
@@ -65,6 +71,8 @@ if (copia != NULL) {
 
 free(copia);
 ```
+
+---
 
 **O caso em que o memcpy não funciona**
 

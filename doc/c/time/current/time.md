@@ -24,6 +24,8 @@ time_t t;
 time(&t); // forma antiga, equivalente
 ```
 
+---
+
 **Mostrando a data e hora atuais**
 
 ```c
@@ -34,6 +36,8 @@ char texto[64];
 strftime(texto, sizeof(texto), "%d/%m/%Y %H:%M:%S", local);
 printf("%s\n", texto); // 04/10/2026 15:00:00
 ```
+
+---
 
 **Semente para números aleatórios**
 
@@ -47,6 +51,8 @@ int dado = rand() % 6 + 1;
 ```
 
 > Como o valor muda só uma vez por segundo, dois programas iniciados no mesmo segundo geram a mesma sequência. Para qualquer uso de segurança, o `rand` não serve, independente da semente
+
+---
 
 **Verificando se algo expirou**
 

@@ -10,6 +10,8 @@ LD_SHOW_AUXV=1 ./app              # Linux: informações que o kernel passou ao 
 /lib64/ld-linux-x86-64.so.2 --list ./app   # Linux: como o ldd, sem executar o programa
 ```
 
+---
+
 **Linux, passo a passo**
 
 ```text
@@ -43,6 +45,8 @@ _start (crt1.o) → __libc_start_main
           └─ _exit(status) → syscall: o kernel libera a memória e fecha os fds
 ```
 
+---
+
 **A pilha inicial**
 
 ```text
@@ -59,6 +63,8 @@ endereço baixo
 
 - É daí que vêm o `argc`/`argv` do `main`, o `environ` e o `getauxval()`
 - O `AT_RANDOM` fornece bytes aleatórios do kernel, usados, por exemplo, para o stack canary (`-fstack-protector`)
+
+---
 
 **macOS, passo a passo**
 
@@ -83,6 +89,8 @@ dyld
    ▼
 main retorna → exit(status) → atexit, destrutores, flush → syscall de saída
 ```
+
+---
 
 **Comportamentos que vêm daqui**
 

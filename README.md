@@ -506,6 +506,8 @@ Configurado em `core/docs.lua`. Mantém uma base de anotações técnicas versio
 
 Também há notas de arquitetura em Python (`doc/python/`).
 
+As notas de C seguem um formato comum: título em negrito, o header ou contexto logo abaixo, uma explicação direta, a assinatura ou comando, tópicos com o comportamento, exemplos curtos e uma observação final. Cada subtópico começa com um título em negrito e é separado do anterior por uma linha `---`.
+
 | Comando | Ação |
 |---|---|
 | `:doc` | Telescope filtrando pelo **nome** dos arquivos em `doc/`; o arquivo escolhido abre num split vertical à direita |

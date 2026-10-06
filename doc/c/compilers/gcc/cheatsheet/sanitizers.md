@@ -15,6 +15,8 @@ gcc -g -O1 -fno-omit-frame-pointer -fsanitize=address,undefined main.c -o main
 - `-fno-omit-frame-pointer`: stack traces mais completos (ver `debugging.md`)
 - A flag precisa estar **na compilação e no link**, pois o link adiciona a biblioteca de runtime do sanitizer (`libasan`, `libubsan`)
 
+---
+
 **AddressSanitizer (ASan)** — `-fsanitize=address`
 
 Detecta:
@@ -44,6 +46,8 @@ v[0] = 2;  // ERROR: AddressSanitizer: heap-use-after-free
 
 - Custo: o programa fica cerca de 2x mais lento e usa cerca de 3x mais memória. Para desenvolvimento e testes, não para produção
 
+---
+
 **UndefinedBehaviorSanitizer (UBSan)** — `-fsanitize=undefined`
 
 Detecta comportamentos indefinidos do padrão C:
@@ -62,6 +66,8 @@ x++; // runtime error: signed integer overflow: 2147483647 + 1 cannot be represe
 - Por padrão o UBSan imprime o erro e **continua** a execução. `-fno-sanitize-recover=all` faz o programa abortar no primeiro erro, o que é melhor em testes
 - Custo bem menor que o ASan, e importante porque UB é exatamente o tipo de bug que muda de comportamento com otimização (ver `optimization.md`)
 
+---
+
 **Opções de runtime**
 
 ```bash
@@ -69,6 +75,8 @@ ASAN_OPTIONS=detect_leaks=1:abort_on_error=1 ./main
 ASAN_OPTIONS=detect_stack_use_after_return=1 ./main   # retorno de ponteiro para variável local
 UBSAN_OPTIONS=print_stacktrace=1 ./main
 ```
+
+---
 
 **Limitações e armadilhas**
 

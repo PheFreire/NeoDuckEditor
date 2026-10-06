@@ -34,6 +34,8 @@ Para ver o resultado em graus:
 double graus = asin(0.5) * 180.0 / M_PI; // 30.0
 ```
 
+---
+
 **Ângulo entre dois vetores**
 
 O cosseno do ângulo entre dois vetores é o produto escalar dividido pelo produto dos tamanhos, então o `acos` devolve o ângulo:
@@ -50,6 +52,8 @@ cosseno = fmax(-1.0, fmin(1.0, cosseno));
 
 double angulo = acos(cosseno) * 180.0 / M_PI; // 45.0
 ```
+
+---
 
 **Por que o atan sozinho não basta**
 

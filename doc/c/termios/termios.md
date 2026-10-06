@@ -22,6 +22,8 @@ struct termios {
 - Esses são os campos garantidos pelo POSIX. Cada sistema pode ter campos extras (`c_line`, `c_ispeed` e `c_ospeed` no Linux, `c_ispeed` e `c_ospeed` no macOS). Por isso nunca monte uma `struct termios` do zero: sempre leia a atual com `tcgetattr` e altere só o que precisa
 - `tcflag_t` é um inteiro sem sinal usado como conjunto de bits (`unsigned int` no Linux, `unsigned long` no macOS). `cc_t` é um `unsigned char`. Ver `terminal-attributes.md`
 
+---
+
 **Funções principais**
 
 | Função | O que faz | Ver |
@@ -33,6 +35,8 @@ struct termios {
 | `tcdrain(fd)` | espera toda a saída pendente ser transmitida | `tcflush-tcdrain.md` |
 | `cfsetispeed` / `cfsetospeed` | define a velocidade (baud rate) | `baud-rate.md` |
 | `isatty(fd)` (`unistd.h`) | diz se `fd` é um terminal | `terminal-and-tty.md` |
+
+---
 
 **File descriptors**
 
@@ -49,6 +53,8 @@ if (tcgetattr(STDIN_FILENO, &t) == -1) {
 - `STDIN_FILENO` (`0`), `STDOUT_FILENO` (`1`) e `STDERR_FILENO` (`2`), de `unistd.h`, normalmente apontam todos para o **mesmo** terminal. Alterar a configuração por qualquer um deles afeta os três
 - Como a configuração fica no terminal, ela **sobrevive ao fim do seu processo**: se o programa sair sem restaurar, o shell continua usando o terminal alterado. Ver `terminal-restoration.md`
 - Se a entrada vier de um arquivo ou de um pipe, não há terminal: as funções falham com `ENOTTY`, e o `read()` simplesmente lê os bytes do arquivo, sem nenhum processamento
+
+---
 
 **Categorias de flags**
 

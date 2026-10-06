@@ -19,11 +19,15 @@ ECHO?    copia o byte para a saída (tela)
 fila de leitura → read()
 ```
 
+---
+
 **ECHO**
 
 - Ligada (padrão): a line discipline envia de volta para a tela uma cópia de cada byte recebido. É o kernel que mostra o que você digita, e não o programa nem o emulator
 - Desligada: nada aparece ao digitar. Usado para senhas (ver `examples.md`) e em raw mode, onde o programa decide o que desenhar
 - O echo passa pelo processamento de saída (`c_oflag`), então em raw mode um Enter ecoado vira só `\r`
+
+---
 
 **ECHOE, ECHOK, ECHONL, ECHOCTL, ECHOKE**
 
@@ -35,11 +39,15 @@ Ajustes finos do echo, relevantes no modo canônico:
 - `ECHONL`: com `ICANON`, ecoa o `\n` mesmo que `ECHO` esteja desligado. Útil ao ler senhas: o usuário vê o Enter mas não a senha
 - `ECHOCTL` (não POSIX): mostra caracteres de controle como `^C`, `^D`, em vez do byte cru. É por isso que aparece `^C` na tela ao interromper um programa
 
+---
+
 **ICANON**
 
 - Ligada (padrão): modo canônico, com buffer e edição de linha. O `read()` só retorna com uma linha completa (ver `canonical-mode.md`)
 - Desligada: modo não canônico. Os bytes vão direto para a fila e o `read()` segue `VMIN`/`VTIME` (ver `raw-mode.md`)
 - Os caracteres de edição (`VERASE`, `VKILL`, `VEOF`, `VEOL`) **só** têm efeito com `ICANON` ligada. Desligada, chegam ao programa como bytes comuns (Backspace = 127, `Ctrl+D` = 4)
+
+---
 
 **ISIG**
 
@@ -56,6 +64,8 @@ Ajustes finos do echo, relevantes no modo canônico:
 - Desligada: os bytes chegam ao `read()` (`3`, `28`, `26`). O programa só pode ser interrompido se tratar esses bytes. Editores desligam para usar `Ctrl+C`/`Ctrl+Z` como comandos
 - Se a ideia é só personalizar o que acontece com `Ctrl+C`, prefira manter `ISIG` e tratar o sinal com `sigaction`
 
+---
+
 **IEXTEN**
 
 - Liga o processamento **estendido**, definido por cada implementação. Na prática, habilita:
@@ -64,6 +74,8 @@ Ajustes finos do echo, relevantes no modo canônico:
 	- `VREPRINT` (`Ctrl+R`): reescreve a linha atual
 	- `VDISCARD` (`Ctrl+O`, macOS): descarta a saída até o próximo `Ctrl+O`
 - Desligada em raw mode: senão, `Ctrl+V` (e `Ctrl+O` no macOS) seriam consumidos pela line discipline e nunca chegariam ao programa
+
+---
 
 **Outras**
 

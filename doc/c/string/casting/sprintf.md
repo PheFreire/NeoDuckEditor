@@ -35,6 +35,8 @@ pos += sprintf(buf + pos, "y=%d", 20);
 // buf == "x=10 y=20", pos == 9
 ```
 
+---
+
 **O problema do buffer overflow**
 
 ```c

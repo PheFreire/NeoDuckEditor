@@ -16,6 +16,8 @@ if (fabs(a - b) < EPSILON) { }
 
 - `EPSILON`: a diferença máxima aceita para considerar os dois valores iguais, escolhida de acordo com a escala dos números envolvidos
 
+---
+
 **O problema**
 
 ```c
@@ -39,6 +41,8 @@ for (double x = 0.0; x < 1.0 - 1e-9; x += 0.1) {
 }
 ```
 
+---
+
 **Tolerância absoluta**
 
 Funciona bem quando os números têm uma escala conhecida, perto de `1`:
@@ -54,6 +58,8 @@ quase_igual(0.1 + 0.2, 0.3); // 1
 ```
 
 > Uma tolerância fixa falha com números muito grandes ou muito pequenos: para `1e20`, a menor diferença possível entre dois `double` já é maior que `1e-9`, então só valores idênticos passariam. Para `1e-12`, quase qualquer par de valores passaria
+
+---
 
 **Tolerância relativa**
 
@@ -75,6 +81,8 @@ quase_igual_rel(0.1 + 0.2, 0.3);    // 1
 
 - `DBL_EPSILON` (`2.22e-16`, de `float.h`): a menor diferença relativa entre dois `double`. Multiplicá-lo por um fator pequeno (como `4`) deixa uma margem para erros acumulados em poucas operações
 
+---
+
 **Combinando as duas**
 
 A tolerância relativa falha perto de zero (onde `maior` também é quase zero), então a forma mais robusta usa as duas:
@@ -90,6 +98,8 @@ int quase_igual_completo(double a, double b) {
 
 quase_igual_completo(sin(M_PI), 0.0); // 1, sin(M_PI) é 1.22e-16
 ```
+
+---
 
 **Quando == funciona**
 

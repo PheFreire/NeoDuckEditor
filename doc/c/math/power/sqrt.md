@@ -26,6 +26,8 @@ sqrt(0.25);   // 0.5
 sqrt(-4.0);   // nan
 ```
 
+---
+
 **Distância entre dois pontos**
 
 O uso mais comum: pelo teorema de Pitágoras, a distância é a raiz da soma dos quadrados das diferenças:
@@ -42,6 +44,8 @@ distancia(0, 0, 3, 4); // 5.0
 
 > Para esse cálculo também existe o `hypot`, que evita overflow com valores muito grandes
 
+---
+
 **Comparando distâncias sem sqrt**
 
 Como a raiz preserva a ordem (se `a < b`, então `sqrt(a) < sqrt(b)`), para só comparar distâncias não é preciso calcular a raiz, o que economiza tempo em laços com muitos pontos:
@@ -55,6 +59,8 @@ if (dx * dx + dy * dy <= raio * raio) {
   // o ponto está dentro do círculo
 }
 ```
+
+---
 
 **Checando se um número é quadrado perfeito**
 

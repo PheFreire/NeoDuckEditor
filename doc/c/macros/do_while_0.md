@@ -18,6 +18,8 @@ O `do { ... } while (0)` é um truque usado para escrever macros com várias ins
 - As variáveis declaradas dentro do bloco ficam visíveis só ali dentro, sem conflitar com variáveis de mesmo nome de fora
 - O compilador remove o "laço" completamente, então não há nenhum custo de performance
 
+---
+
 **O problema sem o do while**
 
 Uma macro com duas instruções soltas funciona sozinha, mas quebra dentro de um `if` sem chaves:
@@ -33,6 +35,8 @@ if (falhou)
   fprintf(stderr, "erro: ");
 fprintf(stderr, "%s\n", "arquivo não encontrado"); // fora do if, roda sempre
 ```
+
+---
 
 **Por que só chaves não resolvem**
 
@@ -52,6 +56,8 @@ if (falhou)
 else // erro de compilação: o ';' depois da '}' terminou o if, este else está sozinho
   printf("ok\n");
 ```
+
+---
 
 **A solução**
 

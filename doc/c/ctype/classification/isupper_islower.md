@@ -24,6 +24,8 @@ isupper('7');   // falso
 islower('7');   // falso: não é letra
 ```
 
+---
+
 **Validando uma senha**
 
 ```c
@@ -40,6 +42,8 @@ int senha_forte(const char *s) {
   return maiuscula && minuscula && digito;
 }
 ```
+
+---
 
 **Contando maiúsculas e minúsculas**
 

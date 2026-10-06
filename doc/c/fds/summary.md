@@ -31,6 +31,8 @@ O pulo do gato está no fato de esta API ser a forma base do C se comunicar com 
 - Se comunicar com drivers externos
 São todos tratados como apenas objetos I/O de `fds` que respondem aos mesmos comandos `read` e `write`
 
+---
+
 **fds Instanciados**
 
 O kernel possui sempre 3 `fds` instanciados no inicio do programa sendo estes o de escrita no terminal (`stdout`), leitura no terminal (`stdin`) e escrita de erro no terminal (`stderr`) 

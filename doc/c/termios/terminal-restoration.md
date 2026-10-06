@@ -4,6 +4,8 @@
 
 A configuração `termios` pertence ao **terminal**, e não ao processo: quando o programa termina, o kernel **não** desfaz as mudanças. Se um programa em raw mode sair sem restaurar a configuração original (por um `return` esquecido, um crash ou um `Ctrl+C`), o shell continua no mesmo terminal com echo desligado, sem modo canônico e sem `\r\n`: nada aparece ao digitar, e o Enter não executa os comandos
 
+---
+
 **Padrão básico**
 
 ```c
@@ -33,6 +35,8 @@ static void entrar_raw(void) {
 - `atexit(restaurar)` faz a restauração rodar em qualquer `exit()` e no `return` do `main` (ver o fim do processo em `../compilers/gcc/advanced/loader.md`)
 - Registrar o `atexit` **antes** do `tcsetattr` evita uma janela em que o terminal está alterado sem nada que o restaure
 
+---
+
 **O que o atexit não cobre**
 
 | Saída | `atexit` roda? | Como cobrir |
@@ -43,6 +47,8 @@ static void entrar_raw(void) {
 | `Ctrl+Z` (`SIGTSTP`) | — (o processo para, não termina) | restaurar no `SIGTSTP`, refazer no `SIGCONT` |
 | crash (`SIGSEGV`, `SIGABRT`) | não | handler (com cuidado) |
 | `kill -9` (`SIGKILL`) | não | impossível. Restaurar manualmente |
+
+---
 
 **Sinais**
 
@@ -63,6 +69,8 @@ signal(SIGHUP, ao_sinal);    // janela do terminal fechada
 - Dentro de um handler, só funções **async-signal-safe** são permitidas. `tcsetattr`, `signal`, `raise` e `write` são, mas `printf`, `exit` e `malloc` não
 - Com `ISIG` desligado (raw mode completo), `Ctrl+C` não gera `SIGINT`. O programa recebe o byte `3` e decide sair por conta própria, chamando `exit` normalmente
 - Prefira `sigaction` a `signal` em código real. O comportamento do `signal` varia entre sistemas
+
+---
 
 **Suspensão com Ctrl+Z**
 
@@ -87,6 +95,8 @@ signal(SIGTSTP, ao_suspender);
 signal(SIGCONT, ao_continuar);
 ```
 
+---
+
 **Além do termios**
 
 Programas de tela cheia também mudam o terminal com escape sequences, e elas precisam ser desfeitas junto:
@@ -98,6 +108,8 @@ static void restaurar(void) {
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig);
 }
 ```
+
+---
 
 **Quando o terminal já quebrou**
 

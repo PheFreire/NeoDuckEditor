@@ -28,6 +28,8 @@ printf("%lld.%09ld\n", (long long)agora.tv_sec, agora.tv_nsec);
 // 1791136800.123456789
 ```
 
+---
+
 **Timestamp em milissegundos, portável**
 
 ```c
@@ -37,6 +39,8 @@ int64_t agora_ms(void) {
   return (int64_t)t.tv_sec * 1000 + t.tv_nsec / 1000000;
 }
 ```
+
+---
 
 **Data e hora com milissegundos**
 

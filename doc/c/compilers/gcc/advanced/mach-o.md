@@ -13,6 +13,8 @@ size -m app          # tamanho de cada segment e section
 dyld_info -fixups app  # fixups (relocations) que o dyld aplica (macOS 13+)
 ```
 
+---
+
 **Estrutura**
 
 ```text
@@ -30,17 +32,23 @@ dyld_info -fixups app  # fixups (relocations) que o dyld aplica (macOS 13+)
 └──────────────────────────┘
 ```
 
+---
+
 **Header** — `otool -h`
 
 - Magic `0xfeedfacf` para Mach-O 64 bits
 - `cputype`: `ARM64` ou `X86_64`
 - `filetype`: `MH_OBJECT` (`.o`), `MH_EXECUTE` (executável), `MH_DYLIB` (`.dylib`), `MH_BUNDLE` (plugin carregado com `dlopen`), `MH_DSYM` (debug info)
 
+---
+
 **Segments e sections**
 
 - Seções são nomeadas como `segment,section`: `__TEXT,__text` é o código, `__TEXT,__cstring` as strings literais, `__DATA,__data` as variáveis inicializadas, `__DATA,__bss` as zeradas
 - `__PAGEZERO`: em executáveis 64 bits, os primeiros 4 GB do espaço de endereçamento ficam sem permissão nenhuma. Qualquer acesso a um ponteiro nulo (ou a um ponteiro truncado para 32 bits) gera `EXC_BAD_ACCESS`
 - `__LINKEDIT`: não contém código nem dados do programa, e sim as informações usadas pelo `dyld`: tabela de símbolos, fixups, exports e a assinatura de código
+
+---
 
 **Load commands importantes** — `otool -l`
 
@@ -58,6 +66,8 @@ dyld_info -fixups app  # fixups (relocations) que o dyld aplica (macOS 13+)
 | `LC_CODE_SIGNATURE` | assinatura de código |
 | `LC_BUILD_VERSION` | plataforma e versão mínima do macOS |
 
+---
+
 **Diferenças práticas em relação ao ELF**
 
 - Todo símbolo C ganha um `_` na frente: `main` vira `_main`, e é assim que aparece no `nm` e nos erros do linker
@@ -65,6 +75,8 @@ dyld_info -fixups app  # fixups (relocations) que o dyld aplica (macOS 13+)
 - Executáveis são sempre PIE e não podem ser totalmente estáticos (ver `static-linking.md`)
 - Em ARM64, **todo** executável precisa estar assinado para rodar. O linker aplica automaticamente uma assinatura `ad-hoc`. Modificar os bytes do binário depois (por exemplo, com um editor hexadecimal) invalida a assinatura e o kernel mata o processo. Refaça com `codesign -s - -f app`
 - O debug info não fica no executável: fica nos `.o` ou em um pacote `.dSYM` separado (ver `../debugging.md`)
+
+---
 
 **Universal binaries**
 

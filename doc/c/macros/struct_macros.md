@@ -21,6 +21,8 @@ size_t offsetof(tipo, campo);
 - `container_of` subtrai esse deslocamento do endereço do campo, chegando ao endereço onde a struct começa. O cast para `char *` é o que faz a subtração ser contada em bytes
 - O `container_of` vem do kernel do Linux e não existe na biblioteca padrão, por isso precisa ser definido no seu código
 
+---
+
 **offsetof e padding**
 
 ```c
@@ -43,6 +45,8 @@ sizeof(struct exemplo);            // 12: mais 3 bytes de padding no final
 // byte:  0     1  2  3   4  5  6  7   8      9  10 11
 //        letra [padding] numero        outra  [padding]
 ```
+
+---
 
 **container_of**
 

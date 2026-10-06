@@ -12,6 +12,8 @@ gcc main.o lista.o -lm -o app   # linking: gera o executável app
 - No Linux, o `gcc` chama o `collect2`, que chama o `ld` do GNU binutils (ou outro linker, como `gold`, `lld` ou `mold`, com `-fuse-ld=`). No macOS, o linker é o `ld` da Apple (`ld64`/`ld-prime`)
 - `gcc -v` mostra o comando completo do linker, incluindo tudo que o driver adiciona por conta própria
 
+---
+
 **O que o linker faz**
 
 ```text
@@ -39,6 +41,8 @@ gcc main.o lista.o -lm -o app   # linking: gera o executável app
 4. **Ponto de entrada**: define o `_start` (vindo do `crt1.o`) como a primeira instrução executada. É ele que chama o `main`
 5. **Dependências dinâmicas**: para bibliotecas compartilhadas, não copia o código, apenas registra que o programa precisa delas em tempo de execução (ver `libraries.md`)
 
+---
+
 **-L e -l**
 
 ```bash
@@ -49,6 +53,8 @@ gcc main.o -L./lib -lfila -o app
 - `-L./lib`: adiciona `./lib` aos diretórios pesquisados, antes dos padrões (`/usr/lib`, `/usr/local/lib`...)
 - Se existirem o `.so` e o `.a` no mesmo diretório, o GNU ld prefere o `.so`
 - A libc é linkada automaticamente. A `libm` (`math.h`) precisa de `-lm` no Linux, mas no macOS faz parte da `libSystem` e não precisa
+
+---
 
 **Ordem de linking**
 
@@ -62,6 +68,8 @@ gcc main.c -lm -o app   # certo: main.o pede sqrt, depois -lm fornece
 - Regra: primeiro os seus `.c`/`.o`, depois as bibliotecas, e cada biblioteca **depois** das que dependem dela (`-lalto -lbaixo`)
 - Dependência circular entre duas `.a`: repita a biblioteca (`-la -lb -la`) ou use `-Wl,--start-group -la -lb -Wl,--end-group`
 - O linker do macOS é bem menos sensível à ordem, mas mantenha a ordem correta por portabilidade
+
+---
 
 **Erros típicos** (detalhes em `common-errors.md`)
 
@@ -79,6 +87,8 @@ ld: symbol(s) not found for architecture arm64
 
 - `undefined reference`: a função foi **declarada** (o compilador aceitou), mas nenhum arquivo do link a **define**: faltou um `.c`/`.o` no comando, faltou o `-l`, ou o nome está diferente
 - `multiple definition`: dois arquivos definem o mesmo símbolo global, normalmente uma variável ou função definida dentro de um header incluído por vários `.c`
+
+---
 
 **Opções úteis**
 

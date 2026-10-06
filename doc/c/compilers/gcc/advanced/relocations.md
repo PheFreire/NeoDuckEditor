@@ -11,6 +11,8 @@ otool -r main.o            # macOS: relocations de um .o
 dyld_info -fixups app      # macOS: fixups aplicados pelo dyld no executável
 ```
 
+---
+
 **Anatomia**
 
 ```c
@@ -35,6 +37,8 @@ Cada relocation tem:
 - **Símbolo**: de qual endereço se trata (`contador`, `soma`)
 - **Addend**: uma constante somada ao cálculo (`-0x4`)
 
+---
+
 **Como o valor é calculado**
 
 Os tipos mais comuns no x86-64 usam endereçamento relativo ao `rip` (a posição da próxima instrução):
@@ -58,6 +62,8 @@ O -4 existe porque o rip aponta para o FIM da instrução, 4 bytes depois de P
 
 - No ARM64, como uma instrução tem só 32 bits, um endereço é montado em duas etapas: `adrp` (página de 4 KB) + `add`/`ldr` (offset dentro da página), com relocations `R_AARCH64_ADR_PREL_PG_HI21` e `R_AARCH64_ADD_ABS_LO12_NC` (no Mach-O: `ARM64_RELOC_PAGE21` e `ARM64_RELOC_PAGEOFF12`). Chamadas usam `bl` com `R_AARCH64_CALL26` / `ARM64_RELOC_BRANCH26`
 
+---
+
 **Estáticas vs dinâmicas**
 
 ```text
@@ -74,6 +80,8 @@ main.o ──(relocations estáticas: .rela.text)──► ld ──► app
 	- `R_X86_64_GLOB_DAT`: preenche uma entrada da GOT com o endereço de um símbolo de outra biblioteca
 	- `R_X86_64_JUMP_SLOT`: preenche a entrada da GOT usada pela PLT de uma função (ver `dynamic-linking.md`)
 - No macOS, executáveis linkados não guardam relocations no formato do `.o`: guardam `rebase` (ajustar pelo endereço base) e `bind` (preencher com um símbolo de dylib), em formato compacto chamado `chained fixups` a partir do macOS 12
+
+---
 
 **Por que -fPIC existe**
 

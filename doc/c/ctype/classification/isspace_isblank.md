@@ -31,6 +31,8 @@ isblank('\n');   // falso
 isspace('a');    // falso
 ```
 
+---
+
 **Removendo espaços do começo e do fim (trim)**
 
 ```c
@@ -58,6 +60,8 @@ char *limpo = trim(buf);   // "pato"
 
 - O ponteiro devolvido aponta para dentro do mesmo buffer. Se a string tiver sido alocada com `malloc`, o `free` deve receber o ponteiro **original**, e não o devolvido pelo `trim`
 - Usar `isspace` no fim também remove o `\n` deixado pelo `fgets` e o `\r` de arquivos vindos do Windows
+
+---
 
 **Contando palavras**
 

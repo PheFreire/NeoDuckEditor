@@ -12,6 +12,8 @@ cat /proc/<pid>/maps    # Linux: mapa de memória de um processo rodando
 vmmap <pid>             # macOS: equivalente
 ```
 
+---
+
 **Onde cada coisa vai**
 
 ```c
@@ -42,6 +44,8 @@ int main(void) {                // .text       (__TEXT,__text)
 | `.init_array` / `.fini_array` | `__DATA_CONST,__mod_init_func` | ponteiros para `__attribute__((constructor/destructor))` | `rw-` → `r--` |
 | `.eh_frame` | `__TEXT,__eh_frame`, `__unwind_info` | tabelas de unwind da pilha | `r--` |
 
+---
+
 **Layout do processo na memória**
 
 ```text
@@ -67,12 +71,16 @@ endereço baixo
 
 - Com ASLR, o endereço base do executável (se for PIE), das bibliotecas, do heap e da pilha muda a cada execução. O desenho mostra só a ordem relativa típica
 
+---
+
 **Comportamentos que vêm daqui**
 
 - `char *s = "ola"; s[0] = 'O';` causa segmentation fault: a string está no `.rodata`, que é somente leitura. `char s[] = "ola";` cria uma cópia na pilha, que pode ser alterada
 - Variáveis globais e `static` sem inicializador valem zero porque o `.bss` é preenchido com zeros pelo kernel. Variáveis locais **não** têm essa garantia, pois a pilha contém o lixo deixado por chamadas anteriores
 - `int grande[1000000] = {0};` global não aumenta o executável (vai para o `.bss`), mas `= {1}` aumenta em 4 MB (vai para o `.data`, com todos os bytes gravados no arquivo)
 - Um `const` local normalmente fica na pilha ou em registrador, e não no `.rodata`. O `const` só garante que o compilador não deixa você alterar
+
+---
 
 **Proteções**
 

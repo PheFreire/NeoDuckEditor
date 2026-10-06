@@ -12,6 +12,8 @@ A `ctype.h` é a biblioteca do C para classificar e converter caracteres: saber 
 
 - Não precisa de nenhuma flag de compilação extra, faz parte da biblioteca padrão
 
+---
+
 **Funções**
 
 | Função | Verdadeiro para | Ver |
@@ -31,6 +33,8 @@ A `ctype.h` é a biblioteca do C para classificar e converter caracteres: saber 
 | `toupper(c)` | converte para maiúscula | `conversion/toupper_tolower.md` |
 | `tolower(c)` | converte para minúscula | `conversion/toupper_tolower.md` |
 
+---
+
 **Como todas funcionam**
 
 ```c
@@ -49,6 +53,8 @@ if (isdigit(c) == 1) {   // errado: pode ser verdadeiro e diferente de 1
 }
 ```
 
+---
+
 **O mapa da tabela ASCII**
 
 ```text
@@ -65,6 +71,8 @@ if (isdigit(c) == 1) {   // errado: pode ser verdadeiro e diferente de 1
 
 - `isalpha` = `isupper` + `islower`, `isalnum` = `isalpha` + `isdigit`, `isgraph` = `isalnum` + `ispunct`, `isprint` = `isgraph` + espaço
 
+---
+
 **O cast para unsigned char**
 
 O argumento precisa ser um valor que caiba em um `unsigned char` (`0` a `255`) ou o `EOF`. Qualquer outro valor negativo é **comportamento indefinido**:
@@ -78,6 +86,8 @@ isalpha((unsigned char)c);   // certo
 - Em x86, `char` costuma ser `signed`, e bytes acima de `127` (letras acentuadas em UTF-8 ou Latin-1) viram números negativos. Muitas implementações usam o valor como índice de uma tabela, e um índice negativo lê memória fora dela
 - Ao percorrer uma string, sempre converta cada `char` para `unsigned char` antes de passar para a `ctype.h`
 - O valor devolvido por `getchar` já está no formato certo (`0` a `255` ou `EOF`) e pode ser passado diretamente
+
+---
 
 **Locale e acentos**
 

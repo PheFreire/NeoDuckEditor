@@ -15,6 +15,8 @@ static_assert(expressão_constante, "mensagem");
 - Não é afetado por `NDEBUG`, ao contrário do `assert`
 - Pode ser usado fora de funções (no escopo global), dentro de funções e dentro de structs
 
+---
+
 **Versões**
 
 | Padrão | Forma |
@@ -34,6 +36,8 @@ static_assert(sizeof(int) == 4, "este código assume int de 4 bytes");
 ```text
 main.c:4:1: error: static assertion failed: "este código assume int de 4 bytes"
 ```
+
+---
 
 **Usos comuns**
 
@@ -81,6 +85,8 @@ static_assert(TAMANHO_BUFFER >= 64, "TAMANHO_BUFFER muito pequeno");
 static_assert((TAMANHO_BUFFER & (TAMANHO_BUFFER - 1)) == 0,
               "TAMANHO_BUFFER precisa ser potência de 2");
 ```
+
+---
 
 **static_assert vs #error**
 

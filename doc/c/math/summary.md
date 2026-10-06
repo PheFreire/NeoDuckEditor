@@ -18,6 +18,8 @@ gcc main.c -o programa -lm
 - No macOS, a `libm` já faz parte da biblioteca padrão e o `-lm` não é necessário, mas também não atrapalha
 - Uma chamada com valores constantes (`sqrt(16.0)`) pode ser calculada pelo próprio compilador e compilar sem o `-lm`, enquanto `sqrt(x)` com uma variável falha, o que confunde. Na dúvida, sempre passe `-lm`
 
+---
+
 **Versões para cada tipo**
 
 Toda função existe em três versões, diferenciadas por um sufixo no nome:
@@ -33,6 +35,8 @@ float f = sqrtf(2.0f);  // 1.4142135
 
 > Passar um `float` para a versão `double` funciona (ele é convertido), mas faz a conta com mais precisão do que o necessário. Em código que usa só `float`, como jogos e gráficos, as versões com `f` são mais coerentes
 
+---
+
 **Erros**
 
 As funções não param o programa quando recebem um valor inválido. Elas devolvem um valor especial:
@@ -41,6 +45,8 @@ As funções não param o programa quando recebem um valor inválido. Elas devol
 - `HUGE_VAL` / `INFINITY`: quando o resultado é grande demais para o tipo, como `exp(1000)`, ou é infinito, como `log(0)` (erro de intervalo)
 
 Em algumas plataformas (como o glibc), essas funções também ajustam o `errno` para `EDOM` ou `ERANGE`, mas outras (como o macOS) não, então a forma portável de detectar um erro é checar o resultado com `isnan` ou `isinf` (em `classification/isnan_isinf.md`)
+
+---
 
 **Cuidado com a divisão inteira**
 

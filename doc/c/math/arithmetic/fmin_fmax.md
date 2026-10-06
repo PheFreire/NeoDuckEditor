@@ -26,6 +26,8 @@ double c = fmax(NAN, 1.0);   // 1.0
 double d = fmax(1.0, NAN);   // 1.0, a ordem não importa
 ```
 
+---
+
 **Limitando um valor a um intervalo (clamp)**
 
 Combinando os dois, é possível prender um valor entre um mínimo e um máximo:

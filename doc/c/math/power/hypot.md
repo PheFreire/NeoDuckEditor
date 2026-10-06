@@ -23,6 +23,8 @@ hypot(-3.0, 4.0);  // 5.0
 hypot(1.0, 1.0);   // 1.4142135623730951
 ```
 
+---
+
 **Distância entre dois pontos**
 
 ```c
@@ -30,6 +32,8 @@ double distancia(double x1, double y1, double x2, double y2) {
   return hypot(x2 - x1, y2 - y1);
 }
 ```
+
+---
 
 **Por que não só sqrt(x * x + y * y)**
 

@@ -26,6 +26,8 @@ printf("%02d:%02d\n", t->tm_hour, t->tm_min); // 15:00
 printf("%d\n", t->tm_year + 1900);           // 2026
 ```
 
+---
+
 **O problema do buffer estático**
 
 Como as duas chamadas devolvem o mesmo ponteiro, o segundo resultado sobrescreve o primeiro:
@@ -48,6 +50,8 @@ struct tm ta = *localtime(&a); // cópia
 struct tm tb = *localtime(&b);
 ```
 
+---
+
 **localtime_r**
 
 A versão com `_r` (de "reentrante") escreve em uma struct que você fornece, então nunca é sobrescrita por outras chamadas e é segura para usar com várias threads:
@@ -64,6 +68,8 @@ printf("%02d/%02d/%d\n", local.tm_mday, local.tm_mon + 1, local.tm_year + 1900);
 ```
 
 > No Windows, o equivalente é o `localtime_s`, com os parâmetros na ordem inversa: `localtime_s(&local, &agora)`
+
+---
 
 **Mesmo instante, fusos diferentes**
 

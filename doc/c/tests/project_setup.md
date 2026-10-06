@@ -4,6 +4,8 @@
 
 Para testar um projeto em C sem nenhum framework, são necessárias três peças: uma separação clara entre o código do programa e o código dos testes, um **test runner** (um segundo `main`, só para os testes) e um `Makefile` que sabe gerar dois executáveis a partir dos mesmos arquivos: o programa e a suíte de testes. Com isso, `make test` compila só o que mudou e roda todos os testes com um comando
 
+---
+
 **Estrutura de pastas**
 
 ```text
@@ -35,6 +37,8 @@ projeto/
 - Cada módulo do `src/` tem um arquivo de teste correspondente em `tests/`, com o prefixo `test_`
 - O `build/` espelha a estrutura do `src/`, assim dois arquivos com o mesmo nome em pastas diferentes não geram o mesmo `.o`
 
+---
+
 **O problema dos dois main**
 
 Um executável só pode ter um `main`. O programa usa o `src/main.c`, e a suíte de testes usa o `tests/test_runner.c`. O que muda entre os dois é a lista de `.o` entregue ao linker:
@@ -47,6 +51,8 @@ test_suite   =  test_runner.o + lista.o + utils.o + test_lista.o + test_utils.o
 - O código dos módulos (`lista.o`, `utils.o`) é compilado **uma vez** e usado pelos dois executáveis
 - O `src/main.c` fica de fora da suíte de testes, senão o linker acusa `multiple definition of 'main'` (ver `../compilers/gcc/cheatsheet/common-errors.md`)
 - Por isso o `main.c` deve ter só a inicialização do programa. Toda lógica que precisa ser testada fica nos módulos, pois o que está no `main.c` não pode ser testado
+
+---
 
 **Arquivos de teste**
 
@@ -75,6 +81,8 @@ void test_lista_deve_adicionar_no_final(void) {
 
 - Os nomes descrevem o comportamento esperado (`test_<módulo>_deve_<comportamento>`), então a saída do runner já funciona como uma lista do que o código faz
 - As funções não são `static`, pois o runner, que está em outro arquivo, precisa chamá-las
+
+---
 
 **Test runner**
 
@@ -119,6 +127,8 @@ void test_utils_deve_remover_espacos(void);
 - O `do { ... } while (0)` faz a macro funcionar como um único comando (ver `../macros/do_while_0.md`)
 - Declarar os testes em um header (`tests.h`), em vez de repetir os protótipos no runner, faz o compilador conferir que a declaração e a definição batem: cada `test_*.c` também inclui o `tests.h`
 - Use `(void)` nos protótipos: em C antes do C23, `void f()` significa "argumentos não especificados", e o compilador não confere a chamada
+
+---
 
 **Makefile**
 
@@ -190,6 +200,8 @@ clean:
 - **Objetos separados para os testes** (`build/test-obj/`): os testes são compilados com sanitizers, que mudam o código gerado. Usar os mesmos `.o` do programa misturaria objetos com e sem instrumentação. Se não quiser sanitizers, os testes podem reaproveitar os `.o` do programa (`$(BUILD_DIR)/%.o`)
 - Nunca adicione `-DNDEBUG` às flags dos testes, ou todos os `assert` somem (ver `ndebug.md`)
 
+---
+
 **Comandos**
 
 ```sh
@@ -200,6 +212,8 @@ make clean      # apaga o build/
 ```
 
 - O `make test` termina com o código de saída da suíte: `0` se todos passaram, diferente de `0` se algum `assert` falhou. Isso permite usar o mesmo comando em um hook de git ou em um CI
+
+---
 
 **Arquivos de apoio**
 

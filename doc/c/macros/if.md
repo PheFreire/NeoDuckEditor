@@ -24,6 +24,8 @@ O `#if` mantém ou apaga um trecho de código antes da compilação de acordo co
 - `defined(NOME)` vale `1` se a macro existe e `0` se não, podendo ser combinado com outros operadores
 - Um nome que não é macro dentro de um `#if` vale `0` sem nenhum aviso, então um erro de digitação (`#if DEBGU`) simplesmente desativa o trecho
 
+---
+
 **Combinando condições com defined**
 
 ```c
@@ -31,6 +33,8 @@ O `#if` mantém ou apaga um trecho de código antes da compilação de acordo co
   // só com DEBUG definida e SEM_LOG não definida
 #endif
 ```
+
+---
 
 **Comparando valores**
 
@@ -43,6 +47,8 @@ O `#if` mantém ou apaga um trecho de código antes da compilação de acordo co
 #define LOG_SIMPLES 1
 #endif
 ```
+
+---
 
 **Detectando o sistema operacional**
 
@@ -60,6 +66,8 @@ O compilador já define macros que indicam a plataforma, permitindo escrever um 
 #endif
 ```
 
+---
+
 **Exigindo uma versão do C**
 
 ```c
@@ -67,6 +75,8 @@ O compilador já define macros que indicam a plataforma, permitindo escrever um 
   // pode usar recursos do C11, como _Static_assert
 #endif
 ```
+
+---
 
 **Desativando um bloco com #if 0**
 

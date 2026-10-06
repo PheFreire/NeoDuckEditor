@@ -4,6 +4,8 @@
 
 Um terminal, para um programa Unix, é um **dispositivo** (um arquivo em `/dev`) que conecta um usuário a processos: o que o usuário digita vira bytes que os processos leem, e o que os processos escrevem vira caracteres na tela. Entre os dois lados existe uma camada do kernel, a **line discipline**, que processa esses bytes segundo a configuração `termios`. É por isso que um simples `read(STDIN_FILENO, ...)` se comporta de forma diferente conforme o terminal está configurado
 
+---
+
 **Os nomes**
 
 - **Terminal**: originalmente um equipamento físico (teclado + tela, como o VT100) ligado ao computador por um cabo serial
@@ -14,6 +16,8 @@ Um terminal, para um programa Unix, é um **dispositivo** (um arquivo em `/dev`)
 	- **slave** (ou lado do processo): aparece como `/dev/pts/N` (Linux) ou `/dev/ttysNNN` (macOS). É o stdin/stdout/stderr do shell e dos programas
 - **Terminal driver**: o código do kernel que implementa os dispositivos de terminal (PTY, serial, console)
 - **Line discipline**: a camada do terminal driver que fica entre o hardware/PTY e os processos e aplica o `termios`: edição de linha, echo, sinais, conversões de `\r`/`\n`. No Linux, a padrão se chama `N_TTY`
+
+---
 
 **O caminho dos bytes**
 
@@ -44,6 +48,8 @@ Passo a passo ao apertar `a`:
 
 > O diagrama é conceitual. Emulator, `ssh`, `tmux` e o seu programa rodam em espaço de usuário. PTY, line discipline e as filas ficam no kernel. Em um terminal serial real, o lugar do PTY master é ocupado pelo driver da porta serial (UART), e o terminal físico do outro lado do cabo faz o papel do emulator
 
+---
+
 **Por que o read() é afetado**
 
 O `read()` em um fd de terminal não lê "do teclado": lê da **fila de saída da line discipline**. O que estará nessa fila, e quando, depende do `termios`:
@@ -63,6 +69,8 @@ ssize_t n = read(STDIN_FILENO, buf, sizeof(buf));
 - O mesmo código, sem nenhuma alteração, lê linhas inteiras ou teclas individuais: quem decide é a configuração do terminal, aplicada pelo kernel antes do `read()`
 - Com stdin redirecionado (`./app < arquivo.txt` ou `echo oi | ./app`), não existe line discipline no caminho e o `read()` devolve os bytes do arquivo/pipe crus
 
+---
+
 **Descobrindo o terminal**
 
 ```c
@@ -77,6 +85,8 @@ ls -l /proc/$$/fd   # Linux: 0, 1 e 2 apontam para /dev/pts/N
 ```
 
 - `/dev/tty` é um apelido especial para o **terminal de controle** do processo atual, seja ele qual for. Útil para pedir uma senha mesmo quando stdin e stdout estão redirecionados
+
+---
 
 **Terminal de controle e sessões**
 

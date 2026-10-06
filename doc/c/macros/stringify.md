@@ -23,6 +23,8 @@ STR(a  ==   b)  // "a == b"
 STR("aspas")    // "\"aspas\""
 ```
 
+---
+
 **Imprimindo nome e valor de uma variável**
 
 Como duas strings literais lado a lado são juntadas pelo compilador (`"a" "b"` vira `"ab"`), o resultado do `#` pode ser combinado com outros textos:
@@ -39,6 +41,8 @@ PRINT_INT(idade * 2);
 // saída: idade * 2 = 50
 ```
 
+---
+
 **Mostrando a condição que falhou**
 
 É assim que o `assert` consegue imprimir a expressão que deu errado:
@@ -54,6 +58,8 @@ PRINT_INT(idade * 2);
 CHECAR(x > 0);
 // se x for 0, saída: falhou: x > 0
 ```
+
+---
 
 **Transformando o valor de outra macro em string**
 

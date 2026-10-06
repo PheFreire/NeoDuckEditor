@@ -24,6 +24,8 @@ sleep(2);
 printf("pronto\n"); // 2 segundos depois
 ```
 
+---
+
 **Repetindo uma tarefa periodicamente**
 
 ```c
@@ -35,6 +37,8 @@ for (;;) {
 
 > Esse laço não roda exatamente a cada 60 segundos: ele espera 60 segundos depois do fim de cada tarefa, então o tempo da própria tarefa se acumula. Para um intervalo preciso, calcula-se o próximo horário com `clock_gettime` e dorme-se só a diferença
 
+---
+
 **Contagem regressiva**
 
 ```c
@@ -44,6 +48,8 @@ for (int i = 3; i > 0; i--) {
 }
 printf("vai!\n");
 ```
+
+---
 
 **Esperando menos de um segundo**
 

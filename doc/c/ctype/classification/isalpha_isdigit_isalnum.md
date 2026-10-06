@@ -29,6 +29,8 @@ isxdigit('F');  // verdadeiro
 isxdigit('g');  // falso
 ```
 
+---
+
 **Verificando se uma string é um número inteiro**
 
 ```c
@@ -53,6 +55,8 @@ so_digitos("-5");     // 0: o sinal não é dígito
 
 - Para aceitar sinal, espaços e checar overflow, o `strtol` é mais completo (ver `../../string/casting/strtol.md`)
 
+---
+
 **Convertendo um dígito em número**
 
 ```c
@@ -64,6 +68,8 @@ if (isdigit((unsigned char)c)) {
 
 - Funciona porque o padrão C garante que os caracteres `'0'` a `'9'` são consecutivos. `'7' - '0'` é `55 - 48 = 7`
 - Essa garantia **não** existe para letras, então para converter um dígito hexadecimal é melhor usar `strtol` com base `16`
+
+---
 
 **Validando um identificador**
 

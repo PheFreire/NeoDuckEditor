@@ -26,6 +26,8 @@ struct timespec cem_ms = {0, 100 * 1000000};     // 100 ms
 struct timespec dois_e_meio = {2, 500000000};    // 2.5 s
 ```
 
+---
+
 **Diferença entre dois timespec**
 
 Subtraindo campo a campo, os nanossegundos podem ficar negativos, e é preciso "pegar emprestado" um segundo:
@@ -48,6 +50,8 @@ struct timespec diferenca(struct timespec inicio, struct timespec fim) {
 // com correção: {1, 200000000}, ou seja, 1.2 s
 ```
 
+---
+
 **Convertendo para um único número**
 
 Para mostrar ou comparar, costuma ser mais prático transformar em segundos (`double`) ou em nanossegundos (inteiro de 64 bits):
@@ -67,6 +71,8 @@ double em_ms(struct timespec t) {
 ```
 
 > O cast para `int64_t` antes da multiplicação é obrigatório: `tv_sec * 1000000000` feito em um tipo de 32 bits estouraria com qualquer valor acima de 2 segundos
+
+---
 
 **Somando um intervalo**
 

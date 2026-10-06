@@ -38,6 +38,8 @@ macOS:  Assertion failed: (b != 0), function dividir, file main.c, line 4.
         zsh: abort      ./programa
 ```
 
+---
+
 **O que acontece por baixo**
 
 O `assert` é uma macro, e não uma função. Uma implementação simplificada:
@@ -51,6 +53,8 @@ O `assert` é uma macro, e não uma função. Uma implementação simplificada:
 - `__FILE__`, `__LINE__`, `__func__`: preenchidos pelo compilador com o arquivo, a linha e a função onde o `assert` está (ver `../macros/predefined.md`)
 - `__assert_fail`: função interna da libc (o nome muda entre sistemas) que escreve a mensagem e chama `abort()`
 - Por ser uma macro, a localização mostrada é a da linha do `assert`, e não a de dentro da libc
+
+---
 
 **abort e o código de saída**
 
@@ -67,6 +71,8 @@ processo encerrado   →  código de saída 134 no shell (128 + 6, o número do 
 - O `echo $?` depois de um `assert` que falhou mostra `134`. Scripts de teste e ferramentas como o `make` tratam qualquer código diferente de `0` como falha
 - Dependendo da configuração do sistema, o `abort()` gera um core dump, que permite abrir o estado do programa no momento da falha com o debugger
 
+---
+
 **Encontrando a causa no debugger**
 
 Como o programa para exatamente no ponto da falha, o debugger mostra a pilha de chamadas que levou até ele:
@@ -82,6 +88,8 @@ gdb ./programa      # ou: lldb ./programa
 
 - O `frame` exato depende de quantas funções internas da libc aparecem na pilha. Procure o primeiro frame que é uma função do seu código (ver `../compilers/gcc/cheatsheet/debugging.md`)
 
+---
+
 **Mensagem junto com a condição**
 
 O `assert` não tem um parâmetro de mensagem, mas uma string literal é sempre verdadeira (é um ponteiro diferente de `NULL`), então ela pode ser adicionada com `&&` sem mudar o resultado:
@@ -90,6 +98,8 @@ O `assert` não tem um parâmetro de mensagem, mas uma string literal é sempre 
 assert(indice < total && "indice fora do limite");
 // Assertion `indice < total && "indice fora do limite"' failed.
 ```
+
+---
 
 **Usos comuns**
 
@@ -115,6 +125,8 @@ switch (estado) {
 - **Invariante**: o que precisa ser sempre verdade em uma estrutura de dados (o total nunca passa da capacidade)
 - **Pós-condição**: o que precisa ser verdade quando a função termina (o resultado está correto)
 - `assert(0 && "...")`: marca um ponto do código que nunca deveria ser executado
+
+---
 
 **Armadilhas**
 

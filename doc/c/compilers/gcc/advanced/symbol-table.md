@@ -11,6 +11,8 @@ nm -m main.o            # macOS: nm com detalhes de section e tipo
 dyld_info -exports libfila.dylib   # macOS: símbolos exportados de uma dylib
 ```
 
+---
+
 **Uma entrada no ELF**
 
 ```text
@@ -37,6 +39,8 @@ readelf -s main.o
 - `Vis` (visibilidade, importante em `.so`): `DEFAULT` (exportado), `HIDDEN` (global entre os `.o` da mesma biblioteca, mas não exportado), `PROTECTED`
 - `Ndx`: índice da section onde o símbolo está definido. `UND` = indefinido, `ABS` = valor absoluto, `COM` = common symbol
 
+---
+
 **.symtab vs .dynsym**
 
 | | `.symtab` | `.dynsym` |
@@ -48,6 +52,8 @@ readelf -s main.o
 
 - `nm -D libfila.so` mostra o `.dynsym`: é a "API binária" que a biblioteca exporta
 
+---
+
 **Mach-O**
 
 - O load command `LC_SYMTAB` aponta para um array de entradas `nlist_64` e uma string table, ambas no `__LINKEDIT`
@@ -55,10 +61,14 @@ readelf -s main.o
 - `LC_DYSYMTAB` divide a tabela em três faixas: locais, definidos externos e indefinidos
 - Entradas de debug do tipo `N_OSO` formam o "debug map" que aponta para os `.o` com o DWARF (ver `../debugging.md`)
 
+---
+
 **Como o linker usa a tabela**
 
 - **Estático** (ver `static-linking.md`): para cada `UND`, procura uma definição `GLOBAL` ou `WEAK`. Duas `GLOBAL` = `multiple definition`. Uma `GLOBAL` e uma `WEAK` = vence a `GLOBAL`, sem erro
 - **Dinâmico** (ver `dynamic-linking.md`): no Linux, o loader procura cada símbolo indefinido do `.dynsym` nas bibliotecas carregadas, **em ordem**, e usa a primeira que exporta aquele nome. É o que permite o `LD_PRELOAD` substituir o `malloc`. No macOS, o símbolo está amarrado a uma dylib específica (two-level namespace)
+
+---
 
 **Weak e visibilidade em C**
 

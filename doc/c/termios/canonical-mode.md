@@ -10,6 +10,8 @@ term.c_lflag &= ~ICANON;   // desliga: modo não canônico (ver raw-mode.md)
 tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
 ```
 
+---
+
 **O que acontece enquanto o usuário digita**
 
 ```text
@@ -26,6 +28,8 @@ Enter        ""                    ──►   "pato\n"     ──►   retorna 
 - O Backspace nunca chega ao programa: a line discipline apaga o último caractere do buffer e, com `ECHO` e `ECHOE` ligados, apaga também na tela (ver `local-flags.md`)
 - O que o `read()` recebe é a linha **já editada**, terminada com `\n`
 
+---
+
 **Caracteres especiais** (definidos em `c_cc`, ver `control-characters.md`)
 
 | Tecla padrão | Índice | Efeito em modo canônico |
@@ -37,11 +41,15 @@ Enter        ""                    ──►   "pato\n"     ──►   retorna 
 | Enter (`\n`) | — | libera o buffer incluindo o `\n` |
 | — | `VEOL`, `VEOL2` | terminadores de linha adicionais (normalmente desativados) |
 
+---
+
 **read() em modo canônico**
 
 - Retorna **no máximo uma linha** por chamada, mesmo que existam várias prontas na fila
 - Se o buffer passado ao `read()` for menor que a linha, retorna só o que cabe. O resto fica para o próximo `read()`
 - Nunca retorna uma linha incompleta, exceto com `Ctrl+D`
+
+---
 
 **EOF e o Ctrl+D**
 
@@ -54,6 +62,8 @@ buffer ""     + Ctrl+D   → read() retorna 0 → o programa interpreta como EOF
 
 - Por isso, no meio de uma linha, é preciso apertar `Ctrl+D` **duas vezes** para encerrar a entrada: a primeira libera o que foi digitado, a segunda libera um buffer vazio, e o `read()` devolve `0`
 - O `0` é a forma do `read()` dizer "fim de arquivo". `fgets` devolve `NULL` e `getchar` devolve `EOF` por causa dele. O terminal continua aberto e é possível continuar lendo depois
+
+---
 
 **Armadilhas**
 

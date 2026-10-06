@@ -33,6 +33,8 @@ nm main.o
                  U soma        U = undefined
 ```
 
+---
+
 **Letras do nm**
 
 | Letra | Significado |
@@ -47,16 +49,22 @@ nm main.o
 
 - Maiúscula = global (visível para outros arquivos), minúscula = local
 
+---
+
 **Definidos e indefinidos**
 
 - **Definido**: o arquivo contém o código ou o espaço de memória daquele nome
 - **Indefinido** (`U`): o arquivo usa o nome, mas espera que outro arquivo o defina. O linker precisa encontrar **exatamente uma** definição global para cada um
+
+---
 
 **Globais e locais**
 
 - **Global** (external linkage): o padrão para funções e variáveis fora de funções. Visível para o linker resolver usos em outros arquivos
 - **Local** (internal linkage): marcado com `static` fora de funções. Existe no `.o`, mas o linker não o usa para resolver referências de outros arquivos. Dois `.c` podem ter cada um a sua função `static void ajuda(void)` sem conflito
 - Regra prática: tudo que não precisa ser usado fora do `.c` deve ser `static`. Evita conflito de nomes, deixa o compilador otimizar melhor e documenta a intenção
+
+---
 
 **Declaração vs definição**
 
@@ -73,11 +81,15 @@ int contador = 0;                // definição: gera o símbolo D contador
 - Por isso declarações vão nos headers (podem se repetir em vários `.c`) e definições vão em um único `.c` (ver `preprocessor.md`)
 - Como o linker não conhece tipos, declarar `int soma(int, int)` em um arquivo e definir `double soma(double)` em outro **linka sem erro** e quebra em tempo de execução. Incluir o mesmo header no `.c` que define a função faz o compilador pegar essa diferença
 
+---
+
 **Armadilhas**
 
 - `int x;` em um header incluído por vários `.c`: até o GCC 9 isso era aceito (`common symbol`, letra `C`), mas a partir do GCC 10 o padrão é `-fno-common`, e isso gera `multiple definition`. O correto é `extern int x;` no header e `int x;` em um único `.c`
 - No macOS (Mach-O), todo símbolo C ganha um `_` na frente: a função `soma` aparece como `_soma` no `nm` e nos erros do linker
 - Em C++, os nomes são codificados com os tipos dos parâmetros (`_Z4somaii`), o `name mangling`. Para chamar código C a partir de C++, as declarações precisam estar em `extern "C" { ... }`
+
+---
 
 **Símbolos no executável**
 

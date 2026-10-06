@@ -33,6 +33,8 @@ main.o
 - No Mach-O, as sections ficam dentro de segments e têm nomes como `__TEXT,__text`, `__DATA,__data`, `__DATA,__bss` e `__TEXT,__cstring`
 - O `.bss` não ocupa espaço no arquivo, só registra quantos bytes zerados serão necessários quando o programa for carregado
 
+---
+
 **Símbolos definidos e não resolvidos**
 
 ```c
@@ -57,6 +59,8 @@ nm main.o
 - Os símbolos `U` são promessas: o `.o` diz "eu uso `soma`, alguém tem que fornecer". Ver `symbols.md`
 - No macOS os nomes aparecem com `_` na frente (`_main`, `_printf`), convenção do Mach-O
 
+---
+
 **Relocations**
 
 Ao gerar o `.o`, o assembler não sabe em que endereço `soma` ou `printf` vão estar, nem onde o próprio `main` vai ficar no executável. Então ele escreve zeros no lugar e anota uma relocation:
@@ -70,12 +74,16 @@ objdump -d -r main.o   # Linux (no macOS: objdump --macho -d -r, ou otool -tv)
 - `e8 00 00 00 00`: instrução `call` com o endereço zerado
 - `R_X86_64_PLT32 soma`: "no byte `0x1f`, escreva o deslocamento até `soma`". Quem faz isso é o linker, depois de decidir onde cada coisa fica (ver `linking.md`)
 
+---
+
 **Por que um .o não é um executável**
 
 - Tem símbolos indefinidos (`U`) que ninguém resolveu
 - Os endereços são relativos ao início de cada section (por isso `relocatable`), e não endereços finais
 - Não tem ponto de entrada: o `_start`, que prepara o processo e chama o `main`, está nos arquivos `crt*.o`, adicionados pelo driver só no link
 - Não tem informações de carregamento (quais partes mapear em memória, com quais permissões, qual dynamic loader usar)
+
+---
 
 **Ferramentas**
 

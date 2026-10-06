@@ -12,6 +12,8 @@ A `assert.h` é a biblioteca do C para verificar suposições do código. Ela te
 
 - Não precisa de nenhuma flag de compilação extra, faz parte da biblioteca padrão
 
+---
+
 **Conteúdo**
 
 | Item | Quando verifica | Ver |
@@ -21,6 +23,8 @@ A `assert.h` é a biblioteca do C para verificar suposições do código. Ela te
 | `NDEBUG` | desliga todos os `assert` | `ndebug.md` |
 | testes com `assert` | — | `unit_tests.md` |
 | estrutura de projeto e `make test` | — | `project_setup.md` |
+
+---
 
 **assert não é tratamento de erro**
 
@@ -37,6 +41,8 @@ O `assert` serve para pegar **bugs do programador**, e não para lidar com situa
 
 - Erros que dependem do mundo externo (arquivos, rede, memória, entrada do usuário) precisam ser tratados sempre, inclusive na versão final do programa
 - Asserções podem ser desligadas com `NDEBUG` (ver `ndebug.md`), então nunca podem ser a única proteção contra algo que acontece em uso normal
+
+---
 
 **Onde cada verificação acontece**
 

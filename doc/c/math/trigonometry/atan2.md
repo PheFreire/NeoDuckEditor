@@ -29,6 +29,8 @@ atan2(0.0, -1.0);   // 3.1415926 (180°, esquerda)
 
 > A ordem dos argumentos é `(y, x)`, e não `(x, y)`, porque a função calcula a tangente `y / x`. Inverter os dois é um erro comum e devolve o ângulo espelhado
 
+---
+
 **Direção de um ponto até outro**
 
 Em jogos, para fazer um objeto olhar ou atirar na direção de um alvo:
@@ -46,6 +48,8 @@ pos_y += sin(angulo) * velocidade;
 
 > Em telas, o eixo `y` normalmente cresce para baixo, então o ângulo cresce no sentido horário. A fórmula é a mesma, só a interpretação visual muda
 
+---
+
 **Convertendo para 0° a 360°**
 
 ```c
@@ -55,6 +59,8 @@ if (graus < 0) {
   graus += 360.0; // 270.0
 }
 ```
+
+---
 
 **Coordenadas polares**
 

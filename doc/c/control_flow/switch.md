@@ -48,6 +48,8 @@ switch (opcao) {
 }
 ```
 
+---
+
 **Fall through: esquecendo o break**
 
 Sem o `break`, todos os `case` abaixo do que foi escolhido também são executados:
@@ -68,6 +70,8 @@ switch (n) {
 }
 // saída: um, dois, três
 ```
+
+---
 
 **Agrupando vários valores no mesmo código**
 
@@ -90,6 +94,8 @@ switch (c) {
 }
 ```
 
+---
+
 **Usando com enum**
 
 O `switch` combina bem com `enum`, e o GCC/Clang com `-Wall` avisam quando algum valor do `enum` não foi tratado em nenhum `case` (desde que não haja `default`):
@@ -111,6 +117,8 @@ void mover(enum estado e) {
   }
 }
 ```
+
+---
 
 **Declarando variáveis dentro de um case**
 
