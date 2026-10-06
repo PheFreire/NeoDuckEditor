@@ -39,7 +39,7 @@ nvim/
 │   └── dark-duck.lua               # Tema customizado baseado em xeno.nvim
 ├── assets/
 │   └── logo.png                    # Logo do projeto
-├── doc/                             # Documentação pessoal (:doc / :docs / :docd) — hoje: C (libc, GCC, termios, controle de fluxo, macros) e arquitetura em Python
+├── doc/                             # Documentação pessoal (:doc / :docs / :docd) — hoje: C (libc, GCC, termios, testes, controle de fluxo, macros) e arquitetura em Python
 ├── setup.sh                        # Script de instalação de dependências externas
 ├── Makefile                        # Utilitários de build
 ├── lazy-lock.json                  # Lockfile do lazy.nvim (versões fixas dos plugins)
@@ -502,6 +502,7 @@ Configurado em `core/docs.lua`. Mantém uma base de anotações técnicas versio
 - **Linguagem**: controle de fluxo (`control_flow/`) e pré-processador (`macros/`)
 - **Terminal**: `termios/`, com TTY, line discipline, modo canônico, raw mode, flags e porta serial
 - **Compilação**: `compilers/gcc/`, com o pipeline do GCC, flags, warnings, otimização, debug, sanitizers, linking e bibliotecas, além de um nível avançado (`advanced/`) sobre assembly, ELF, Mach-O, relocations, linking estático e dinâmico e loader
+- **Testes**: `tests/`, com `assert`, `static_assert`, `NDEBUG`, testes unitários sem framework e como configurar um projeto com test runner e `make test`
 
 Também há notas de arquitetura em Python (`doc/python/`).
 
