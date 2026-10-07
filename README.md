@@ -25,6 +25,7 @@ Destaques do setup:
 - Tema próprio `dark-duck`, construído sobre tonalidades quentes de preto e amarelo
 - File explorer moderno via Oil.nvim (edita arquivos como buffers)
 - Documentação pessoal versionada no próprio repo, acessível de qualquer projeto via `:doc` / `:docs` / `:docd`
+- Sites favoritos abertos no `terminal-browser` em uma nova tab do Kitty via `:web` / `:webd`
 - Busca poderosa com Telescope + ripgrep
 - Multi-cursor, find & replace global, folding via `vim.treesitter.foldexpr()` nativo
 
@@ -56,6 +57,7 @@ nvim/
         │   ├── c-hover.lua         # Hover LSP em C com fallback para man page
         │   ├── macro-define.lua    # Comandos :Define / :Undefine (alinhamento de macros C)
         │   ├── docs.lua            # Comandos :doc / :docs / :docd (documentação pessoal)
+        │   ├── web.lua             # Comandos :web / :webd (sites no terminal-browser)
         │   ├── kitty_spacing.lua   # Integração de espaçamento com Kitty terminal
         │   ├── aesthetics/
         │   │   ├── init.lua              # Importa os módulos de aesthetics
@@ -519,6 +521,25 @@ Como o Neovim não aceita comandos definidos em minúsculo, `:doc`/`:docs`/`:doc
 
 ---
 
+### Sites no Terminal — `:web` / `:webd`
+
+Configurado em `core/web.lua`. Mantém uma lista de sites favoritos em `web/sites.md` (ignorado pelo git) e abre cada um no `terminal-browser` sem sair do Neovim.
+
+| Comando | Ação |
+|---|---|
+| `:webd` | Abre `web/sites.md` num split vertical para editar a lista de sites |
+| `:web` | Telescope com o nome dos sites cadastrados, e o escolhido abre numa nova tab da sessão atual do Kitty com o `terminal-browser` na URL do site |
+
+Cada site ocupa uma linha no formato:
+
+```markdown
+# GitHub [https://github.com]
+```
+
+Linhas fora desse formato são ignoradas. Se `web/sites.md` não existir, ele é criado com esse exemplo na primeira vez que `:webd` ou `:web` for usado. A tab é aberta via `kitty @ launch --type=tab`, então depende de `allow_remote_control` e `listen_on` no `kitty.conf` e só funciona com o Neovim rodando dentro do Kitty. `:web`/`:webd` são `cnoreabbrev` para `:Web`/`:WebWrite`, do mesmo jeito que os comandos de documentação.
+
+---
+
 ### Outras Ferramentas
 
 | Tecla | Modo | Ação |
@@ -719,6 +740,7 @@ Instaladas via `setup.sh`:
 | FiraCode Nerd Font | Instalado pelo `setup.sh` | Ícones e ligatures |
 | `node` / `npm` | Instalação manual | Servidores LSP de JS/TS |
 | `cargo` (Rust) | Instalação manual | rust_analyzer |
+| `terminal-browser` | Instalação manual | Navegador no terminal usado pelo `:web` |
 
 ---
 

@@ -5,6 +5,7 @@ require("pato.core.keymaps")
 require("pato.core.lsp-buffer")
 require("pato.core.macro-define")
 require("pato.core.docs").setup()
+require("pato.core.web").setup()
 
 local ks = require("pato.core.kitty_spacing")
 
