@@ -39,7 +39,7 @@ nvim/
 │   └── dark-duck.lua               # Tema customizado baseado em xeno.nvim
 ├── assets/
 │   └── logo.png                    # Logo do projeto
-├── doc/                             # Documentação pessoal (:doc / :docs / :docd) — hoje: C (libc, GCC, termios, testes, raylib, controle de fluxo, macros) e arquitetura em Python
+├── doc/                             # Documentação pessoal (:doc / :docs / :docd) — hoje: C (libc, GCC, termios, testes, raylib, controle de fluxo, structs, macros) e arquitetura em Python
 ├── setup.sh                        # Script de instalação de dependências externas
 ├── Makefile                        # Utilitários de build
 ├── lazy-lock.json                  # Lockfile do lazy.nvim (versões fixas dos plugins)
@@ -381,7 +381,7 @@ Configurado em `keymaps/nvim-lsp.lua`, `plugins/language/mason-lsp.lua` e `core/
 | `e` | Abrir float de diagnóstico no cursor |
 | `ee` | Ver erros do workspace (via Telescope) |
 
-Em arquivos `.c`, `<leader>gg` usa um hover customizado (`core/c-hover.lua`): primeiro tenta o hover normal do LSP; se a página que abrir tiver o toggle ativo, `<leader><leader>` alterna entre o hover do LSP e a página de manual (`man`) do símbolo sob o cursor, em uma janela flutuante própria (`q` fecha).
+Em arquivos `.c`, `<leader>gg` usa um hover customizado (`core/c-hover.lua`): primeiro tenta o hover normal do LSP, e se a página que abrir tiver o toggle ativo, `<leader><leader>` alterna entre o hover do LSP e a página de manual (`man`) do símbolo sob o cursor, em uma janela flutuante própria (`q` fecha).
 
 ---
 
@@ -499,7 +499,7 @@ Detalhes de comportamento:
 Configurado em `core/docs.lua`. Mantém uma base de anotações técnicas versionada no próprio repositório (`doc/`), acessível de qualquer projeto aberto no Neovim — hoje reúne notas sobre C (`doc/c/`):
 
 - **libc**: memória, strings (conversão numérica e formatação em `casting/`, concatenação em `concatenation/`, tokenização em `split/`, além de `strlen`/`strcmp`/`strncpy`/`strstr`/`strcspn`/`strdup`), classificação de caracteres (`ctype/`), I/O, matemática (`math/`), tempo (`time/`), tipos (`types/`), hashing, file descriptors, chamadas de sistema (`os/`), sockets (com um resumo dos conceitos de rede) e threads (pthread)
-- **Linguagem**: controle de fluxo (`control_flow/`) e pré-processador (`macros/`)
+- **Linguagem**: controle de fluxo (`control_flow/`), structs (`types/struct/`, com o uso básico em `struct.md` e notas separadas para padding, flexible array, bit fields, struct opaca, funções em structs, herança e polimorfismo com vtable) e pré-processador (`macros/`)
 - **Terminal**: `termios/`, com TTY, line discipline, modo canônico, raw mode, flags e porta serial
 - **Compilação**: `compilers/gcc/`, com o pipeline do GCC, flags, warnings, otimização, debug, sanitizers, linking e bibliotecas, além de um nível avançado (`advanced/`) sobre assembly, ELF, Mach-O, relocations, linking estático e dinâmico e loader
 - **Testes**: `tests/`, com `assert`, `static_assert`, `NDEBUG`, testes unitários sem framework e como configurar um projeto com test runner e `make test`
@@ -511,8 +511,8 @@ As notas de C seguem um formato comum: título em negrito, o header ou contexto 
 
 | Comando | Ação |
 |---|---|
-| `:doc` | Telescope filtrando pelo **nome** dos arquivos em `doc/`; o arquivo escolhido abre num split vertical à direita |
-| `:docs` | Telescope filtrando pelo **conteúdo** dos arquivos em `doc/`; o resultado escolhido abre num split vertical à direita |
+| `:doc` | Telescope filtrando pelo **nome** dos arquivos em `doc/`, e o arquivo escolhido abre num split vertical à direita |
+| `:docs` | Telescope filtrando pelo **conteúdo** dos arquivos em `doc/`, e o resultado escolhido abre num split vertical à direita |
 | `:docd` | Abre o Oil em `doc/` num split vertical (não mexe na janela atual) |
 
 Como o Neovim não aceita comandos definidos em minúsculo, `:doc`/`:docs`/`:docd` são `cnoreabbrev` para os comandos reais `:Doc`/`:DocTxt`/`:DocDir` — a abreviação só expande quando a linha de comando é exatamente essa palavra, então não interfere se ela aparecer no meio de outro comando. O diretório raiz é sempre `stdpath("config") .. "/doc"`, então os três comandos funcionam do mesmo jeito não importa qual projeto esteja aberto (e `project.nvim` ignora esse diretório, então visitar um buffer de doc nunca troca o `cwd` do projeto atual).
