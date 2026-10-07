@@ -530,13 +530,18 @@ Configurado em `core/web.lua`. Mantém uma lista de sites favoritos em `web/site
 | `:webd` | Abre `web/sites.md` num split vertical para editar a lista de sites |
 | `:web` | Telescope com o nome dos sites cadastrados, e o escolhido abre numa nova tab da sessão atual do Kitty com o `terminal-browser` na URL do site |
 
-Cada site ocupa uma linha no formato:
+Cada seção é um título `#`, cada site é um título `##` com o nome, e logo abaixo vêm a URL entre colchetes e, opcionalmente, o perfil:
 
 ```markdown
-# GitHub [https://github.com]
+# Exemplo
+## GitHub
+- [https://github.com]
+- pessoal
 ```
 
-Linhas fora desse formato são ignoradas. Se `web/sites.md` não existir, ele é criado com esse exemplo na primeira vez que `:webd` ou `:web` for usado. A tab é aberta via `kitty @ launch --type=tab`, então depende de `allow_remote_control` e `listen_on` no `kitty.conf` e só funciona com o Neovim rodando dentro do Kitty. `:web`/`:webd` são `cnoreabbrev` para `:Web`/`:WebWrite`, do mesmo jeito que os comandos de documentação.
+Uma linha `# Nome da Seção` cria uma divisão no Telescope (`── Nome da Seção ──`). Cada bloco (seção e seus sites) fica separado do anterior por uma linha em branco. O cursor pula as divisões, `<CR>` não faz nada nelas, e elas somem quando há texto digitado no prompt. A lista aparece de cima para baixo na mesma ordem do arquivo. Linhas fora desses formatos são ignoradas. Se `web/sites.md` não existir, ele é criado com esse exemplo na primeira vez que `:webd` ou `:web` for usado. A tab é aberta via `kitty @ launch --type=tab`, então depende de `allow_remote_control` e `listen_on` no `kitty.conf` e só funciona com o Neovim rodando dentro do Kitty. `:web`/`:webd` são `cnoreabbrev` para `:Web`/`:WebWrite`, do mesmo jeito que os comandos de documentação.
+
+**Perfis:** cada perfil tem login, cookies e histórico próprios. Sites sem a linha de perfil usam o perfil padrão do `terminal-browser`. O perfil aparece apagado ao lado do nome no Telescope. Como o `terminal-browser` não tem opção de perfil, o isolamento é feito com variáveis de ambiente que ele lê ao subir seu processo em segundo plano (`TERMINAL_BROWSER_APPDATA`, `XDG_DATA_HOME`, `XDG_STATE_HOME` e `XDG_RUNTIME_DIR`), todas apontando para `~/.local/share/tbp/<perfil>/`. O caminho é curto de propósito, porque o socket do processo fica dentro dele e o macOS limita caminhos de socket a ~104 caracteres. Isso não é documentado pelo `terminal-browser` e pode mudar numa atualização. Para encerrar o processo de um perfil, rode `terminal-browser shutdown` com as mesmas variáveis.
 
 ---
 
