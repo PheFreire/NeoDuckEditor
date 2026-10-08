@@ -19,7 +19,7 @@ O projeto segue uma filosofia simples: **menos cliques, mais foco**. Cada plugin
 Destaques do setup:
 - Navegação remapeada completamente (sem depender do layout padrão HJKL do Vim)
 - LSP completo com 11 servidores de linguagem configurados e auto-instalados
-- Debugging integrado para C via nvim-dap + CodeLLDB (compila o arquivo atual com `-g`/ASan, UI automática, virtual text inline, stack que acompanha o cursor)
+- Debugging integrado para C via nvim-dap + CodeLLDB (compila o arquivo atual com `-g`/ASan ou o projeto CMake inteiro em Debug, carrega `.env`/`.envrc` da raiz, UI automática, virtual text inline, stack que acompanha o cursor)
 - Hover contextual para C: documentação LSP com fallback para `man` (`<leader>gg` / `<leader><leader>` alterna entre os dois)
 - Comandos `:Define` / `:Undefine` para alinhar (ou remover) automaticamente as continuações `\` de macros C
 - Tema próprio `dark-duck`, construído sobre tonalidades quentes de preto e amarelo
@@ -433,9 +433,15 @@ Pressione **`<leader>d`** e aguarde ~400ms para abrir um popup do which-key com 
 
 | Configuração | O que faz |
 |---|---|
+| CMake: build project & debug | Salva todos os buffers, configura o projeto em `build-dap/` com `-DCMAKE_BUILD_TYPE=Debug` e compila com `cmake --build`. Os executáveis são lidos da File API do CMake, e se houver mais de um aparece um seletor. O `cwd` do programa é a raiz do projeto |
+| CMake: build project & debug (AddressSanitizer) | Igual, em `build-dap-asan/` com `-fsanitize=address,undefined` |
 | Compile current file & debug | Salva e compila o arquivo atual com `cc -g -O0 -Wall -Wextra` e abre no debugger. Se a compilação falhar, mostra o erro e não inicia |
 | Compile current file & debug (AddressSanitizer) | Igual, com `-fsanitize=address,undefined`. Pega acesso fora do array, use-after-free e double free mostrando a linha exata no console |
 | Launch executable | Pede o caminho de um binário já compilado (projetos com Makefile). Compile com `-g -O0` |
+
+A raiz do projeto é o `CMakeLists.txt` mais externo acima do arquivo atual, senão a raiz do git, senão o `cwd`. Os builds ficam em diretórios próprios para não alterar um `build/` já existente.
+
+**Ambiente do projeto:** antes de qualquer configuração iniciar, se a raiz tiver um `.envrc` é feito `direnv allow` e o ambiente é carregado com `direnv exec`, e se tiver um `.env` ele recebe `source` (com `set -a`, então tudo é exportado). As variáveis resultantes vão para o programa debugado e também para o `cmake` durante configure e build.
 
 Veja `tutorial-dap-gdb.md` para um guia completo com exemplos práticos.
 

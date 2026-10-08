@@ -318,16 +318,174 @@ return {
       end
     end
 
+    -- Raiz do projeto: o CMakeLists.txt mais externo acima do arquivo atual (subdiretórios
+    -- também têm CMakeLists.txt), senão a raiz do git, senão o cwd
+    local function cmake_root()
+      local start = vim.fn.expand("%:p:h")
+      if start == "" then start = vim.fn.getcwd() end
+      local found = vim.fs.find("CMakeLists.txt", {
+        path = start, upward = true, limit = math.huge, stop = vim.uv.os_homedir(),
+      })
+      return #found > 0 and vim.fs.dirname(found[#found]) or nil
+    end
+
+    local function project_root()
+      return cmake_root() or vim.fs.root(0, ".git") or vim.fn.getcwd()
+    end
+
+    -- Ambiente do projeto: faz `direnv allow` se houver .envrc e dá source no .env da raiz.
+    -- Devolve só as variáveis novas ou alteradas em relação ao ambiente do nvim
+    local function project_env(root)
+      local has_env    = vim.uv.fs_stat(root .. "/.env") ~= nil
+      local has_envrc  = vim.uv.fs_stat(root .. "/.envrc") ~= nil
+      if not has_env and not has_envrc then return {} end
+
+      local cmd = { "sh", "-c", (has_env and "set -a; . ./.env; set +a; " or "") .. "env -0" }
+      if has_envrc then
+        if vim.fn.executable("direnv") == 1 then
+          vim.system({ "direnv", "allow", root }, { cwd = root }):wait()
+          cmd = vim.list_extend({ "direnv", "exec", root }, cmd)
+        else
+          vim.notify(".envrc encontrado mas direnv não está instalado", vim.log.levels.WARN, { title = "DAP" })
+        end
+      end
+
+      local result = vim.system(cmd, { cwd = root, text = true }):wait()
+      if result.code ~= 0 then
+        vim.notify(result.stderr, vim.log.levels.ERROR, { title = "Falha ao carregar .env/.envrc" })
+        return nil
+      end
+
+      -- Ignora variáveis do próprio shell, do direnv e do nvim
+      local ignored = { PWD = true, OLDPWD = true, SHLVL = true, _ = true, NVIM = true }
+      local current, env = vim.fn.environ(), {}
+      for _, entry in ipairs(vim.split(result.stdout, "\0", { plain = true, trimempty = true })) do
+        local k, v = entry:match("^([^=]+)=(.*)$")
+        if k and current[k] ~= v and not ignored[k] and not k:match("^DIRENV_") then
+          env[k] = v
+        end
+      end
+      return env
+    end
+
+    -- Envolve uma configuração: ao iniciar, carrega o ambiente do projeto e junta com o env
+    -- da própria configuração. `setup(config, root, env)` pode completar a config (cmake)
+    local function with_project_env(config, setup)
+      return setmetatable(config, {
+        __call = function(self)
+          local cfg  = vim.deepcopy(self)
+          local root = project_root()
+          local env  = project_env(root)
+          if not env then
+            cfg.program = dap.ABORT
+            return cfg
+          end
+          cfg.env = vim.tbl_extend("force", env, cfg.env or {})
+          if setup then setup(cfg, root, env) end
+          return cfg
+        end,
+      })
+    end
+
+    -- Escolha dentro da corrotina do nvim-dap (vim.ui.select é assíncrono)
+    local function select_in_coroutine(items, prompt)
+      if #items == 1 then return items[1] end
+      local co = coroutine.running()
+      vim.ui.select(items, { prompt = prompt, format_item = function(i) return i.name end }, function(choice)
+        vim.schedule(function() coroutine.resume(co, choice) end)
+      end)
+      return coroutine.yield()
+    end
+
+    -- Executáveis gerados pelo CMake, lidos da File API (reply do codemodel-v2)
+    local function cmake_executables(build_dir)
+      local reply = build_dir .. "/.cmake/api/v1/reply"
+      local index = vim.fn.glob(reply .. "/index-*.json", false, true)
+      if #index == 0 then return {} end
+      table.sort(index)
+      local read_json = function(path) return vim.json.decode(table.concat(vim.fn.readfile(path), "\n")) end
+      local idx = read_json(index[#index])
+      local codemodel
+      for _, obj in ipairs(idx.objects or {}) do
+        if obj.kind == "codemodel" then codemodel = read_json(reply .. "/" .. obj.jsonFile) end
+      end
+      if not codemodel then return {} end
+
+      local exes, seen = {}, {}
+      for _, conf in ipairs(codemodel.configurations or {}) do
+        for _, t in ipairs(conf.targets or {}) do
+          local target = read_json(reply .. "/" .. t.jsonFile)
+          if target.type == "EXECUTABLE" and target.artifacts and not seen[target.name] then
+            seen[target.name] = true
+            local path = target.artifacts[1].path
+            if not path:match("^/") then path = build_dir .. "/" .. path end
+            table.insert(exes, { name = target.name, path = path })
+          end
+        end
+      end
+      table.sort(exes, function(a, b) return a.name < b.name end)
+      return exes
+    end
+
+    -- Configura (Debug) e compila o projeto CMake com o ambiente do projeto, depois escolhe
+    -- o executável. Build separado em build-dap/ para não mexer no build/ do usuário
+    local function cmake_build(extra_flags, dir_name)
+      return function(cfg, root, env)
+        cfg.cwd = root
+        cfg.program = function()
+          vim.cmd("silent! wall")
+          local build_dir = root .. "/" .. dir_name
+          vim.fn.mkdir(build_dir .. "/.cmake/api/v1/query", "p")
+          vim.fn.writefile({}, build_dir .. "/.cmake/api/v1/query/codemodel-v2")
+
+          local configure = { "cmake", "-S", root, "-B", build_dir, "-DCMAKE_BUILD_TYPE=Debug" }
+          if #extra_flags > 0 then
+            local flags = table.concat(extra_flags, " ")
+            vim.list_extend(configure, { "-DCMAKE_C_FLAGS=" .. flags, "-DCMAKE_CXX_FLAGS=" .. flags,
+              "-DCMAKE_EXE_LINKER_FLAGS=" .. flags })
+          end
+          for _, step in ipairs({ configure, { "cmake", "--build", build_dir, "--parallel" } }) do
+            local result = vim.system(step, { cwd = root, env = env, text = true }):wait()
+            if result.code ~= 0 then
+              vim.notify(result.stdout .. result.stderr, vim.log.levels.ERROR, { title = "CMake falhou" })
+              return dap.ABORT
+            end
+          end
+
+          local exes = cmake_executables(build_dir)
+          if #exes == 0 then
+            vim.notify("Nenhum executável encontrado em " .. build_dir, vim.log.levels.ERROR, { title = "CMake" })
+            return dap.ABORT
+          end
+          local choice = select_in_coroutine(exes, "Executável CMake")
+          return choice and choice.path or dap.ABORT
+        end
+      end
+    end
+
     dap.configurations.c = {
-      {
+      with_project_env({
+        name        = "CMake: build project & debug",
+        type        = "codelldb",
+        request     = "launch",
+        stopOnEntry = false,
+      }, cmake_build({ "-fno-omit-frame-pointer" }, "build-dap")),
+      with_project_env({
+        name        = "CMake: build project & debug (AddressSanitizer)",
+        type        = "codelldb",
+        request     = "launch",
+        stopOnEntry = false,
+        env         = { ASAN_OPTIONS = "abort_on_error=1:detect_leaks=0" },
+      }, cmake_build({ "-fno-omit-frame-pointer", "-fsanitize=address,undefined" }, "build-dap-asan")),
+      with_project_env({
         name        = "Compile current file & debug",
         type        = "codelldb",
         request     = "launch",
         program     = compile_current({}),
         cwd         = "${workspaceFolder}",
         stopOnEntry = false,
-      },
-      {
+      }),
+      with_project_env({
         name        = "Compile current file & debug (AddressSanitizer)",
         type        = "codelldb",
         request     = "launch",
@@ -335,8 +493,8 @@ return {
         cwd         = "${workspaceFolder}",
         stopOnEntry = false,
         env         = { ASAN_OPTIONS = "abort_on_error=1:detect_leaks=0" },
-      },
-      {
+      }),
+      with_project_env({
         name        = "Launch executable",
         type        = "codelldb",
         request     = "launch",
@@ -346,7 +504,8 @@ return {
         cwd         = "${workspaceFolder}",
         stopOnEntry = false,
         args        = {},
-      },
+      }),
     }
+    dap.configurations.cpp = dap.configurations.c
   end,
 }
