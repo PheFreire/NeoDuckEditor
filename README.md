@@ -264,7 +264,7 @@ O setup usa um **layout de navegação remapeado**. As teclas padrão do Vim for
 | `<C-q>` | n | Fechar sem salvar |
 | `<leader>gb` | n | Abrir último buffer |
 | `<leader>n` | n | Novo buffer sem nome |
-| `cc` | n | Copiar path do buffer atual para o clipboard |
+| `cc` | n | Copiar path do buffer atual para o clipboard (no oil, copia o caminho absoluto do diretório aberto) |
 
 ---
 

@@ -181,7 +181,15 @@ function M.setDefaultNavigationKeymaps(bufnr)
 
   -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Copy Buffer Path)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+  -- No oil o nome do buffer é oil:///..., então copia o diretório que o oil está mostrando
   vim.keymap.set('n', 'cc', function()
+    if vim.bo.filetype == "oil" then
+      local dir = require("oil").get_current_dir()
+      if dir then
+        vim.fn.setreg("+", (dir:gsub("(.)/$", "%1")))
+      end
+      return
+    end
     vim.fn.setreg("+", vim.fn.expand("%:."))
   end, keymapOpts)
 
