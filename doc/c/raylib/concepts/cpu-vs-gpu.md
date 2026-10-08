@@ -48,4 +48,4 @@ LoadImageFromTexture / screenshot      VRAM → RAM   lento: a CPU espera a GPU 
 - A CPU é melhor em lógica com muitas decisões e dependências (IA, regras do jogo)
 - Mover um efeito da CPU para um shader (por exemplo, escurecer a tela inteira) pode transformar um gargalo em algo praticamente gratuito (ver `../shaders/shaders.md`)
 
-> A GPU só existe para o raylib depois do `InitWindow`, que cria o contexto OpenGL. Por isso funções de imagem (CPU) funcionam antes da janela existir, e funções de textura (GPU) não (ver `image-vs-texture.md`)
+> A GPU só existe para o raylib depois do `InitWindow`, que cria o contexto OpenGL. Por isso funções de imagem (CPU) funcionam antes da janela existir, e funções de textura (GPU) não (ver `../texture/image-vs-texture.md`)

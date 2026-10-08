@@ -2,7 +2,7 @@
 
 > do `DrawRectangle` até o pixel na tela
 
-Quando o programa chama uma função `Draw...`, nada é desenhado na hora. O raylib acumula os vértices em um buffer (o **batch**) e os envia à GPU de uma vez, em poucos comandos. Esse agrupamento é o que permite desenhar milhares de formas por frame com bom desempenho
+Quando o programa chama uma função `Draw...`, nada é desenhado na hora. O raylib acumula os vértices em um buffer (o **batch**) e os envia à GPU de uma vez, em poucos comandos. Esse agrupamento é o que permite desenhar milhares de formas por frame com bom desempenho. Como a textura chega até aqui, desde o arquivo, está em `image-to-screen.md`
 
 ```text
 DrawRectangle / DrawTexture / DrawText ...

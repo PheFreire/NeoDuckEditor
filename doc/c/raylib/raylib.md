@@ -68,6 +68,7 @@ O raylib é dividido em módulos, cada um em um arquivo `.c` interno, mas todos 
 
 - A câmera 2D/3D, usada para mover a visão do mundo, está em `camera/`
 - Conceitos que valem para todos os módulos (game loop, delta time, CPU vs GPU, ciclo de vida dos recursos) estão em `concepts/`
+- O caminho completo de uma imagem, do arquivo até aparecer na tela, passando por `Image`, `Texture2D` e o desenho, está em `concepts/image-to-screen.md`
 
 ---
 

@@ -54,5 +54,6 @@ arquivo .png  ──LoadImage──►  Image (RAM, CPU)  ──LoadTextureFromI
 - `Image`: editável pelo programa, não desenhável
 - `Texture2D`: desenhável e rápida, mas os pixels ficam na GPU e não são acessíveis diretamente
 - Ver a comparação completa em `../texture/image-vs-texture.md`
+- Ver o caminho inteiro, do arquivo até a tela, em `../concepts/image-to-screen.md`
 
 > As funções `Image...` que modificam a imagem recebem um ponteiro (`Image *`), pois podem trocar os dados, o tamanho e o formato. As que só leem ou criam uma nova recebem a imagem por valor. Toda imagem carregada ou gerada precisa de um `UnloadImage`, que libera os pixels da RAM (ver `functions/unload-image.md`)

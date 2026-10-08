@@ -31,6 +31,6 @@ UnloadImage(folha);
 **ImageCrop vs ImageFromImage**
 
 - `ImageCrop(&img, rec)`: altera a própria imagem, perdendo o resto
-- `ImageFromImage(img, rec)`: devolve uma imagem nova com o recorte, mantendo a original. No exemplo acima, substitui o `ImageCopy` + `ImageCrop`
+- `ImageFromImage(img, rec)`: devolve uma imagem nova com o recorte, mantendo a original. No exemplo acima, substitui o `ImageCopy` + `ImageCrop` (ver `image-from-image.md`)
 
 > Para desenhar só uma parte de uma folha de sprites, não é preciso recortar: carregue a folha inteira como uma textura e desenhe a região desejada com `DrawTextureRec` ou `DrawTexturePro`. Isso usa uma única textura para todos os sprites, o que é mais eficiente (ver `../../texture/texture-drawing.md`)

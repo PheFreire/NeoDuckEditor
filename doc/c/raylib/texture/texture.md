@@ -37,6 +37,7 @@ CloseWindow();
 
 | Assunto | Ver |
 |---------|-----|
+| caminho completo: arquivo → `Image` → `Texture2D` → tela | `../concepts/image-to-screen.md` |
 | diferença entre `Image` e `Texture2D` | `image-vs-texture.md` |
 | carregar texturas | `texture-loading.md` |
 | desenhar texturas, recortes, rotação e escala | `texture-drawing.md` |
