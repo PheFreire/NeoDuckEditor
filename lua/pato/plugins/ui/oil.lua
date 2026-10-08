@@ -12,6 +12,23 @@ return {
       "icon",
     },
     use_default_keymaps = true,
+    keymaps = {
+      -- Imagem abre no kitty (ou no visualizador do sistema) sem sair do oil
+      ["<CR>"] = {
+        desc = "Abrir entrada (imagens fora do buffer)",
+        callback = function()
+          local oil   = require("oil")
+          local entry = oil.get_cursor_entry()
+          local dir   = oil.get_current_dir()
+          local image = require("pato.core.image")
+          if entry and dir and entry.type == "file" and image.is_image(entry.name) then
+            image.open(dir .. entry.name)
+          else
+            oil.select()
+          end
+        end,
+      },
+    },
     view_options = {
       show_hidden = true,
       is_always_hidden = function(name, _)

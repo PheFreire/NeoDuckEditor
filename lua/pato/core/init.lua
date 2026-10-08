@@ -6,6 +6,7 @@ require("pato.core.lsp-buffer")
 require("pato.core.macro-define")
 require("pato.core.docs").setup()
 require("pato.core.web").setup()
+require("pato.core.image").setup()
 
 local ks = require("pato.core.kitty_spacing")
 

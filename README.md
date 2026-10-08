@@ -59,6 +59,8 @@ nvim/
         │   ├── docs.lua            # Comandos :doc / :docs / :docd (documentação pessoal)
         │   ├── web.lua             # Comandos :web / :webd (sites no terminal-browser)
         │   ├── kitty_spacing.lua   # Integração de espaçamento com Kitty terminal
+        │   ├── image.lua           # Abre imagens no kitty (icat) ou no visualizador do sistema
+        │   ├── image-view.sh       # Redimensiona com sips e mostra a imagem 1:1 no overlay do kitty
         │   ├── aesthetics/
         │   │   ├── init.lua              # Importa os módulos de aesthetics
         │   │   ├── excluded-themes.lua   # Temas excluídos do seletor
@@ -362,8 +364,11 @@ O Oil permite editar o sistema de arquivos como se fosse um buffer de texto: ren
 |---|---|
 | `<C-s>` | Salvar alterações |
 | `<Esc>` / `q` | Fechar |
+| `<CR>` | Abrir entrada. Imagens abrem fora do buffer (veja abaixo) e o Oil continua aberto |
 | `o` | Abrir arquivo com app padrão do sistema |
 | `v` / `<A-v>` | Entrar em modo visual |
+
+**Imagens:** abrir uma imagem (`png`, `jpg`, `gif`, `webp`, `bmp`, `ico`, `tiff`, `heic`, `avif`) nunca mostra o binário no buffer. Dentro do kitty ela aparece num overlay sobre a janela do Neovim usando `kitten icat` (protocolo gráfico do kitty), ocupando no máximo 45% da janela, centralizada (fator em `M.zoom` de `core/image.lua`). Imagens pequenas recebem zoom até preencher essa área mantendo a proporção. Para não borrar, `core/image-view.sh` redimensiona a imagem com `sips` (alta qualidade) para o tamanho final em pixels e o kitty a mostra 1:1, sem escalar. Sem `sips` (Linux) o kitty escala sozinho, e qualquer tecla fecha. Fora do kitty, ou se o remote control falhar, abre no visualizador do sistema (`open` no macOS, `xdg-open` no Linux). Vale para o Oil, `:e`, Telescope e qualquer outro jeito de abrir o arquivo, implementado em `core/image.lua` com um `BufReadCmd`. Arquivos `svg` ficam de fora porque são texto editável.
 
 ---
 
