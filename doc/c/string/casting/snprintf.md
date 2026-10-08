@@ -4,6 +4,8 @@
 
 O `snprintf` escreve texto formatado dentro de uma string, funcionando como um `printf` cujo destino é um buffer em vez da tela, sendo a forma mais comum de converter números (e outros valores) em string
 
+Seu resultado é bem proximo de uma formatação de string `format` do python
+
 ```c
 int snprintf(char *str, size_t size, const char *format, ...);
 ```
