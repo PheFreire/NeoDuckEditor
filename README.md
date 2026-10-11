@@ -446,7 +446,7 @@ Pressione **`<leader>d`** e aguarde ~400ms para abrir um popup do which-key com 
 
 A raiz do projeto é o `CMakeLists.txt` mais externo acima do arquivo atual, senão a raiz do git, senão o `cwd`. Os builds ficam em diretórios próprios para não alterar um `build/` já existente.
 
-**Ambiente do projeto:** antes de qualquer configuração iniciar, se a raiz tiver um `.envrc` é feito `direnv allow` e o ambiente é carregado com `direnv exec`, e se tiver um `.env` ele recebe `source` (com `set -a`, então tudo é exportado). As variáveis resultantes vão para o programa debugado e também para o `cmake` durante configure e build.
+**Ambiente do projeto:** antes de qualquer configuração iniciar, se a raiz tiver um `.envrc` é feito `direnv allow` e o ambiente é carregado com `direnv exec`, e se tiver um `.env` ele recebe `source` (com `set -a`, então tudo é exportado). As variáveis resultantes vão para o programa debugado e também para o `cmake` durante configure e build. Se não sobrar nenhuma variável, o campo `env` nem é enviado ao CodeLLDB, porque uma tabela vazia viraria uma lista JSON e ele só aceita um objeto.
 
 Veja `tutorial-dap-gdb.md` para um guia completo com exemplos práticos.
 
