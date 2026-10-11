@@ -380,7 +380,9 @@ return {
             cfg.program = dap.ABORT
             return cfg
           end
-          cfg.env = vim.tbl_extend("force", env, cfg.env or {})
+          -- Tabela vazia vira array JSON ([]) e o codelldb exige um objeto em env
+          local merged = vim.tbl_extend("force", env, cfg.env or {})
+          cfg.env = next(merged) and merged or nil
           if setup then setup(cfg, root, env) end
           return cfg
         end,
