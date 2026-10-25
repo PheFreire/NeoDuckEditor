@@ -27,3 +27,5 @@ inet_pton(AF_INET, "127.0.0.1", &server_address.sin_addr);
 connect(sock_fd, (struct sockaddr *)&server_address, sizeof(server_address));
 ```
 
+> Se o socket estiver em modo não-bloqueante (ver `functions/socket/accept.md`), o `connect` não espera o handshake terminar: ele devolve `-1` na hora com `errno` valendo `EINPROGRESS`, e o kernel continua fazendo a conexão em segundo plano. Para saber quando ela terminou, você espera o socket ficar pronto para escrita com `poll` ou `select` e depois lê o resultado com `getsockopt(fd, SOL_SOCKET, SO_ERROR, &erro, &len)`. Se `erro` valer `0` a conexão foi estabelecida, senão ele guarda o código do erro, como `ECONNREFUSED`
+
