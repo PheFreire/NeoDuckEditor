@@ -11,13 +11,13 @@ Criado por Daniel J. Bernstein, é um dos hashes de string mais replicados que e
 unsigned long
 hash(unsigned char *str)
 {
-	unsigned long hash = 5381;
-	int c;
+  unsigned long hash = 5381;
 
-	while (c = *str++)
-		hash = ((hash << 5) + hash) + c;
+  for (int i = 0; str[i] != '0'; i++) {
+    hash += (hash << 5) + str[i];
+  }
 
-	return hash;
+  return hash;
 }
 ```
 

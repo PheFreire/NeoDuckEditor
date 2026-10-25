@@ -56,13 +56,13 @@ O endereço IP identifica uma **máquina** (mais precisamente, uma interface de 
 	- `127.0.0.1` (`::1` no IPv6), o **localhost**: a própria máquina. Usado para testar cliente e servidor no mesmo computador. Os pacotes nunca saem da máquina
 	- `0.0.0.0` (`INADDR_ANY`): usado só no `bind` de um servidor, significa "aceite conexões em **qualquer** interface desta máquina"
 	- `192.168.x.x`, `10.x.x.x`, `172.16.x.x` a `172.31.x.x`: endereços **privados**, válidos só dentro de uma rede local. Para sair para a internet, o roteador troca o IP privado pelo público (NAT)
-- A conversão entre texto e o formato binário que a API usa é feita com `inet_pton` (texto → binário) e `inet_ntop` (binário → texto). Ver `functions/inet_pton.md` e `functions/inet_ntop.md`
+- A conversão entre texto e o formato binário que a API usa é feita com `inet_pton` (texto → binário) e `inet_ntop` (binário → texto). Ver `functions/inet/inet_pton.md` e `functions/inet/inet_ntop.md`
 
 ---
 
 **Nomes e DNS**
 
-Pessoas usam nomes (`example.com`), mas os pacotes só conhecem IPs. O **DNS** é o serviço que traduz um nome para um ou mais IPs. Em C, isso é feito com `getaddrinfo`, que também já preenche a `struct sockaddr` pronta para o `connect` (ver `functions/getaddrinfo.md`)
+Pessoas usam nomes (`example.com`), mas os pacotes só conhecem IPs. O **DNS** é o serviço que traduz um nome para um ou mais IPs. Em C, isso é feito com `getaddrinfo`, que também já preenche a `struct sockaddr` pronta para o `connect` (ver `functions/netdb/getaddrinfo.md`)
 
 ---
 
@@ -95,7 +95,7 @@ address.sin_port = htons(8080);          // host to network short: 8080 na ordem
 int porta = ntohs(client.sin_port);      // network to host short: de volta para o seu int
 ```
 
-- Esquecer o `htons` faz o servidor escutar em outra porta: `8080` (`0x1F90`) sem conversão vira `0x901F` = `36895`. Ver `functions/htons.md` e `functions/ntohs.md`
+- Esquecer o `htons` faz o servidor escutar em outra porta: `8080` (`0x1F90`) sem conversão vira `0x901F` = `36895`. Ver `functions/inet/htons.md` e `functions/inet/ntohs.md`
 
 ---
 
@@ -110,7 +110,7 @@ int fd = socket(AF_INET, SOCK_STREAM, 0);
 //              └─ família: AF_INET (IPv4) ou AF_INET6 (IPv6)
 ```
 
-- O `socket()` só cria o objeto. Ele ainda não tem endereço nem está conectado a ninguém. As funções seguintes (`bind`, `listen`, `connect`) dão esse papel a ele (ver `functions/socket.md`)
+- O `socket()` só cria o objeto. Ele ainda não tem endereço nem está conectado a ninguém. As funções seguintes (`bind`, `listen`, `connect`) dão esse papel a ele (ver `functions/socket/socket.md`)
 - Dados escritos no socket vão para um buffer de envio do kernel, que cuida de transformá-los em pacotes. Dados recebidos ficam em um buffer de recepção até o programa chamar `recv`/`read`
 
 ---
@@ -157,9 +157,9 @@ connect() retorna                        accept() retorna um novo fd
 3. **ACK** (acknowledge): o cliente confirma. A partir daqui, a conexão está estabelecida nos dois lados
 
 - O handshake é feito **pelo kernel**, e não pelo seu programa: o `connect()` dispara e espera o handshake. O `listen()` faz o kernel responder aos SYN recebidos. O `accept()` só entrega uma conexão que já completou o handshake
-- O `backlog` do `listen(fd, backlog)` limita quantas conexões completas podem ficar esperando um `accept()` (ver `functions/listen.md`)
+- O `backlog` do `listen(fd, backlog)` limita quantas conexões completas podem ficar esperando um `accept()` (ver `functions/socket/listen.md`)
 - Se não houver nenhum programa escutando na porta, o servidor responde com um pacote **RST** (reset), e o `connect()` falha com `ECONNREFUSED` ("Connection refused")
-- O `accept()` devolve um **novo** socket para aquela conexão. O socket original continua escutando novos clientes (ver `functions/accept.md`)
+- O `accept()` devolve um **novo** socket para aquela conexão. O socket original continua escutando novos clientes (ver `functions/socket/accept.md`)
 
 ---
 
@@ -174,9 +174,9 @@ close() ──── FIN ───────────►  recv() retorna 0 
 ```
 
 - Cada lado envia um **FIN** dizendo "não vou mais enviar dados". Quando o outro lado recebe o FIN, o `recv()` retorna `0`, que é o sinal de que a conexão foi fechada
-- `shutdown(fd, SHUT_WR)` envia o FIN sem fechar o socket, permitindo continuar lendo a resposta (ver `functions/shutdown.md`)
+- `shutdown(fd, SHUT_WR)` envia o FIN sem fechar o socket, permitindo continuar lendo a resposta (ver `functions/socket/shutdown.md`)
 - Escrever em uma conexão que o outro lado já fechou gera `EPIPE` e o sinal `SIGPIPE`, que por padrão **mata o processo**. Use `send(..., MSG_NOSIGNAL)` no Linux ou ignore o `SIGPIPE`
-- Quem fecha primeiro fica um tempo no estado **TIME_WAIT** (até alguns minutos), para garantir que pacotes atrasados não sejam confundidos com uma nova conexão. É por isso que reiniciar um servidor logo depois de fechá-lo pode falhar no `bind` com `EADDRINUSE` ("Address already in use"), e por isso se usa `setsockopt(SO_REUSEADDR)` antes do `bind` (ver `functions/setsockopt.md`)
+- Quem fecha primeiro fica um tempo no estado **TIME_WAIT** (até alguns minutos), para garantir que pacotes atrasados não sejam confundidos com uma nova conexão. É por isso que reiniciar um servidor logo depois de fechá-lo pode falhar no `bind` com `EADDRINUSE` ("Address already in use"), e por isso se usa `setsockopt(SO_REUSEADDR)` antes do `bind` (ver `functions/socket/setsockopt.md`)
 
 ---
 
@@ -229,6 +229,6 @@ recv/send    troca bytes        ◄─────────► send/recv
 close()      envia FIN          ◄─────────► close()
 ```
 
-- Um exemplo completo desse fluxo está em `summary.md`, e cada função tem a sua nota em `functions/`
+- Um exemplo completo desse fluxo está em `socket_summary.md`, e cada função tem a sua nota em `functions/`
 
 > Para testar sem escrever o outro lado: `nc -l 8080` cria um servidor TCP simples na porta 8080 e `nc localhost 8080` cria um cliente (adicione `-u` para UDP). `ss -tlnp` (Linux) ou `lsof -iTCP -sTCP:LISTEN -n -P` (macOS) mostra quais programas estão escutando em cada porta, e `tcpdump -i lo port 8080` (Linux, `-i lo0` no macOS) mostra os pacotes do handshake passando
