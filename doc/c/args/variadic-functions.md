@@ -2,33 +2,71 @@
 
 > `stdarg.h`
 
-Uma função variádica aceita uma quantidade variável de argumentos, como o `printf`, que recebe um formato e depois quantos valores forem necessários. Ela é declarada com `...` no fim da lista de parâmetros, e os argumentos extras são lidos um por um dentro da função com as macros da `stdarg.h`
-
-> Os argumentos de uma chamada ficam guardados em registradores e na pilha, em posições que a convenção de chamada da plataforma define. Uma função normal sabe pelo protótipo quantos são e de que tipo. Uma função variádica não sabe: o `...` só diz "pode haver mais", então é a própria função que precisa descobrir quantos argumentos vieram e qual o tipo de cada um, e a `stdarg.h` dá as ferramentas para ir buscá-los
+Uma função variádica é uma função que aceita uma quantidade variável de argumentos, como o `printf`. Ela é declarada com `...` no fim dos parâmetros, e dentro dela os argumentos que caíram no `...` são lidos **um de cada vez, na ordem**, usando quatro peças da `stdarg.h`: `va_list`, `va_start`, `va_arg` e `va_end`
 
 ```c
-#include <stdarg.h>
+void imprimir_verde(int count, ...);
 
-tipo nome(tipo fixo, ...);
-
-void va_start(va_list ap, fixo);
-tipo va_arg(va_list ap, tipo);
-void va_end(va_list ap);
-void va_copy(va_list destino, va_list origem);
+imprimir_verde(3, "A", "B", "C");
+//             │  └──────┬──────┘
+//             │         └── vão para o ... (os argumentos extras)
+//             └── vai para o parâmetro count (o argumento fixo)
 ```
 
-- `...`: precisa ser o último parâmetro. Até o C17, também precisa de pelo menos um parâmetro fixo antes dele
-- `va_list`: o tipo que guarda a posição atual na lista de argumentos extras, como um cursor
-- `va_start`: inicializa o `va_list`, apontando para o primeiro argumento depois do parâmetro fixo informado, que precisa ser o **último** parâmetro antes do `...`
-- `va_arg`: devolve o próximo argumento, interpretado como o `tipo` informado, e avança o cursor
-- `va_end`: encerra o uso do `va_list`. Toda chamada de `va_start` precisa de um `va_end` correspondente na mesma função
-- `va_copy`: cria uma cópia do `va_list` na posição atual, para percorrer os argumentos duas vezes
-
-Apesar da aparência, `va_start`, `va_arg` e `va_end` são **macros**, e não funções. Por isso o `va_arg` consegue receber um tipo (`char*`) como argumento, algo que uma função não aceita
+- Os argumentos **fixos** (antes do `...`) têm nome e são usados normalmente, como `count`
+- Os argumentos **extras** (que caem no `...`) não têm nome. A função não sabe quantos são nem de que tipo, e só consegue pegá-los com as peças da `stdarg.h`
 
 ---
 
-**Exemplo**
+**A ideia: uma fila e um marcador**
+
+Pense nos argumentos extras como uma fila de valores, um atrás do outro, e nas quatro peças como as ações de ler essa fila com um marcador (como o dedo seguindo as linhas de um texto):
+
+
+| Peça | O que é | Na analogia |
+|---|---|---|
+| `va_list args` | uma variável que guarda a posição na fila | o marcador |
+| `va_start(args, count)` | coloca o marcador no primeiro extra, logo depois de `count` | pôr o dedo no começo da fila |
+| `va_arg(args, char *)` | lê o valor onde o marcador está e anda uma posição | ler e passar o dedo para o próximo |
+| `va_end(args)` | termina o uso do marcador | tirar o dedo |
+
+
+- O `va_list` sozinho não faz nada: é só a variável. Quem o coloca no lugar é o `va_start`, e quem o faz andar é o `va_arg`
+
+- O `va_arg` é o único que devolve um valor. Cada chamada devolve **um** argumento e já deixa o marcador no próximo
+
+- O marcador só anda para frente. Não dá para voltar nem pular direto para o terceiro argumento
+
+---
+
+**Passo a passo**
+
+A chamada `imprimir_verde(3, "A", "B", "C")`, acompanhando onde o marcador está a cada linha:
+
+```c
+void imprimir_verde(int count, ...) {
+  va_list args;                       // 1
+  va_start(args, count);              // 2
+  char *t1 = va_arg(args, char *);    // 3
+  char *t2 = va_arg(args, char *);    // 4
+  char *t3 = va_arg(args, char *);    // 5
+  va_end(args);                       // 6
+}
+```
+
+- Por que o `va_start` recebe o `count`: os extras começam logo depois do último argumento fixo, e é por ele que o `va_start` sabe onde a fila começa
+
+- Por que o `va_arg` recebe o tipo (`char *`): os extras não têm tipo declarado, então é você quem diz como interpretar o valor lido
+
+- O que acontece com um quarto `va_arg`: o marcador está depois do fim da fila (`???`), e o `va_arg` lê lixo da memória sem dar erro. **A fila não tem um fim visível**, então a função precisa saber por conta própria quando parar
+
+- Por isso existe o `count`: ele diz quantas vezes o `va_arg` pode ser chamado
+
+---
+
+**O exemplo completo**
+
+Com um laço, o mesmo passo a passo funciona para qualquer quantidade de textos:
 
 ```c
 #include <stdio.h>
@@ -63,114 +101,77 @@ int main() {
 Texto 1 Texto 2 Texto infinitos...      (em verde no terminal)
 ```
 
-- `int count`: o parâmetro fixo. Além de ser obrigatório antes do `...`, é ele que diz quantas vezes o `va_arg` pode ser chamado
-- `va_start(args, count)`: posiciona o cursor logo depois de `count`, no `"Texto 1"`
-- `va_arg(args, char*)`: cada chamada devolve uma das strings, na ordem em que foram passadas, e avança para a próxima
-- `va_end(args)`: encerra a leitura. Ele não libera memória do heap (nenhum `malloc` foi feito), só deixa o `va_list` em um estado final. Na maioria das plataformas não faz nada, mas o padrão exige a chamada, e pular é comportamento indefinido
-- `"\033[32m"` e `"\033[0m"`: códigos ANSI que o terminal entende como "mudar a cor do texto para verde" e "voltar para a cor padrão". Não têm relação com a `stdarg.h`
+- O `for` chama o `va_arg` exatamente `count` vezes, uma por texto
+- O `va_end` não libera memória (nenhum `malloc` foi feito), ele só encerra o marcador. Mesmo assim o padrão exige que todo `va_start` tenha um `va_end` na mesma função
+- `"\033[32m"` e `"\033[0m"` são códigos que o terminal entende como "texto verde" e "volta para a cor padrão". Não têm relação com a `stdarg.h`
 
 ---
 
-**Como a função sabe quantos argumentos vieram**
+**Sem count: parar em um NULL**
 
-A `stdarg.h` não tem nenhuma forma de contar os argumentos nem de saber o tipo deles. A informação precisa vir de algum lugar, e há três formas comuns:
-
-- **Um contador**: um parâmetro fixo com a quantidade, como o `count` do exemplo
-- **Um sentinela**: um valor especial no fim da lista, normalmente `NULL`, que indica que os argumentos acabaram
-- **Uma string de formato**: como no `printf`, onde cada `%d`, `%s` e `%f` diz o tipo e a quantidade dos argumentos seguintes
+Em vez de dizer quantos textos vieram, a chamada coloca um `NULL` no fim da fila, e a função lê até encontrá-lo:
 
 ```c
-void juntar(const char *primeiro, ...) {
+void imprimir_verde(const char *texto, ...) {
   va_list args;
-  va_start(args, primeiro);
-  for (const char *s = primeiro; s != NULL; s = va_arg(args, const char *)) {
-    printf("%s", s);
+  va_start(args, texto);
+
+  printf("\033[32m");
+  while (texto != NULL) {
+    printf("%s ", texto);
+    texto = va_arg(args, const char *);  // o próximo texto, ou o NULL do fim
   }
+  printf("\033[0m\n");
+
   va_end(args);
-  printf("\n");
 }
 
-juntar("pa", "to", "!", NULL);  // pato!
-```
-
-- O sentinela evita precisar contar os argumentos na chamada, mas esquecer o `NULL` no final faz a função continuar lendo valores que não existem
-
----
-
-**Promoção dos argumentos**
-
-Os argumentos que caem no `...` passam pelas `default argument promotions` antes de serem enviados, pois a função não tem um protótipo dizendo o tipo deles:
-
-- `char` e `short` viram `int`
-- `float` vira `double`
-
-Por isso o `va_arg` deve sempre usar o tipo **promovido**:
-
-```c
-float f = va_arg(args, float);   // errado: o valor chegou como double
-double d = va_arg(args, double); // certo
-
-char c = va_arg(args, char);     // errado: o valor chegou como int
-char c2 = (char)va_arg(args, int); // certo
+imprimir_verde("Texto 1", "Texto 2", "Texto infinitos...", NULL);
 ```
 
 ```text
-warning: second argument to 'va_arg' is of promotable type 'float'; this va_arg has undefined behavior because arguments will be promoted to 'double' [-Wvarargs]
+texto     extras
+┌─────┐   ┌─────┬──────────────────────┬──────┐
+│ "T1"│   │ "T2"│ "Texto infinitos..." │ NULL │  ← a função para aqui
+└─────┘   └─────┴──────────────────────┴──────┘
 ```
 
-- É por isso que o `printf` usa o mesmo `%f` para `float` e para `double`: ele sempre recebe um `double`
-
-O tipo de quem chama também precisa bater com o que a função lê, e o compilador não converte nada sozinho:
-
-```c
-double media(int n, ...);   // lê cada argumento com va_arg(args, double)
-
-media(3, 1.0, 2.0, 4.5);    // 2.50
-media(2, 1, 2);             // lixo: 1 e 2 são int, e a função os lê como double
-```
+- O primeiro texto é o argumento fixo, e os outros vêm pela fila
+- O `NULL` é o "fim da fila" que a fila não tem sozinha. Esquecê-lo faz a função ler lixo, como o quarto `va_arg` do passo a passo
 
 ---
 
-**Repassando para outra função variádica**
+**Sem count: uma string de formato**
 
-Uma função variádica não consegue repassar o seu `...` direto para outra. Para isso a biblioteca padrão tem versões que recebem um `va_list` no lugar do `...`, com um `v` no começo do nome: `vprintf`, `vfprintf`, `vsnprintf`, `vsprintf`
+É o jeito do `printf`: o argumento fixo é uma string, e cada `%` dentro dela diz que há mais um valor na fila e de que tipo ele é:
 
 ```c
-#include <stdarg.h>
 #include <stdio.h>
+#include <stdarg.h>
 
-__attribute__((format(printf, 1, 2)))
-void logar(const char *fmt, ...) {
+void imprimir_verde(const char *formato, ...) {
   va_list args;
-  va_start(args, fmt);
-  fprintf(stderr, "[log] ");
-  vfprintf(stderr, fmt, args);   // usa os argumentos que vieram no ...
-  fprintf(stderr, "\n");
+  va_start(args, formato);
+  printf("\033[32m");
+  vprintf(formato, args);   // entrega o marcador para o vprintf ler a fila
+  printf("\033[0m\n");
   va_end(args);
 }
 
-logar("porta %d", 8080);    // [log] porta 8080
-logar("porta %d", "8080");  // warning: format specifies type 'int' but the argument has type 'char *'
+imprimir_verde("%s %s %s", "Texto 1", "Texto 2", "Texto infinitos...");
+imprimir_verde("%d itens, total %.2f", 3, 9.5);   // 3 itens, total 9.50
 ```
 
-- O `va_list` só pode ser percorrido uma vez. Para usá-lo em duas funções (por exemplo, `vsnprintf` para medir o tamanho e outra para escrever), faça uma cópia antes com `va_copy`, e chame `va_end` nas duas
-- `__attribute__((format(printf, 1, 2)))`: extensão do GCC e do Clang que diz "o parâmetro 1 é um formato do `printf`, e os argumentos começam no 2". Com ela, o compilador passa a verificar os tipos das chamadas de `logar` como faz com o `printf`
+- Aqui a função não chama o `va_arg`: ela entrega o marcador para o `vprintf`, que chama o `va_arg` por dentro, uma vez para cada `%`
+- É a única das três formas que aceita valores de tipos diferentes na mesma fila
+- Um exemplo prático, uma função de log que monta a mensagem com `vsnprintf`, está em `va-list-forwarding.md`
 
----
+Docs deste diretório:
 
-**C23: ... sem parâmetro fixo**
+- `stdarg.md`: as quatro peças em detalhe, e o `va_copy` para ler a fila duas vezes
+- `type-promotion.md`: por que `va_arg(args, float)` e `va_arg(args, char)` estão errados
+- `count-macros.md`: macros que colocam o `NULL` ou calculam o `count` sozinhas
+- `va-list-forwarding.md`: entregando o marcador para `vprintf`, `vsnprintf` e outras funções
+- `c23-variadic.md`: funções só com `...`, sem argumento fixo
 
-```c
-int primeiro(...) {
-  va_list args;
-  va_start(args);          // C23: sem o segundo argumento
-  int x = va_arg(args, int);
-  va_end(args);
-  return x;
-}
-```
-
-- A partir do C23, uma função pode ter só o `...`, e o `va_start` recebe apenas o `va_list`
-- Antes do C23 isso é erro de compilação: `ISO C requires a named parameter before '...'`
-
-> Uma função variádica não tem nenhuma verificação de tipo nem de quantidade: passar menos argumentos do que a função lê, ou de um tipo diferente, compila sem erro e é comportamento indefinido, normalmente lendo lixo da pilha ou causando um crash. Prefira um array e um tamanho (`void f(const char **textos, int n)`) quando todos os argumentos têm o mesmo tipo, e deixe as funções variádicas para quando os tipos mudam, como no `printf`. Para receber um número variável de argumentos no pré-processador, veja `macros/variadic.md`
+> O ponto mais importante é que a fila não sabe o próprio tamanho nem o tipo dos valores: o `va_arg` lê o que você mandar, quantas vezes você mandar. Por isso toda função variádica precisa de uma regra para saber quando parar (um `count`, um `NULL` ou uma string de formato), e chamar a função com argumentos que não batem com essa regra compila sem erro e lê lixo. Quando todos os valores são do mesmo tipo, um array com um tamanho (`void f(const char **textos, size_t n)`) é mais simples e mais seguro
