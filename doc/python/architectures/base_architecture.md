@@ -43,6 +43,7 @@
 8. **Teste de integração real** (Postgres real, repositórios reais) cobrindo todos os fluxos de negócio e todas as regras de acesso.
 9. **Qualidade bloqueante antes do push** (testes + formatação + lint + tipos + segurança).
 10. **Código autoexplicativo.** Sem comentários explicativos; docstrings descrevem propósito, regras e entradas/saídas.
+11. **A regra do dado mora no serviço dono do dado.** Toda regra que um dado precisa cumprir (ex.: uma resposta dada numa unidade também conta para as unidades acima dela) **DEVE** ser aplicada pelo serviço que grava esse dado, valendo para qualquer chamador. Outros serviços **PODEM** repetir a regra por conveniência, mas o serviço dono **NÃO DEVE** depender deles para o dado ficar correto. Teste: *se alguém chamar este serviço direto, pulando o intermediário, o dado fica errado?* Se sim, a regra está no lugar errado.
 
 ---
 
@@ -55,7 +56,7 @@
 | DTOs | **Pydantic v2** | Todos os DTOs herdam de `dddk.BaseDto` |
 | Banco | **PostgreSQL 17** | Local via `docker compose` |
 | Pacotes | **Poetry** (`poetry-core>=2`) | Grupos `main` e `dev` |
-| Framework de domínio | **`duck-domain-django-kit`** (import `dddk`) `^0.3.0` | PyPI; ver [§8](#8-framework-de-domínio-dddk) |
+| Framework de domínio | **`duck-domain-django-kit`** (import `dddk`) `^0.3.4` | PyPI; ver [§8](#8-framework-de-domínio-dddk) |
 | DI | **`duckdi`** `^0.1.13` | PyPI; ver [§7](#7-injeção-de-dependência-duckdi) |
 | Servidor | **gunicorn** + **whitenoise** | Config em `gunicorn.conf.py` |
 | Infra Django | `django-cors-headers`, `dj-database-url`, `psycopg2` | |
@@ -225,6 +226,13 @@ Operações concretas, pequenas, previsíveis, testáveis isoladamente. **Um blo
 | **Factory** | Agrupa e instancia adapters de um contexto de DI | `IRepositoryFactory` → `DjangoRepositoryFactory` |
 
 **Read models:** quando uma leitura junta muitas tabelas/dimensões, **DEVE** ser feita em SQL (view do Postgres ou query agregada num *query repository*/*provider*) mapeada 1:1 para um DTO de resposta — nunca laços Python sobre o ORM.
+
+### 4.4 Contrato entre serviços
+Quando um *client* chama outro serviço que segue este padrão, o request do lado que recebe é um `RequestDto` com `extra="forbid"`: um campo que ele ainda não conhece é rejeitado com `422`. Por isso, toda mudança de contrato entre serviços:
+- **DEVE** ser compatível com a versão anterior: campo novo é **opcional** no serviço que recebe (com default), e o *client* só o envia quando tem valor (ex.: lista/dict vazio não é enviado).
+- **DEVE** ser publicada na ordem **quem recebe → quem envia**: o serviço que passa a aceitar o campo sobe primeiro; o que passa a enviá-lo sobe depois.
+- **DEVE** ter a ordem de deploy registrada no PR (ou na descrição da entrega) de ambos os repositórios.
+- Remover ou renomear um campo segue o caminho inverso: quem envia para de mandar primeiro; quem recebe remove depois.
 
 ---
 
@@ -749,6 +757,7 @@ urlpatterns = [
 ```
 
 - `build_controller_payload(request, **path_params)` combina: corpo JSON + header `Authorization` (numa chave interna) + parâmetros de URL. É o único formato que o controller recebe.
+- Corpo que não é JSON válido **DEVE** virar `AppError(400)` antes de chegar ao controller — nunca `500`. Erro do cliente não é erro do servidor (e não polui o log de erros).
 - Buscas com filtros usam **POST** em `.../find/` (corpo JSON), ou rotas de contexto fixas (§9.4).
 - `urls.py` raiz: `path("api/<recurso-no-plural>/", include("apps.<grupo>.<domínio>.infra.django.urls"))`. Todo endpoint de negócio fica sob `/api/`.
 
@@ -815,7 +824,7 @@ register(JwtAuthenticationEnsurerProvider, "jwt_bearer", True)
 
 ## 8. Framework de domínio (`dddk`)
 
-PyPI `duck-domain-django-kit`, import `dddk`, versão mínima `0.3.x`. Depende só de `django`, `duckdi`, `pydantic`, `toml`. Símbolos que dependem de Django são carregados preguiçosamente (pode ser importado em `settings.py`).
+PyPI `duck-domain-django-kit`, import `dddk`, versão mínima `0.3.4`. Depende só de `django`, `duckdi`, `pydantic`, `toml`. Símbolos que dependem de Django são carregados preguiçosamente (pode ser importado em `settings.py`).
 
 ### 8.1 Tipos base
 - **`BaseDto`** — `BaseModel` com `arbitrary_types_allowed` e serialização `Null → None`. `.get(attr, type)` lança `AppError(500)` se ausente/tipo errado.
@@ -838,7 +847,7 @@ PyPI `duck-domain-django-kit`, import `dddk`, versão mínima `0.3.x`. Depende s
 
 ### 8.3 Implementação Django
 - **`SoftDeleteModel`** — PK `uuid`, timestamps, `deleted_at`; managers `objects` (só ativos) e `everything` (todos); `soft_delete()`, `restore()`; `as_dto()` abstrato.
-- **`SoftDeleteDjangoRepository`** — implementação genérica: `create`; `create_many` via `bulk_create(batch_size=500)`; `find` traduz o `WhereDto` (ignora `Null`, `uuids → pk__in`, sufixos `_id` e `__in`, `where_field_to_filter`); `update` ignora `Null`; `delete` faz soft-delete; 404 padronizado; `select_related_fields` aplicado em `find`/`create_many`/`update`.
+- **`SoftDeleteDjangoRepository`** — implementação genérica: `create`; `create_many` via `bulk_create(batch_size=500)`; `find` traduz o `WhereDto` (ignora `Null`, `uuids → pk__in`, sufixos `_id` e `__in`, `where_field_to_filter`); `update` ignora `Null`; `delete` faz soft-delete; 404 padronizado; `select_related_fields` aplicado em `find`/`create_many`/`update`. Filtros que atravessam relações to-many devolvem cada registro uma única vez (`distinct`, desde 0.3.3), e o salto para um model soft-delete já exige `deleted_at IS NULL` no mesmo join (desde 0.3.4) — filhos apagados não fazem o pai aparecer.
 - **`SoftDeleteAdmin`** — filtro "Soft Delete", actions `soft_delete_selected` / `restore_selected` / `duplicate_selected`, mostra também os apagados.
 - **`get_if_active(model)`** — `str(uuid)` se ativo, senão `None`.
 
@@ -1027,7 +1036,7 @@ def db_state(db):
 | **Delete** | Soft-delete (`deleted_at` preenchido, some do `find`); inexistente → `404` |
 | **Flow** | Cada ramo de decisão do método público |
 | **Decorator** | Permite com permissão/relação; nega (`403`) sem; bypass por permissão ampla quando previsto |
-| **Controller** | Sem token → `401`; sem permissão → `403`; isolamento de tenant (dados de outro tenant nunca aparecem); recorte correto em rotas `scoped`; formato da resposta |
+| **Controller** | Sem token → `401`; sem permissão → `403`; isolamento de tenant (dados de outro tenant nunca aparecem); recorte correto em rotas `scoped`; corpo JSON inválido → `400`; formato da resposta |
 
 ### 12.5 Comandos
 `make test` · `make test-unit` · `make test-integration` · `make test-coverage` (`--cov=src`). Carga: `locust/` separado, `make locust`.
@@ -1164,6 +1173,9 @@ Executa em sequência e **aborta o push** se algo falhar:
 |---|---|
 | Usecase/flow importando Django, ORM, boto3, requests | Interface em `domain/` + adapter em `infra/` |
 | Lógica de negócio no controller/route | Mover para usecase/flow |
+| Regra de um dado aplicada só por um serviço intermediário | Aplicar no serviço dono do dado (§1, princípio 11) |
+| Campo novo obrigatório entre serviços, ou quem envia subindo antes de quem recebe | Campo opcional, enviado só com valor; deploy quem recebe → quem envia (§4.4) |
+| `500` para corpo JSON inválido | `AppError(400)` antes do controller |
 | Controller como função | Classe com `__call__` |
 | `dict` cru entre camadas de domínio | DTO Pydantic |
 | `raise Exception/ValueError` em domínio | `AppError(self, title, message, details, code)` |
@@ -1227,3 +1239,4 @@ Executa em sequência e **aborta o push** se algo falhar:
 - [ ] Chave em `envs.toml [injections]`
 - [ ] Variáveis novas documentadas em `docs/envs.md`
 - [ ] Efeito colateral externo atrás de chave default-off quando aplicável
+- [ ] Se é client de outro serviço: campos novos opcionais e enviados só com valor; ordem de deploy (quem recebe → quem envia) registrada no PR (§4.4)
