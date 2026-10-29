@@ -1365,3 +1365,7 @@ Executa em sequência e **aborta o push** se algo falhar:
 - [ ] Variáveis novas documentadas em `docs/envs.md`
 - [ ] Efeito colateral externo atrás de chave default-off quando aplicável
 - [ ] Se é client de outro serviço: campos novos opcionais e enviados só com valor; ordem de deploy (quem recebe → quem envia) registrada no PR (§4.4)
+
+---
+
+> **Autor:** Phelipe De Oliveira Freire Loureiro · GitHub: [PheFreire](https://github.com/PheFreire/)
