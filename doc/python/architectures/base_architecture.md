@@ -1,5 +1,7 @@
 # Especificação Técnica de Padrão de Implementação — APIs Python/Django
 
+> **Autor:** Phelipe De Oliveira Freire Loureiro · GitHub: [PheFreire](https://github.com/PheFreire/)
+
 > **Objetivo deste documento:** permitir que qualquer time (ou agente) implemente um backend novo seguindo exatamente o mesmo padrão de arquitetura, nomenclatura, modularização, segurança, testes, qualidade e entrega — sem precisar conhecer nenhum outro sistema que já use esse padrão.
 >
 > **Como ler:** as palavras **DEVE**, **NÃO DEVE**, **DEVERIA** e **PODE** têm sentido normativo (estilo RFC 2119). Tudo marcado com **DEVE** é obrigatório para o projeto ser considerado aderente. Os exemplos de código usam um domínio fictício (`organizations/organization` como *tenant* e `catalog/product` como entidade de negócio) — substitua pelos nomes do seu domínio.
