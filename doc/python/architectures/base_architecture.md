@@ -1095,6 +1095,12 @@ tests/unit/infra/...                     # código puro (formatters, parsers, he
 ```
 Toda pasta tem `__init__.py` (evita colisão de módulos no pytest).
 
+**Nome do arquivo de teste** — duas formas aceitas:
+- **Por cenário (padrão):** um arquivo por cenário, nome `test_<operação>_<cenário>.py` (`test_create_success.py`, `test_create_duplicate_error.py`, `test_find_should_exist_error.py`, `test_find_with_category_include.py`), cada um com uma ou poucas funções sobre aquele cenário.
+- **Por método:** um arquivo com o nome do método público testado (`test_call.py`, `test_find.py`, `test_is_member.py`, `test_resolve.py`) e **uma função por cenário** (`test_rejects_a_duplicate_name_in_the_same_organization`), quando todos os cenários exercitam o mesmo método.
+
+Dentro de uma mesma pasta de usecase/flow/controller **NÃO DEVE** haver mistura das duas formas. Nomes de função descrevem o comportamento esperado, não a implementação.
+
 ### 12.3 Fixtures
 ```python
 # conftest.py de um usecase
@@ -1124,10 +1130,17 @@ def db_state(db):
 
 - Imports **dentro** das fixtures (após o setup do Django).
 - `db_state` monta o grafo de dependências **de baixo para cima** (tenant → pais → entidade), incluindo **variantes irmãs** (outro tenant/pai) para provar isolamento e **registros soft-deleted** quando relevante.
-- Fixture global `bearer_header(user_id, role_id, tenant_id)` em `tests/conftest.py`: cria/atualiza o usuário com o papel e gera um token real → testes de controller passam pela verificação real de autenticação e permissão, sem camada HTTP.
+- Fixture global de credencial em `tests/conftest.py` que gera a credencial **real** que o decorator de autenticação espera (ex.: `bearer_header(user_id, role_id, tenant_id)`, que cria/atualiza o usuário com o papel e emite um token real) → testes de controller passam pela verificação real de autenticação e permissão, sem camada HTTP.
 - Fixture `autouse` que liga as chaves de efeito colateral (ex.: `SEND_EMAILS=True`) com backends em memória, para exercitar os caminhos de entrega.
 - `pytestmark = pytest.mark.django_db` no topo do arquivo de teste.
 - Criação em massa: lista de `CreateDto` + `repository.create_many(dtos).all`; nunca laço de `create`.
+
+**Teste de controller:**
+- O controller é chamado **direto** (`controller(payload)`), sem cliente HTTP: o payload tem o mesmo formato que o `build_controller_payload` monta (credencial na chave interna + corpo + parâmetros de URL).
+- **Um helper por perfil de chamador** no arquivo ou no `conftest.py` (ex.: `_full(db_state, bearer_header)`, `_read_only(...)`, `_scoped(...)`), cada um devolvendo a credencial de um papel/relação montado no `db_state`. Os testes combinam o helper com o corpo: `controller({**_scoped(db_state, bearer_header), "where": {...}})`.
+- Controllers ficam numa fixture (`controllers`, dict nome → instância) quando o arquivo testa vários controllers do mesmo recurso.
+- Erros esperados com `pytest.raises(AppError)` conferindo `code` (e o slug faltante em `details` nos `403`).
+- O mecanismo de credencial é do projeto (JWT, chave de API, etc.); o que é obrigatório é passar pela verificação **real** dele, nunca pular o decorator.
 
 ### 12.4 Cenários obrigatórios
 
@@ -1140,6 +1153,12 @@ def db_state(db):
 | **Flow** | Cada ramo de decisão do método público |
 | **Decorator** | Permite com permissão/relação; nega (`403`) sem; bypass por permissão ampla quando previsto |
 | **Controller** | Sem token → `401`; sem permissão → `403`; isolamento de tenant (dados de outro tenant nunca aparecem); recorte correto em rotas `scoped`; corpo JSON inválido → `400`; formato da resposta |
+| **Middleware** | Caminho dentro e fora da allow-list; efeito esperado na request/resposta; falha interna não altera a resposta |
+| **Data migration** | A função do `RunPython` (importada com `import_module`, chamada com `django.apps` e `None`) faz a alteração esperada; rodar sobre dados já no estado final não altera nada; a função reversa desfaz quando existir |
+| **Admin** | Lista e detalhe renderizam (inclusive com campos nulos); cada filtro e cada action; páginas/actions próprias negadas sem a permissão Django correspondente |
+| **Client** | Monta a chamada certa para o serviço externo (método, URL/operação, payload) com o transporte/SDK falso; resposta de sucesso vira o DTO esperado; falha do serviço vira `AppError` |
+
+Os quatro últimos tipos são obrigatórios para **código novo**. Middleware, migration, admin ou client já existentes sem esses testes são dívida: ganham os testes quando forem alterados.
 
 ### 12.5 Comandos
 `make test` · `make test-unit` · `make test-integration` · `make test-coverage` (`--cov=src`). Carga: `locust/` separado, `make locust`.
