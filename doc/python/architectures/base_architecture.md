@@ -936,7 +936,7 @@ MIDDLEWARE = [
     "...RequestConsoleLogMiddleware",      # 1 linha "MÉTODO rota status duração" em DEBUG/ALL
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "...RequestLogMiddleware",             # persiste requests /api/ de forma assíncrona
+    "...RequestLogMiddleware",             # persiste requests /api/ de forma assíncrona (§10.5.2)
     # middlewares padrão do Django (sessions, common, csrf, auth, messages, clickjacking)
 ]
 ```
@@ -952,6 +952,7 @@ MIDDLEWARE = [
 - `src/infra/log/` define `build_logging()` (dict para `logging.config.dictConfig`), usado **tanto** por `settings.LOGGING` quanto por `gunicorn.conf.py` (`logconfig_dict`).
 - Nível por `LOG_LEVEL` (`DEBUG`/`INFO`/`WARNING`/`ERROR`/`ALL`); um único handler stderr com formatter de console; loggers ruidosos (`boto3`, `botocore`, `urllib3`, `django.db.backends`...) fixados em `WARNING`; access log do gunicorn desligado; sob pytest o handler é no-op (o `caplog` continua funcionando).
 - Código de domínio usa `logging.getLogger(__name__)`; nunca `print`.
+- Especificação completa (níveis aceitos, layout da linha, cor, linha por request): §10.5.1.
 
 ### 10.4 Settings
 - `SECRET_KEY` obrigatório por env; `DEBUG` por env (default `false`).
@@ -959,6 +960,108 @@ MIDDLEWARE = [
 - `DATABASES` a partir de `Get(IEnvs, "env").database.url`; `TEST_DATABASE_URL` opcional para o banco de teste.
 - **Efeitos colaterais externos com chave de desligamento default-off** (ex.: `SEND_EMAILS=false`): nenhum ambiente envia e-mail/integração por acidente; em debug, o conteúdo (ex.: código de login) é logado no servidor, **nunca** devolvido na resposta HTTP.
 - `TIME_ZONE = "UTC"`, `USE_TZ = True`.
+
+### 10.5 Especificação dos logs
+
+Esta seção detalha os dois canais de log resumidos em §10.2 e §10.3: o **console** (stderr, lido no terminal e no coletor de logs do container) e a **tabela de requests** (auditoria persistida no banco). São independentes: o nível do console nunca liga nem desliga a gravação na tabela.
+
+#### 10.5.1 Console
+
+**Módulos (`src/infra/log/`):** `levels.py` (`resolve_level`), `ansi.py` (`Color`, `Effect`, `paint`, `supports_color`), `formatter.py` (`ConsoleFormatter`), `config.py` (`build_logging`), `pretty.py` (`pretty`, `jsonify`), todos re-exportados no `__init__.py`.
+
+**Nível (`LOG_LEVEL`):**
+
+| Valor (maiúsculas ou minúsculas, espaços ignorados) | Nível |
+|---|---|
+| `OFF`, `NONE`, `SILENT` | acima de `CRITICAL` (silencia tudo) |
+| `CRITICAL`, `FATAL` | `CRITICAL` |
+| `ERROR` | `ERROR` |
+| `WARN`, `WARNING` | `WARNING` |
+| `INFO` | `INFO` |
+| `DEBUG` | `DEBUG` |
+| `ALL`, `TRACE` | `NOTSET` (tudo) |
+
+Ausente, vazio ou desconhecido → `INFO`. Um valor inválido **NÃO DEVE** derrubar o boot.
+
+**Layout da linha (`ConsoleFormatter`):** um registro por linha, no formato
+
+```
+HH:MM:SS LEVEL    logger.curto  mensagem
+```
+
+- Hora com `datefmt="%H:%M:%S"`.
+- Nível com largura fixa de 8 caracteres e cor por gravidade: `DEBUG` cinza, `INFO` azul, `WARNING` amarelo, `ERROR`/`CRITICAL` vermelho **em negrito**.
+- Nome do logger em cinza e abreviado: todo segmento menos o último vira a inicial (`apps.users.user.entrypoints.controllers.send_password` → `a.u.u.e.c.send_password`), e nomes conhecidos têm apelido (`gunicorn.error` → `gunicorn`).
+- Traceback (`exc_info`) e stack (`stack_info`) vêm nas linhas seguintes, indentados com 4 espaços.
+
+**Cor (`supports_color`):** `NO_COLOR` definida → sem cor; `FORCE_COLOR` definida → com cor (as duas independem do valor); senão, cor só quando a saída é um TTY. Saída redirecionada (coletor de logs do container) **DEVE** sair sem códigos ANSI.
+
+**`build_logging(level_override=None, *, force_console=False)`** devolve o dict do `dictConfig`, usado em `settings.LOGGING` **e** no `logconfig_dict` do `gunicorn.conf.py`:
+- Um único handler `StreamHandler` em stderr com o `ConsoleFormatter`, ligado ao root.
+- Loggers barulhentos fixados em `WARNING`: `boto3`, `botocore`, `urllib3`, `s3transfer`, `asyncio`, `django.utils.autoreload`, `django.db.backends`, `django.template`.
+- Logger `django` sem handlers próprios (propaga ao root), para uma request gerar uma única linha formatada; `django.server` em `WARNING`.
+- `gunicorn.error` no handler do console, nunca abaixo de `INFO`; `gunicorn.access` sem handlers (a linha por request vem do middleware).
+- Sob pytest o handler vira `NullHandler` (os registros continuam propagando, então `caplog` funciona); `force_console=True` religa o console quando um teste precisa.
+
+**Linha por request (`RequestConsoleLogMiddleware`, logger `request`):**
+- Formato `MÉTODO path status duraçãoms` (ex.: `POST /api/products/ 201 42ms`), em `DEBUG`.
+- **NÃO DEVE** incluir a query string (tokens passados na URL nunca chegam ao console).
+- Quando `DEBUG` não está habilitado (`logger.isEnabledFor`), a request passa direto, sem medir tempo.
+
+**Uso no código:** `logging.getLogger(__name__)`; nunca `print`. `pretty(title, value)`/`jsonify(obj)` são utilitários de depuração local (impressão formatada e normalização de `datetime`, `UUID`, `Decimal`, coleções) e **NÃO DEVEM** ficar em código de produção.
+
+#### 10.5.2 Tabela de requests
+
+**Localização:** domínio `apps/logs/request_log/` (model, admin e fila em `infra/django/`); middleware em `src/infra/django/customs/middlewares/request_log_middleware.py`.
+
+**Model `RequestLog`** (`db_table = "request_logs"`, `ordering = ["-created_at"]`):
+
+| Coluna | Tipo | Conteúdo |
+|---|---|---|
+| `uuid` | UUID (PK) | |
+| `path` | texto | Caminho da request, **sem** query string |
+| `http_method` | varchar(10) | Verbo HTTP |
+| `input_data` | JSON, nulo | Corpo da request já mascarado, com a chave `user` do chamador quando autenticado |
+| `output_data` | JSON, nulo | Corpo da resposta já mascarado |
+| `status_code` | smallint positivo | Status da resposta |
+| `duration_ms` | float | Tempo total da request em milissegundos |
+| `ip_address` | IP, nulo | IP do cliente (regra abaixo) |
+| `user_id` | FK `SET_NULL`, nulo | Chamador autenticado |
+| `<tenant>_id` | FK `SET_NULL`, nulo | Tenant ativo do chamador |
+| `created_at` / `updated_at` / `deleted_at` | datetime | `created_at` com índice |
+
+Índice composto `(path, http_method)`. Colunas de enriquecimento específicas de um sistema (ex.: rota ou produto associados para métricas) **PODEM** ser acrescentadas como FKs nulas resolvidas pela fila, sem mudar as regras abaixo.
+
+**Middleware `RequestLogMiddleware`:**
+- **Allow-list:** só grava quando o caminho, normalizado com `/` no final, começa com `/api/`. `/admin/`, estáticos, `/health/` etc. nunca entram.
+- **Duração:** `time.monotonic()` em volta de `get_response`.
+- **Captura do corpo** (request e resposta, mesmas regras):
+  - só `Content-Type` com `application/json`; qualquer outro (multipart, HTML, arquivo) → `None`;
+  - resposta `streaming` → `None`;
+  - acima de 64 KB → `{"_truncated": true, "_size_bytes": N}` (registra que havia corpo e o tamanho, sem guardá-lo);
+  - JSON inválido → `None`.
+- **Máscara (`_sanitize`, recursiva em dicts e listas):**
+  - chaves sensíveis, sem diferenciar maiúsculas → `"***"`: `password`, `token`, `access`, `refresh`, `authorization`, `secret`, `api_key`, `master_key`;
+  - string com 64+ caracteres que seja base64 válido (regex) ou comece com `data:<tipo>;base64,` → `"base_64"`.
+- **IP:** primeiro valor do `X-Forwarded-For`; sem ele, `REMOTE_ADDR`; porta removida (inclusive `[ipv6]:porta`); vazio → `None`.
+- **Chamador:** o `payload["user"]` que o `build_controller_payload` guarda num atributo da request; dele saem `user_id` e `<tenant>_id`, e ele é mesclado em `input_data["user"]`. Rota sem autenticação → FKs nulas.
+- **Falha:** qualquer exceção no caminho do log é engolida (`# nosec B110`); a resposta é devolvida intacta.
+
+**Fila (`queue_worker.py`):**
+- `queue.Queue` limitada a **5000** itens; `enqueue` usa `put_nowait` e, com a fila cheia, **descarta** o registro com um `warning` (o log nunca segura a resposta).
+- Uma thread *daemon* por processo, iniciada sob demanda e identificada pelo PID — segura com os workers do gunicorn criados por fork.
+- A thread fecha a conexão com o banco quando fica 1 s sem itens.
+- Falha ao gravar um registro → `logger.exception`, e a thread segue.
+- Sob pytest a thread não sobe; `flush_for_tests()` grava a fila de forma síncrona para o teste conferir as linhas.
+
+**Admin:**
+- Só leitura: sem adicionar nem editar.
+- Filtro por classe de status (`2xx`, `3xx`, `4xx`, `5xx`) além do filtro de soft-delete; busca por `=uuid`, `path` e `ip_address`.
+- `input_data`/`output_data` com prévia limitada (20 000 caracteres) e link para baixar o JSON completo.
+
+**Retenção:** a tabela cresce a cada request. O projeto **DEVERIA** definir uma política de retenção (ex.: comando agendado que apaga ou arquiva registros acima de N dias) e documentá-la em `docs/`.
+
+**Testes obrigatórios:** allow-list (`/api/` grava, fora dela não); máscara de cada chave sensível e de base64; corpo grande truncado; não-JSON nulo; IP com e sem `X-Forwarded-For`; chamador autenticado preenchendo as FKs e `input_data["user"]`; exceção no log não altera a resposta; linha do console sem query string e ausente fora de `DEBUG`.
 
 ---
 
@@ -1206,7 +1309,8 @@ Executa em sequência e **aborta o push** se algo falhar:
 - [ ] `src/infra/container.py` + `envs.toml [injections]` + `from dddk import container  # noqa: F401`
 - [ ] `IRepositoryFactory` / `DjangoRepositoryFactory`
 - [ ] `build_controller_payload`, `UserArgument`, exception handler, middlewares (§10)
-- [ ] `src/infra/log/` + `gunicorn.conf.py`
+- [ ] `src/infra/log/` + `gunicorn.conf.py` (§10.5.1)
+- [ ] Domínio `logs/request_log` (model, fila, admin só leitura) + `RequestLogMiddleware` + `RequestConsoleLogMiddleware` (§10.5.2)
 - [ ] Autenticação (`IAuthenticationEnsurerProvider` + adapter), `require_authentication`, `require_permission`, `require_own_<tenant>`
 - [ ] `BaseSoftDeleteAdmin`, management command `seed_admins`
 - [ ] `dockerfile`, `src/entrypoint.sh`, `docker-compose.yml` (só Postgres), `Makefile` (§15)
