@@ -122,6 +122,8 @@ gcc main.o soma.o -o app    # o linker liga a chamada em main.o ao código em so
     - `__GNUC__`
     - `__STDC_VERSION__`
 
+> O `defined` é um operador do preprocessor, e não uma função, e só funciona dentro de `#if` e `#elif`. A explicação completa, com as combinações usando `&&`, `||` e `!`, está em `doc/c/macros/if.md`, e a diferença para o `#ifdef` está em `doc/c/macros/ifdef.md`
+
 ---
 
 **Flags de macros -D e -U**

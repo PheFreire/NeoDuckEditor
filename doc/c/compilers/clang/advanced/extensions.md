@@ -30,6 +30,8 @@ Além das extensões GNU, que o Clang aceita quase todas (`__attribute__((...))`
 - `__apple_build_version__` só existe no Apple Clang, e `__clang_major__` nele segue a numeração da Apple (ver `apple-clang.md`)
 - Comparar versões é frágil. Prefira testar o recurso que você quer usar (abaixo)
 
+> O `defined` é um operador do preprocessor, e não uma função, explicado em detalhes em `doc/c/macros/if.md`. As macros predefinidas de sistema e de compilador que costumam ser testadas com ele estão em `doc/c/macros/predefined.md`
+
 ---
 
 **Testando recursos: __has_***
@@ -57,6 +59,8 @@ Além das extensões GNU, que o Clang aceita quase todas (`__attribute__((...))`
 - `__has_builtin`, `__has_attribute` e `__has_include` também existem no GCC moderno (e o `__has_include` virou padrão no C23)
 - `__has_feature` e `__has_extension` são do Clang. Os nomes mais úteis: `address_sanitizer`, `thread_sanitizer`, `memory_sanitizer`, `c_static_assert`, `c_atomic`
 - Testar o recurso é mais robusto que testar a versão, pois funciona igual no Clang do LLVM, no Apple Clang e em versões futuras
+
+> O `defined(__has_builtin)` usa o mesmo operador `defined` do `#if`, explicado em detalhes em `doc/c/macros/if.md`
 
 ---
 
