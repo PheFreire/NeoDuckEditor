@@ -241,6 +241,12 @@ return {
 					"--clang-tidy",
 				},
 			},
+			-- neocmake só oferece completion quando o cliente anuncia suporte a snippets
+			neocmake = {
+				capabilities = vim.tbl_deep_extend("force", vim.deepcopy(capabilities), {
+					textDocument = { completion = { completionItem = { snippetSupport = true } } },
+				}),
+			},
 			pyright = {},
 			pylsp = {},
 			html = {},

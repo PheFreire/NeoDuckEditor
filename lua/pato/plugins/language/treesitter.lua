@@ -40,6 +40,7 @@ return {
 			"vimdoc",
 			"c",
 			"cpp",
+			"cmake",
 			"python",
       "rust",
       "regex",

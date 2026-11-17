@@ -52,6 +52,7 @@ return {
         { "quick-lint-js" },
         { "rust-analyzer" },
         { "python-lsp-server" },
+        { "neocmakelsp" },
 			},
 			auto_update = true,
 			run_on_start = true,
