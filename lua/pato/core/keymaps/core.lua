@@ -9,51 +9,60 @@ Km = vim.keymap
 
 local M = {}
 
+-- Tenta andar um caractere e, se o cursor não sair do lugar, pula para a linha vizinha
+local function moveRight()
+  local before = vim.api.nvim_win_get_cursor(0)
+  vim.cmd('silent normal! l')
+  local after = vim.api.nvim_win_get_cursor(0)
+  local stuck = after[2] == before[2] or after[2] >= #vim.fn.getline('.')
+  if stuck and before[1] < vim.fn.line('$') then
+    vim.cmd('silent normal! j0')
+  end
+end
+
+local function moveLeft()
+  local before = vim.api.nvim_win_get_cursor(0)
+  vim.cmd('silent normal! h')
+  local after = vim.api.nvim_win_get_cursor(0)
+  if after[1] == before[1] and after[2] == before[2] and before[1] > 1 then
+    vim.cmd('silent normal! k$')
+  end
+end
+
+
 function M.setDefaultNavigationKeymaps(bufnr)
   local opts = {}
   if bufnr then opts.buffer = bufnr end
 
   local keymapOpts = vim.tbl_extend("force", opts, { noremap = true, silent = true })
+  local exprOpts = vim.tbl_extend("force", keymapOpts, { expr = true })
 
   vim.keymap.set("n", "i", "<cmd>startinsert<CR><Right>", keymapOpts)
 
-  vim.keymap.set("n", "k", "<Down>", keymapOpts)
-  vim.keymap.set("n", "j", "<Up>", keymapOpts)
+  -- Sem contagem anda pela linha da tela (wrap), com contagem anda pela linha real
+  vim.keymap.set("n", "k", function() return vim.v.count == 0 and "gj" or "j" end, exprOpts)
+  vim.keymap.set("n", "j", function() return vim.v.count == 0 and "gk" or "k" end, exprOpts)
   vim.keymap.set("n", "<C-l>", "e", keymapOpts)
-  vim.keymap.set("n", "<A-l>", "$", keymapOpts)
+  -- Com wrap vai até o fim e o início do pedaço da linha que aparece na tela
+  vim.keymap.set("n", "<A-l>", function() return vim.wo.wrap and "g$" or "$" end, exprOpts)
 
   vim.keymap.set("n", "<C-h>", "b", keymapOpts)
-  vim.keymap.set("n", "<A-h>", "0", keymapOpts)
+  vim.keymap.set("n", "<A-h>", function() return vim.wo.wrap and "g0" or "0" end, exprOpts)
 
   vim.keymap.set("n", "<A-k>", "G", keymapOpts)
   vim.keymap.set("n", "<A-j>", "gg", keymapOpts)
 
-  vim.keymap.set('n', 'l', function ()
-      local col = vim.fn.col('.')
-      local line = vim.fn.getline('.')
-      if col >= #line then
-          vim.cmd('silent normal! j0')
-      else
-          vim.cmd('silent normal! l')
-      end
-  end, keymapOpts)
+  vim.keymap.set('n', 'l', moveRight, keymapOpts)
 
-  vim.keymap.set('n', 'h', function ()
-      local col = vim.fn.col('.')
-      if col == 1 then
-          vim.cmd('silent normal! k$')
-      else
-          vim.cmd('silent normal! h')
-      end
-  end,  keymapOpts)
+  vim.keymap.set('n', 'h', moveLeft,  keymapOpts)
 
   --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Insert-Mode Movement keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
   vim.keymap.set("i", "<A-Left>", "<C-o>0", keymapOpts)
   vim.keymap.set("i", "<A-Right>", "<C-o>$", keymapOpts)
 
-  vim.keymap.set("i", "<A-k>", "<Down>", keymapOpts)
-  vim.keymap.set("i", "<A-j>", "<Up>", keymapOpts)
+  vim.keymap.set("i", "<A-k>", "<Cmd>normal! gj<CR>", keymapOpts)
+  vim.keymap.set("i", "<A-j>", "<Cmd>normal! gk<CR>", keymapOpts)
   vim.keymap.set("i", "<A-h>", "<Left>", keymapOpts)
   vim.keymap.set("i", "<A-l>", "<Right>", keymapOpts)
 
@@ -64,14 +73,14 @@ function M.setDefaultNavigationKeymaps(bufnr)
 
   --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Visual-Mode Movement keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-  vim.keymap.set("v", "k", "<Down>", keymapOpts)
-  vim.keymap.set("v", "j", "<Up>", keymapOpts)
+  vim.keymap.set("v", "k", function() return vim.v.count == 0 and "gj" or "j" end, exprOpts)
+  vim.keymap.set("v", "j", function() return vim.v.count == 0 and "gk" or "k" end, exprOpts)
 
   vim.keymap.set("v", "<C-l>", "e", keymapOpts)
-  vim.keymap.set("v", "<A-l>", "$", keymapOpts)
+  vim.keymap.set("v", "<A-l>", function() return vim.wo.wrap and "g$" or "$" end, exprOpts)
 
   vim.keymap.set("v", "<C-h>", "b", keymapOpts)
-  vim.keymap.set("v", "<A-h>", "0", keymapOpts)
+  vim.keymap.set("v", "<A-h>", function() return vim.wo.wrap and "g0" or "0" end, exprOpts)
 
   vim.keymap.set("v", "<A-k>", "G", keymapOpts)
   vim.keymap.set("v", "<A-j>", "gg", keymapOpts)
@@ -81,43 +90,13 @@ function M.setDefaultNavigationKeymaps(bufnr)
 
   vim.keymap.set('v', 'x', '"_d', keymapOpts)
 
-  vim.keymap.set('v', 'l', function ()
-      local col = vim.fn.col('.')
-      local line = vim.fn.getline('.')
-      if col >= #line then
-          vim.cmd('silent normal! j0')
-      else
-          vim.cmd('silent normal! l')
-      end
-  end, keymapOpts)
+  vim.keymap.set('v', 'l', moveRight, keymapOpts)
 
-  vim.keymap.set('v', 'h', function ()
-      local col = vim.fn.col('.')
-      if col == 1 then
-          vim.cmd('silent normal! k$')
-      else
-          vim.cmd('silent normal! h')
-      end
-  end,  keymapOpts)
+  vim.keymap.set('v', 'h', moveLeft,  keymapOpts)
 
-  vim.keymap.set('v', '<Right>', function ()
-      local col = vim.fn.col('.')
-      local line = vim.fn.getline('.')
-      if col >= #line then
-          vim.cmd('silent normal! j0')
-      else
-          vim.cmd('silent normal! l')
-      end
-  end, keymapOpts)
+  vim.keymap.set('v', '<Right>', moveRight, keymapOpts)
 
-  vim.keymap.set('v', '<Left>', function ()
-      local col = vim.fn.col('.')
-      if col == 1 then
-          vim.cmd('silent normal! k$')
-      else
-          vim.cmd('silent normal! h')
-      end
-  end, keymapOpts)
+  vim.keymap.set('v', '<Left>', moveLeft, keymapOpts)
 
   --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-(Ctrl Movement Keymaps)-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
