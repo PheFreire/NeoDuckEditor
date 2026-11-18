@@ -81,3 +81,11 @@ vim.filetype.add({
 -- add binaries installed by mason.nvim to path
 local is_windows = vim.fn.has("win32") ~= 0
 vim.env.PATH = vim.fn.stdpath "data" .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
+
+-- dicionário português para as sugestões de palavras em markdown (o 'spell' continua desligado)
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    vim.opt_local.spelllang = "pt_br"
+  end,
+})
